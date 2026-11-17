@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="aagzvzG8FxG_yRXb6rrDtTEjMk7-ePR2ghRUQnz_Keo" />
+    <meta name="description" content="Daftar Dewan Guru dan Tenaga Kependidikan SD Negeri Inpres Arso VIII, Kabupaten Keerom Papua.">
+    <title>Dewan Guru & GTK - SDN Inpres Arso VIII</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css?v=20261116_v51">
+    <!-- Open Graph / Media Sosial Preview -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Dewan Guru & GTK - SDN Inpres Arso VIII">
+    <meta property="og:description" content="Struktur Organisasi Resmi dan Profil 12 Tenaga Pendidik & Kependidikan SD Negeri Inpres Arso VIII, Keerom Papua.">
+    <meta property="og:image" content="images/dewan-guru.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Dewan Guru & GTK - SDN Inpres Arso VIII">
+    <meta name="twitter:description" content="Struktur Organisasi Resmi dan Profil 12 Tenaga Pendidik & Kependidikan SD Negeri Inpres Arso VIII, Keerom Papua.">
+    <meta name="twitter:image" content="images/dewan-guru.jpg">
+    <link rel="dns-prefetch" href="https://arso8-a2bcf-default-rtdb.firebaseio.com">
+    <!-- Favicon & Mobile Touch Icons Resmi SDN Inpres Arso VIII -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="images/logo-keerom-192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon-180.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0d5c3a">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="SDN Arso VIII">
+</head>
+<body>
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <div class="container">
+            <div class="top-bar-left">
+                <div class="top-bar-item">
+                    <span>📍 Jln. Sulawesi, Kampung Dukwia, Distrik Arso Barat, Kab. Keerom - Papua</span>
+                </div>
+                <div class="top-bar-item top-bar-contact-hide">
+                    <span>📞 0812-4821-9125</span>
+                </div>
+                <div class="top-bar-item top-bar-contact-hide">
+                    <span>✉️ sdninpresarso8@gmail.com</span>
+                </div>
+            </div>
+            <div class="top-bar-right">
+                <div class="top-bar-clock" id="topBarClock" title="Waktu Indonesia Timur">
+                    <span class="clock-icon">🕒</span> <span class="live-wit-clock">WIT</span>
+                </div>
+                <a href="login.html" class="top-bar-admin-btn" title="Masuk ke Portal Admin SDN Inpres Arso VIII">
+                    <svg class="admin-user-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <span>Admin</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- HEADER & NAVIGASI -->
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="index.html" class="brand-wrapper">
+                <img src="images/logo-keerom.png" alt="Lambang Kabupaten Keerom" class="brand-logo" decoding="async">
+                <div class="brand-text">
+                    <h1>SDN INPRES ARSO VIII</h1>
+                    <p>Dinas Pendidikan dan Pengajaran Kab. Keerom - Papua (NPSN: 60300868)</p>
+                </div>
+            </a>
+
+            <button class="mobile-toggle" aria-label="Buka Menu Navigasi">☰</button>
+
+            <nav class="main-nav">
+                <a href="index.html" class="nav-link">Beranda</a>
+                <div class="nav-item-dropdown">
+                    <a href="profil.html" class="nav-link nav-dropdown-toggle active">
+                        Profil Sekolah <span class="dropdown-chevron">▾</span>
+                    </a>
+                    <div class="nav-dropdown-menu">
+                        <a href="profil.html" class="nav-dropdown-item">
+                            <span class="dropdown-icon">🏛️</span>
+                            <div>
+                                <strong>Profil Sekolah</strong>
+                                <small>Sejarah, Visi Misi & Identitas</small>
+                            </div>
+                        </a>
+                        <a href="guru.html" class="nav-dropdown-item active">
+                            <span class="dropdown-icon">👩‍🏫</span>
+                            <div>
+                                <strong>Dewan Guru & GTK</strong>
+                                <small>Struktur Organisasi & Tenaga Pendidik</small>
+                            </div>
+                        </a>
+                        <a href="siswa.html" class="nav-dropdown-item">
+                            <span class="dropdown-icon">👨‍🎓</span>
+                            <div>
+                                <strong>Kesiswaan</strong>
+                                <small>Data Siswa, Kelas & Rombel</small>
+                            </div>
+                        </a>
+                        <a href="sapras.html" class="nav-dropdown-item">
+                            <span class="dropdown-icon">🏫</span>
+                            <div>
+                                <strong>Sarana & Prasarana</strong>
+                                <small>Kondisi Ruang Kelas, TIK & Fasilitas</small>
+                            </div>
+                        </a>
+                        <a href="sop.html" class="nav-dropdown-item">
+                            <span class="dropdown-icon">📋</span>
+                            <div>
+                                <strong>Dokumen SOP</strong>
+                                <small>Standar Operasional Prosedur Resmi</small>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <a href="kolaborasi.html" class="nav-link">Mitra & Kolaborasi</a>
+                <a href="pengembangan-guru.html" class="nav-link">Pengembangan Guru</a>
+                <a href="berita.html" class="nav-link">Berita</a>
+                <a href="pengumuman.html" class="nav-link">Pengumuman</a>
+                <a href="galeri.html" class="nav-link">Galeri</a>
+                <a href="kontak.html" class="nav-link">Kontak</a>
+                <a href="pengumuman.html#ppdb" class="btn-nav-action">PPDB</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- BANNER SUB-HALAMAN -->
+    <section style="background: linear-gradient(135deg, var(--primary-dark), var(--primary)); color: white; padding: 45px 0;">
+        <div class="container">
+            <span class="badge-tag" style="background: rgba(255,255,255,0.2); font-size: 12px; margin-bottom: 10px; display: inline-block;">PENDIDIK & GTK</span>
+            <h1 style="font-size: 32px; font-weight: 800; margin-bottom: 8px;">Dewan Guru & Tenaga Kependidikan</h1>
+            <p style="color: #e2e8f0; font-size: 15px; max-width: 700px;">
+                Mengenal 12 tenaga pendidik profesional dan berdedikasi tinggi yang membimbing 157 putra-putri SD Negeri Inpres Arso VIII.
+            </p>
+        </div>
+    </section>
+
+    <!-- KONTEN GURU -->
+    <section>
+        <div class="container">
+
+            <!-- FOTO RESMI DEWAN GURU & GAPURA -->
+            <div class="school-photo-showcase" style="margin-bottom: 35px;">
+                <img src="images/dewan-guru.jpg" alt="Dewan Guru SD Negeri Inpres Arso VIII bersama Kepala Sekolah" style="cursor: pointer;" onclick="window.openLightboxWith(this.src, this.alt)" title="Klik untuk perbesar foto" decoding="async" loading="lazy">
+                <div class="school-photo-caption">
+                    <div>
+                        <span style="background: var(--secondary); color: white; padding: 4px 12px; border-radius: 9999px; font-size: 11px; font-weight: 800; text-transform: uppercase;">DEWAN GURU & TENAGA PENDIDIK</span>
+                        <h3 style="font-size: 18px; font-weight: 800; margin: 6px 0 2px; color: white;">Keluarga Besar Pendidik SDN Inpres Arso VIII</h3>
+                        <p style="font-size: 13px; color: #cbd5e1; margin: 0;">Foto bersama 12 tenaga pendidik di depan Gapura Sekolah. Kepala Sekolah Bapak Adi Puspito, S.Pd (tengah).</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BAGAN STRUKTUR ORGANISASI -->
+            <div class="card" style="padding: 30px; margin-bottom: 40px;">
+                <div style="text-align: center; margin-bottom: 25px;">
+                    <span class="section-pill">Struktur Resmi</span>
+                    <h2 style="font-size: 24px; color: var(--primary-dark); font-weight: 800;">Struktur Organisasi Sekolah</h2>
+                    <p style="font-size: 14px; color: var(--dark-muted);">Bagan Pembagian Tugas Guru SDN Inpres Arso VIII Sesuai Struktur Resmi Sekolah</p>
+                </div>
+
+                <!-- DIAGRAM STRUKTUR RESMI (VEKTOR INTERAKTIF & RESPONSIF) -->
+                <div class="org-diagram-wrapper" id="baganStrukturWrapper" style="width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 15px 10px; border: 1px solid #e2e8f0; border-radius: 12px; background: #ffffff; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);">
+                    <!-- Wadah Gambar Bagan Kustom (Jika diunggah lewat Admin) -->
+                    <div id="baganCustomImageContainer" style="display: none; text-align: center; padding: 10px 0;">
+                        <img id="baganCustomImg" src="" alt="Bagan Struktur Organisasi Resmi SDN Inpres Arso VIII" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); cursor: pointer;" onclick="if(window.openBaganModal){ window.openBaganModal(); }" title="Klik untuk memperbesar bagan layar penuh">
+                    </div>
+
+                    <!-- Wadah Bagan Vektor Interaktif (Otomatis Terkoneksi dengan Database Guru) -->
+                    <div id="baganSvgContainer">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 710" width="100%" height="auto" style="font-family: 'Outfit', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; display: block; margin: 0 auto; max-width: 1040px; background: #ffffff;">
+  <defs>
+    <!-- Arrowhead markers -->
+    <marker id="arrowDown" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#0284c7"/>
+    </marker>
+    <marker id="arrowLeft" viewBox="0 0 10 10" refX="2" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 10 0 L 0 5 L 10 10 z" fill="#0284c7"/>
+    </marker>
+    <marker id="arrowRight" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#0284c7"/>
+    </marker>
+
+    <!-- Soft box shadow for premium elevation -->
+    <filter id="boxShadow" x="-5%" y="-10%" width="110%" height="130%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#0f172a" flood-opacity="0.08"/>
+    </filter>
+    <filter id="kepsekShadow" x="-5%" y="-10%" width="110%" height="130%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#1e40af" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+
+  <!-- ========================================== -->
+  <!-- JUDUL STRUKTUR ORGANISASI                 -->
+  <!-- ========================================== -->
+  <text x="530" y="36" text-anchor="middle" font-size="20" font-weight="800" fill="#0f172a" letter-spacing="0.5">STRUKTUR ORGANISASI SEKOLAH DASAR NEGERI INPRES ARSO VIII</text>
+  <line x1="200" y1="48" x2="860" y2="48" stroke="#e2e8f0" stroke-width="2"/>
+
+  <!-- ========================================== -->
+  <!-- KEPALA SEKOLAH (LEVEL 0)                   -->
+  <!-- ========================================== -->
+  <g transform="translate(400, 65)" filter="url(#kepsekShadow)">
+    <rect width="260" height="76" rx="8" fill="#f8fafc" stroke="#1d4ed8" stroke-width="2.5"/>
+    <rect width="260" height="6" rx="3" fill="#1d4ed8"/>
+    <text x="130" y="32" text-anchor="middle" font-size="14.5" font-weight="800" fill="#0f172a" id="baganSvgNamaKepsek">ADI PUSPITO,S.Pd.SD</text>
+    <text x="130" y="58" text-anchor="middle" font-size="13" font-weight="800" fill="#1d4ed8" letter-spacing="1">KEPALA SEKOLAH</text>
+  </g>
+
+  <!-- Garis Utama dari Kepala Sekolah ke Baris 1 -->
+  <line x1="530" y1="141" x2="530" y2="175" stroke="#0284c7" stroke-width="2.2" marker-end="url(#arrowDown)"/>
+
+  <!-- ========================================== -->
+  <!-- CONNECTING TREE LINES                      -->
+  <!-- ========================================== -->
+  <!-- Horizontal Bar 1 (atas Row 1) -->
+  <line x1="190" y1="180" x2="870" y2="180" stroke="#0284c7" stroke-width="2.2"/>
+  
+  <!-- Panah turun ke tiap kotak Baris 1 -->
+  <line x1="190" y1="180" x2="190" y2="204" stroke="#0284c7" stroke-width="2.2" marker-end="url(#arrowDown)"/>
+  <line x1="530" y1="180" x2="530" y2="204" stroke="#0284c7" stroke-width="2.2" marker-end="url(#arrowDown)"/>
+  <line x1="870" y1="180" x2="870" y2="204" stroke="#0284c7" stroke-width="2.2" marker-end="url(#arrowDown)"/>
+
+  <!-- Garis cabang vertikal yang tembus turun ke Baris 2 & 3 -->
+  <!-- Cabang kiri di celah 1-2 (x=360) -->
+  <line x1="360" y1="180" x2="360" y2="350" stroke="#0284c7" stroke-width="2.2"/>
+  <!-- Cabang kanan di celah 2-3 (x=700) -->
+  <line x1="700" y1="180" x2="700" y2="350" stroke="#0284c7" stroke-width="2.2"/>
+
+  <!-- Horizontal Bar 2 (atas Row 2) -->
+  <line x1="190" y1="350" x2="870" y2="350" stroke="#0284c7" stroke-width="2.2"/>
+
+  <!-- Panah turun ke tiap kotak Baris 2 -->
+  <line x1="190" y1="350" x2="190" y2="374" stroke="#0284c7" stroke-width="2.2" marker-end="url(#arrowDown)"/>
+  <line x1="530" y1="350" x2="530" y2="374" stroke="#0284c7" stroke-width="2.2" marker-end="url(#arrowDown)"/>
+  <line x1="870" y1="350" x2="870" y2="374" stroke="#0284c7" stroke-width="2.2" marker-end="url(#arrowDown)"/>
+
+  <!-- Garis vertikal tembus turun ke Baris 3 -->
+  <line x1="360" y1="350" x2="360" y2="520" stroke="#0284c7" stroke-width="2.2"/>
+  <line x1="700" y1="350" x2="700" y2="520" stroke="#0284c7" stroke-width="2.2"/>
+
+  <!-- Horizontal Bar 3 (atas Row 3) -->
+  <line x1="141.5" y1="520" x2="918.5" y2="520" stroke="#0284c7" stroke-width="2.2"/>
+
+  <!-- Panah turun ke tiap kotak Baris 3 -->
+  <line x1="141.5" y1="520" x2="141.5" y2="544" stroke="#0284c7" stroke-width="2.2" marker-end="url(#arrowDown)"/>
+  <line x1="400.5" y1="520" x2="400.5" y2="544" stroke="#0284c7" stroke-width="2.2" marker-end="url(#arrowDown)"/>
+  <line x1="659.5" y1="520" x2="659.5" y2="544" stroke="#0284c7" stroke-width="2.2" marker-end="url(#arrowDown)"/>
+  <line x1="918.5" y1="520" x2="918.5" y2="544" stroke="#0284c7" stroke-width="2.2" marker-end="url(#arrowDown)"/>
+
+
+  <!-- ========================================== -->
+  <!-- BARIS 1: GURU KELAS BAWAH (I, II, III)     -->
+  <!-- ========================================== -->
+  <!-- Kotak 1: Yuli Syetia Sari (Guru Kls I) -->
+  <g transform="translate(65, 208)" filter="url(#boxShadow)">
+    <rect width="250" height="74" rx="8" fill="#ffffff" stroke="#0284c7" stroke-width="1.8"/>
+    <text x="125" y="32" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0f172a" id="baganSvgNamaKelas1">YULI SYETIA SARI,S.Pd</text>
+    <text x="125" y="56" text-anchor="middle" font-size="12" font-weight="800" fill="#0284c7" letter-spacing="0.5">GURU KLS I</text>
+  </g>
+
+  <!-- Panah 2 Arah Horizontal: Yuli <-> Elias -->
+  <line x1="323" y1="245" x2="397" y2="245" stroke="#0284c7" stroke-width="2" marker-start="url(#arrowLeft)" marker-end="url(#arrowRight)"/>
+
+  <!-- Kotak 2: Elias Tabuni (Guru Kls II) -->
+  <g transform="translate(405, 208)" filter="url(#boxShadow)">
+    <rect width="250" height="74" rx="8" fill="#ffffff" stroke="#0284c7" stroke-width="1.8"/>
+    <text x="125" y="32" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0f172a" id="baganSvgNamaKelas2">ELIAS TABUNI,S.Pd</text>
+    <text x="125" y="56" text-anchor="middle" font-size="12" font-weight="800" fill="#0284c7" letter-spacing="0.5">GURU KLS II</text>
+  </g>
+
+  <!-- Panah 2 Arah Horizontal: Elias <-> Rita -->
+  <line x1="663" y1="245" x2="737" y2="245" stroke="#0284c7" stroke-width="2" marker-start="url(#arrowLeft)" marker-end="url(#arrowRight)"/>
+
+  <!-- Kotak 3: Rita Paulina Wabiser (Guru Kls III) -->
+  <g transform="translate(745, 208)" filter="url(#boxShadow)">
+    <rect width="250" height="74" rx="8" fill="#ffffff" stroke="#0284c7" stroke-width="1.8"/>
+    <text x="125" y="27" text-anchor="middle" font-size="13" font-weight="700" fill="#0f172a" id="baganSvgNamaKelas3"><tspan x="125" y="27">RITA PAULINA</tspan><tspan x="125" y="43">WABISER,S.Pd</tspan></text>
+    <text x="125" y="62" text-anchor="middle" font-size="12" font-weight="800" fill="#0284c7" letter-spacing="0.5">GURU KLS III</text>
+  </g>
+
+
+  <!-- ========================================== -->
+  <!-- BARIS 2: GURU KELAS ATAS (IV, V, VI)       -->
+  <!-- ========================================== -->
+  <!-- Kotak 1: Warno (Guru Kls IV) -->
+  <g transform="translate(65, 378)" filter="url(#boxShadow)">
+    <rect width="250" height="74" rx="8" fill="#ffffff" stroke="#0284c7" stroke-width="1.8"/>
+    <text x="125" y="32" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0f172a" id="baganSvgNamaKelas4">WARNO,S.Pd.SD</text>
+    <text x="125" y="56" text-anchor="middle" font-size="12" font-weight="800" fill="#0284c7" letter-spacing="0.5">GURU KLS IV</text>
+  </g>
+
+  <!-- Panah 2 Arah Horizontal: Warno <-> Rini -->
+  <line x1="323" y1="415" x2="397" y2="415" stroke="#0284c7" stroke-width="2" marker-start="url(#arrowLeft)" marker-end="url(#arrowRight)"/>
+
+  <!-- Kotak 2: Rini Handayani (Guru Kls V) -->
+  <g transform="translate(405, 378)" filter="url(#boxShadow)">
+    <rect width="250" height="74" rx="8" fill="#ffffff" stroke="#0284c7" stroke-width="1.8"/>
+    <text x="125" y="32" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0f172a" id="baganSvgNamaKelas5">RINI HANDAYANI,S.Pd</text>
+    <text x="125" y="56" text-anchor="middle" font-size="12" font-weight="800" fill="#0284c7" letter-spacing="0.5">GURU KLS V</text>
+  </g>
+
+  <!-- Panah 2 Arah Horizontal: Rini <-> Cicik -->
+  <line x1="663" y1="415" x2="737" y2="415" stroke="#0284c7" stroke-width="2" marker-start="url(#arrowLeft)" marker-end="url(#arrowRight)"/>
+
+  <!-- Kotak 3: Cicik Mursidah (Guru Kls VI) -->
+  <g transform="translate(745, 378)" filter="url(#boxShadow)">
+    <rect width="250" height="74" rx="8" fill="#ffffff" stroke="#0284c7" stroke-width="1.8"/>
+    <text x="125" y="32" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0f172a" id="baganSvgNamaKelas6">CICIK MURSIDAH,S.Pd</text>
+    <text x="125" y="56" text-anchor="middle" font-size="12" font-weight="800" fill="#0284c7" letter-spacing="0.5">GURU KLS VI</text>
+  </g>
+
+
+  <!-- ========================================== -->
+  <!-- BARIS 3: GURU MAPEL & AGAMA                -->
+  <!-- ========================================== -->
+  <!-- Kotak 1: Ferdinand (Guru Penjaskes) -->
+  <g transform="translate(34, 548)" filter="url(#boxShadow)">
+    <rect width="215" height="76" rx="8" fill="#ffffff" stroke="#0284c7" stroke-width="1.8"/>
+    <text x="107.5" y="33" text-anchor="middle" font-size="13" font-weight="700" fill="#0f172a" id="baganSvgNamaPenjas">FERDINAND,S.Pd</text>
+    <text x="107.5" y="57" text-anchor="middle" font-size="11.5" font-weight="800" fill="#0284c7" letter-spacing="0.5">GURU PENJASKES</text>
+  </g>
+
+  <!-- Panah 2 Arah Horizontal: Ferdinand <-> Zainal -->
+  <line x1="257" y1="586" x2="285" y2="586" stroke="#0284c7" stroke-width="2" marker-start="url(#arrowLeft)" marker-end="url(#arrowRight)"/>
+
+  <!-- Kotak 2: Zainal Habib Al Arif (Guru Ag.Islam) -->
+  <g transform="translate(293, 548)" filter="url(#boxShadow)">
+    <rect width="215" height="76" rx="8" fill="#ffffff" stroke="#0284c7" stroke-width="1.8"/>
+    <text x="107.5" y="27" text-anchor="middle" font-size="12" font-weight="700" fill="#0f172a" id="baganSvgNamaAgIslam"><tspan x="107.5" y="27">Zainal Habiib Al</tspan><tspan x="107.5" y="43">Arif,S.Pd</tspan></text>
+    <text x="107.5" y="63" text-anchor="middle" font-size="11.5" font-weight="800" fill="#0284c7" letter-spacing="0.5">Guru Ag.Islam</text>
+  </g>
+
+  <!-- Panah 2 Arah Horizontal: Zainal <-> Ester -->
+  <line x1="516" y1="586" x2="544" y2="586" stroke="#0284c7" stroke-width="2" marker-start="url(#arrowLeft)" marker-end="url(#arrowRight)"/>
+
+  <!-- Kotak 3: Ester Tina Maria Panjaitan (Guru Ag.Protestan) -->
+  <g transform="translate(552, 548)" filter="url(#boxShadow)">
+    <rect width="215" height="76" rx="8" fill="#ffffff" stroke="#0284c7" stroke-width="1.8"/>
+    <text x="107.5" y="27" text-anchor="middle" font-size="11.5" font-weight="700" fill="#0f172a" id="baganSvgNamaAgKristen"><tspan x="107.5" y="27">Esther Tina Maria</tspan><tspan x="107.5" y="43">Panjaitan,S.Pd</tspan></text>
+    <text x="107.5" y="63" text-anchor="middle" font-size="11.5" font-weight="800" fill="#0284c7" letter-spacing="0.5">Guru Ag.Protestan</text>
+  </g>
+
+  <!-- Panah 2 Arah Horizontal: Ester <-> Flavianus -->
+  <line x1="775" y1="586" x2="803" y2="586" stroke="#0284c7" stroke-width="2" marker-start="url(#arrowLeft)" marker-end="url(#arrowRight)"/>
+
+  <!-- Kotak 4: Flavianus Renaldus (Guru Ag.Katolik) -->
+  <g transform="translate(811, 548)" filter="url(#boxShadow)">
+    <rect width="215" height="76" rx="8" fill="#ffffff" stroke="#0284c7" stroke-width="1.8"/>
+    <text x="107.5" y="27" text-anchor="middle" font-size="12" font-weight="700" fill="#0f172a" id="baganSvgNamaAgKatolik"><tspan x="107.5" y="27">Flavianus</tspan><tspan x="107.5" y="43">Rainaldus,S.Ag</tspan></text>
+    <text x="107.5" y="63" text-anchor="middle" font-size="11.5" font-weight="800" fill="#0284c7" letter-spacing="0.5">Guru Ag.Katolik</text>
+  </g>
+
+  <!-- Keterangan Alur Hubungan Kerja -->
+  <text x="530" y="685" text-anchor="middle" font-size="12" fill="#64748b" font-weight="600">Ket: Garis vertikal (▼) Garis Instruksi / Pembinaan Kepala Sekolah  &#8226;  Garis horizontal (◄►) Hubungan Koordinasi Antar Guru</text>
+</svg>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 15px; font-size: 12.5px; color: var(--dark-muted);">
+                    <div>💡 <em>Geser / scroll bagan ke kanan jika melihat dari layar ponsel pintar (HP).</em></div>
+                    <div style="display: inline-flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                        <button type="button" onclick="if(window.openBaganModal){ window.openBaganModal(); } else { window.open('images/bagan-struktur-organisasi.svg', '_blank'); }" class="btn btn-primary" style="font-size: 13px; padding: 9px 18px; cursor: pointer; border: none; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 3px 10px rgba(30,58,138,0.3); font-weight: 700; border-radius: 8px;">
+                            <span>🔍 Perbesar & Telusuri Bagan (Layar Penuh HD)</span>
+                        </button>
+                        <a href="images/bagan-struktur-organisasi.svg" target="_blank" class="btn btn-secondary" style="font-size: 12.5px; padding: 8px 15px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; border-radius: 8px;" title="Buka file gambar vektor asli di tab peramban baru">
+                            <span>↗️ Buka di Tab Baru</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FILTER & PENCARIAN GURU -->
+            <div class="filter-bar">
+                <div class="filter-pills">
+                    <button class="filter-btn filter-teacher-btn active" data-filter="all">Semua GTK (12)</button>
+                    <button class="filter-btn filter-teacher-btn" data-filter="wali">Wali Kelas (6)</button>
+                    <button class="filter-btn filter-teacher-btn" data-filter="agama">Guru Agama (3)</button>
+                    <button class="filter-btn filter-teacher-btn" data-filter="mapel">Guru Mapel (2)</button>
+                    <button class="filter-btn filter-teacher-btn" data-filter="pns">PNS (5)</button>
+                    <button class="filter-btn filter-teacher-btn" data-filter="p3k">P3K (2)</button>
+                    <button class="filter-btn filter-teacher-btn" data-filter="honor">Honor (4)</button>
+                </div>
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="teacherSearch" class="search-input" placeholder="Cari nama guru atau NUPTK...">
+                </div>
+            </div>
+
+            <!-- DAFTAR KARTU GURU (12 PENDIDIK RESMI) -->
+            <div class="teachers-grid" id="guruGridContainer">
+                
+                <!-- 1. KEPALA SEKOLAH -->
+                <div class="teacher-card" data-role="kepala wali" data-status="pns">
+                    <img src="images/kepala-sekolah.jpg" alt="Adi Puspito, S.Pd" class="teacher-avatar" decoding="async" loading="lazy">
+                    <span class="badge-status pns">PNS IV/c</span>
+                    <h3 class="teacher-name" style="margin-top: 8px;">Adi Puspito, S.Pd</h3>
+                    <div class="teacher-role">Kepala Sekolah</div>
+                    <div class="teacher-details">
+                        <span><strong>NIP:</strong> 196702141992031009</span>
+                        <span><strong>NUPTK:</strong> 4546745649200010</span>
+                        <span><strong>Pangkat:</strong> Pembina Utama Muda</span>
+                        <span><strong>TTL:</strong> Banyuwangi, 14-02-1967</span>
+                    </div>
+                </div>
+
+                <!-- 2. GURU KELAS I: YULI SYETIA SARI -->
+                <div class="teacher-card" data-role="wali" data-status="p3k">
+                    <img src="images/guru-yuli.jpg" alt="Yuli Syetia Sari, S.Pd" class="teacher-avatar" decoding="async" loading="lazy">
+                    <span class="badge-status p3k">P3K Gol. IX</span>
+                    <h3 class="teacher-name" style="margin-top: 8px;">Yuli Syetia Sari, S.Pd</h3>
+                    <div class="teacher-role">Guru Kelas I</div>
+                    <div class="teacher-details">
+                        <span><strong>NIP:</strong> 199203132022212024</span>
+                        <span><strong>NUPTK:</strong> 8645770671230192</span>
+                        <span><strong>Pangkat:</strong> Golongan IX</span>
+                        <span><strong>TTL:</strong> Jayapura, 13-03-1992</span>
+                    </div>
+                </div>
+
+                <!-- 3. GURU KELAS II: ELIAS TABUNI -->
+                <div class="teacher-card" data-role="wali" data-status="pns">
+                    <img src="images/guru-elias.jpg" alt="Elias Tabuni, S.Pd" class="teacher-avatar" decoding="async" loading="lazy">
+                    <span class="badge-status pns">PNS IV/c</span>
+                    <h3 class="teacher-name" style="margin-top: 8px;">Elias Tabuni, S.Pd</h3>
+                    <div class="teacher-role">Guru Kelas II</div>
+                    <div class="teacher-details">
+                        <span><strong>NIP:</strong> 196903091993011001</span>
+                        <span><strong>NUPTK:</strong> 3641747652200002</span>
+                        <span><strong>Pangkat:</strong> Pembina Utama Muda</span>
+                        <span><strong>TTL:</strong> Pyramit, 09-03-1969</span>
+                    </div>
+                </div>
+
+                <!-- 4. GURU KELAS III: RITA PAULINA WABISER -->
+                <div class="teacher-card" data-role="wali" data-status="honor">
+                    <img src="images/guru-rita.jpg" alt="Rita Paulina Wabiser, S.Pd" class="teacher-avatar" decoding="async" loading="lazy">
+                    <span class="badge-status honor">Guru Honor</span>
+                    <h3 class="teacher-name" style="margin-top: 8px;">Rita Paulina Wabiser, S.Pd</h3>
+                    <div class="teacher-role">Guru Kelas III</div>
+                    <div class="teacher-details">
+                        <span><strong>NIP:</strong> -</span>
+                        <span><strong>NUPTK:</strong> -</span>
+                        <span><strong>Status:</strong> Guru Honorer Daerah</span>
+                        <span><strong>TTL:</strong> Biak, 18-07-1997</span>
+                    </div>
+                </div>
+
+                <!-- 5. GURU KELAS IV: WARNO -->
+                <div class="teacher-card" data-role="wali" data-status="pns">
+                    <img src="images/guru-warno.jpg" alt="Warno, S.Pd.SD" class="teacher-avatar" decoding="async" loading="lazy">
+                    <span class="badge-status pns">PNS IV/c</span>
+                    <h3 class="teacher-name" style="margin-top: 8px;">Warno, S.Pd.SD</h3>
+                    <div class="teacher-role">Guru Kelas IV</div>
+                    <div class="teacher-details">
+                        <span><strong>NIP:</strong> 197206061993051001</span>
+                        <span><strong>NUPTK:</strong> 1938750652200032</span>
+                        <span><strong>Pangkat:</strong> Pembina Utama Muda</span>
+                        <span><strong>TTL:</strong> Ponorogo, 06-06-1972</span>
+                    </div>
+                </div>
+
+                <!-- 6. GURU KELAS V: RINI HANDAYANI -->
+                <div class="teacher-card" data-role="wali" data-status="pns">
+                    <img src="images/guru-rini.jpg" alt="Rini Handayani, S.Pd" class="teacher-avatar" decoding="async" loading="lazy">
+                    <span class="badge-status pns">PNS III/b</span>
+                    <h3 class="teacher-name" style="margin-top: 8px;">Rini Handayani, S.Pd</h3>
+                    <div class="teacher-role">Guru Kelas V</div>
+                    <div class="teacher-details">
+                        <span><strong>NIP:</strong> 198408042015072002</span>
+                        <span><strong>NUPTK:</strong> 6136762665300023</span>
+                        <span><strong>Pangkat:</strong> Penata Muda Tk.I</span>
+                        <span><strong>TTL:</strong> Ponorogo, 04-08-1984</span>
+                    </div>
+                </div>
+
+                <!-- 7. GURU KELAS VI: CICIK MURSIDAH -->
+                <div class="teacher-card" data-role="wali" data-status="pns">
+                    <img src="images/guru-cicik.jpg" alt="Cicik Mursidah, S.Pd" class="teacher-avatar" decoding="async" loading="lazy">
+                    <span class="badge-status pns">PNS III/a</span>
+                    <h3 class="teacher-name" style="margin-top: 8px;">Cicik Mursidah, S.Pd</h3>
+                    <div class="teacher-role">Guru Kelas VI</div>
+                    <div class="teacher-details">
+                        <span><strong>NIP:</strong> 199512062020122023</span>
+                        <span><strong>NUPTK:</strong> 8538773674230073</span>
+                        <span><strong>Pangkat:</strong> Penata Muda</span>
+                        <span><strong>TTL:</strong> Bojonegoro, 06-12-1995</span>
+                    </div>
+                </div>
+
+                <!-- 8. GURU PENJASKES: FERDINAND -->
+                <div class="teacher-card" data-role="mapel penjas" data-status="pns">
+                    <img src="images/guru-ferdinand.jpg" alt="Ferdinand, S.Pd" class="teacher-avatar" decoding="async" loading="lazy">
+                    <span class="badge-status pns">PNS IV/b</span>
+                    <h3 class="teacher-name" style="margin-top: 8px;">Ferdinand, S.Pd</h3>
+                    <div class="teacher-role">Guru Penjaskes / PJOK</div>
+                    <div class="teacher-details">
+                        <span><strong>NIP:</strong> 197305281997111001</span>
+                        <span><strong>NUPTK:</strong> 7860751653200002</span>
+                        <span><strong>Pangkat:</strong> Pembina Tk.I</span>
+                        <span><strong>TTL:</strong> Abepura, 28-05-1973</span>
+                    </div>
+                </div>
+
+                <!-- 9. GURU AGAMA ISLAM: ZAINAL HABIIB AL ARIF -->
+                <div class="teacher-card" data-role="agama" data-status="p3k">
+                    <img src="images/guru-zainal.jpg" alt="Zainal Habiib Al Arif, S.Pd" class="teacher-avatar" decoding="async" loading="lazy">
+                    <span class="badge-status p3k">P3K Gol. IX</span>
+                    <h3 class="teacher-name" style="margin-top: 8px;">Zainal Habiib Al Arif, S.Pd</h3>
+                    <div class="teacher-role">Guru Pendidikan Agama Islam</div>
+                    <div class="teacher-details">
+                        <span><strong>NIP:</strong> 199707062024211013</span>
+                        <span><strong>NUPTK:</strong> 2038775676130133</span>
+                        <span><strong>Pangkat:</strong> Golongan IX</span>
+                        <span><strong>TTL:</strong> Arso, 06-07-1997</span>
+                    </div>
+                </div>
+
+                <!-- 10. GURU AGAMA KATOLIK: FLAVIANUS RAINALDUS -->
+                <div class="teacher-card" data-role="agama" data-status="honor">
+                    <img src="images/guru-flavianus.jpg" alt="Flavianus Rainaldus, S.Ag" class="teacher-avatar" decoding="async" loading="lazy">
+                    <span class="badge-status honor">Guru Honor</span>
+                    <h3 class="teacher-name" style="margin-top: 8px;">Flavianus Rainaldus, S.Ag</h3>
+                    <div class="teacher-role">Guru Pendidikan Agama Katolik</div>
+                    <div class="teacher-details">
+                        <span><strong>NIP:</strong> -</span>
+                        <span><strong>NUPTK:</strong> 3847768669130452</span>
+                        <span><strong>Status:</strong> Guru Honorer Daerah</span>
+                        <span><strong>TTL:</strong> Bebot, 15-05-1990</span>
+                    </div>
+                </div>
+
+                <!-- 11. GURU AGAMA PROTESTAN: ESTHER TINA MARIA PANJAITAN -->
+                <div class="teacher-card" data-role="agama" data-status="honor">
+                    <img src="images/guru-esther.jpg" alt="Esther Tina Maria Panjaitan, S.Pd" class="teacher-avatar" decoding="async" loading="lazy">
+                    <span class="badge-status honor">Guru Honor</span>
+                    <h3 class="teacher-name" style="margin-top: 8px;">Esther Tina Maria Panjaitan, S.Pd</h3>
+                    <div class="teacher-role">Guru Pendidikan Agama Protestan</div>
+                    <div class="teacher-details">
+                        <span><strong>NIP:</strong> -</span>
+                        <span><strong>NUPTK:</strong> 0352766667230403</span>
+                        <span><strong>Status:</strong> Guru Honorer Daerah</span>
+                        <span><strong>TTL:</strong> Ujung Bandar, 20-10-1988</span>
+                    </div>
+                </div>
+
+                <!-- 12. GURU BHS. INGGRIS: UMI WILDANA ZULFA -->
+                <div class="teacher-card" data-role="mapel inggris" data-status="honor">
+                    <img src="images/guru-umi.jpg" alt="Umi Wildana Zulfa" class="teacher-avatar" decoding="async" loading="lazy">
+                    <span class="badge-status honor">Guru Honor</span>
+                    <h3 class="teacher-name" style="margin-top: 8px;">Umi Wildana Zulfa</h3>
+                    <div class="teacher-role">Guru Bahasa Inggris</div>
+                    <div class="teacher-details">
+                        <span><strong>NIP:</strong> -</span>
+                        <span><strong>NUPTK:</strong> 5055779680230013</span>
+                        <span><strong>Status:</strong> Guru Honorer Daerah</span>
+                        <span><strong>TTL:</strong> Keerom, 23-07-2001</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- TABEL REKAPITULASI PENDIDIK -->
+            <div style="margin-top: 45px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                    <h3 style="font-size: 20px; color: var(--primary-dark); font-weight: 800;">Tabel Data Resmi Tenaga Pendidik SDN Inpres Arso VIII</h3>
+                    <button onclick="window.print()" class="btn btn-primary" style="padding: 6px 14px; font-size: 13px;">🖨️ Cetak Rekap Guru</button>
+                </div>
+                <div class="data-table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama Lengkap & NIP</th>
+                                <th>Jabatan / Tugas</th>
+                                <th>Status</th>
+                                <th>Pangkat / Gol</th>
+                                <th>Tempat & Tgl Lahir</th>
+                                <th>NUPTK</th>
+                            </tr>
+                        </thead>
+                        <tbody id="guruRecapTableBody">
+                            <tr>
+                                <td>1</td>
+                                <td><strong>Adi Puspito, S.Pd</strong><br><small style="color: var(--dark-muted);">196702141992031009</small></td>
+                                <td>Kepala Sekolah</td>
+                                <td><span class="badge-status pns">PNS</span></td>
+                                <td>Pembina Utama Muda, IV/c</td>
+                                <td>Banyuwangi, 14/02/1967</td>
+                                <td>4546745649200010</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td><strong>Yuli Syetia Sari, S.Pd</strong><br><small style="color: var(--dark-muted);">199203132022212024</small></td>
+                                <td>Guru Kelas I</td>
+                                <td><span class="badge-status p3k">P3K</span></td>
+                                <td>Golongan IX</td>
+                                <td>Jayapura, 13/03/1992</td>
+                                <td>8645770671230192</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td><strong>Elias Tabuni, S.Pd</strong><br><small style="color: var(--dark-muted);">196903091993011001</small></td>
+                                <td>Guru Kelas II</td>
+                                <td><span class="badge-status pns">PNS</span></td>
+                                <td>Pembina Utama Muda, IV/c</td>
+                                <td>Pyramit, 09/03/1969</td>
+                                <td>3641747652200002</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td><strong>Rita Paulina Wabiser, S.Pd</strong></td>
+                                <td>Guru Kelas III</td>
+                                <td><span class="badge-status honor">Honor</span></td>
+                                <td>-</td>
+                                <td>Biak, 18/07/1997</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td><strong>Warno, S.Pd.SD</strong><br><small style="color: var(--dark-muted);">197206061993051001</small></td>
+                                <td>Guru Kelas IV</td>
+                                <td><span class="badge-status pns">PNS</span></td>
+                                <td>Pembina Utama Muda, IV/c</td>
+                                <td>Ponorogo, 06/06/1972</td>
+                                <td>1938750652200032</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td><strong>Rini Handayani, S.Pd</strong><br><small style="color: var(--dark-muted);">198408042015072002</small></td>
+                                <td>Guru Kelas V</td>
+                                <td><span class="badge-status pns">PNS</span></td>
+                                <td>Penata Muda Tk.I, III/b</td>
+                                <td>Ponorogo, 04/08/1984</td>
+                                <td>6136762665300023</td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td><strong>Cicik Mursidah, S.Pd</strong><br><small style="color: var(--dark-muted);">199512062020122023</small></td>
+                                <td>Guru Kelas VI</td>
+                                <td><span class="badge-status pns">PNS</span></td>
+                                <td>Penata Muda, III/a</td>
+                                <td>Bojonegoro, 06/12/1995</td>
+                                <td>8538773674230073</td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td><strong>Ferdinand, S.Pd</strong><br><small style="color: var(--dark-muted);">197305281997111001</small></td>
+                                <td>Guru Penjaskes / PJOK</td>
+                                <td><span class="badge-status pns">PNS</span></td>
+                                <td>Pembina Tk.I, IV/b</td>
+                                <td>Abepura, 28/05/1973</td>
+                                <td>7860751653200002</td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                                <td><strong>Zainal Habiib Al Arif, S.Pd</strong><br><small style="color: var(--dark-muted);">199707062024211013</small></td>
+                                <td>Guru Agama Islam</td>
+                                <td><span class="badge-status p3k">P3K</span></td>
+                                <td>Golongan IX</td>
+                                <td>Arso, 06/07/1997</td>
+                                <td>2038775676130133</td>
+                            </tr>
+                            <tr>
+                                <td>10</td>
+                                <td><strong>Flavianus Rainaldus, S.Ag</strong></td>
+                                <td>Guru Agama Katolik</td>
+                                <td><span class="badge-status honor">Honor</span></td>
+                                <td>-</td>
+                                <td>Bebot, 15/05/1990</td>
+                                <td>3847768669130452</td>
+                            </tr>
+                            <tr>
+                                <td>11</td>
+                                <td><strong>Esther Tina Maria Panjaitan, S.Pd</strong></td>
+                                <td>Guru Agama Protestan</td>
+                                <td><span class="badge-status honor">Honor</span></td>
+                                <td>-</td>
+                                <td>Ujung Bandar, 20/10/1988</td>
+                                <td>0352766667230403</td>
+                            </tr>
+                            <tr>
+                                <td>12</td>
+                                <td><strong>Umi Wildana Zulfa</strong></td>
+                                <td>Guru Bhs. Inggris</td>
+                                <td><span class="badge-status honor">Honor</span></td>
+                                <td>-</td>
+                                <td>Keerom, 23/07/2001</td>
+                                <td>5055779680230013</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ==========================================
+                 STANDAR OPERASIONAL PROSEDUR (SOP) DEWAN GURU
+                 ========================================== -->
+            <div style="margin-top: 55px; margin-bottom: 30px;">
+                <div class="section-header">
+                    <span class="section-pill">SOP & Kedisiplinan Pendidik</span>
+                    <h2 class="section-title">Tata Tertib, Piket & Seragam Dewan Guru</h2>
+                    <p class="section-desc">Pedoman resmi kedisiplinan, piket harian, rotasi seragam mingguan, dan pembinaan kepramukaan di SDN Inpres Arso VIII.</p>
+                </div>
+
+                <!-- TATA TERTIB GURU KARTU -->
+                <div class="card" style="padding: 28px; margin-bottom: 25px; border-left: 5px solid var(--primary);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
+                        <h3 style="font-size: 18px; color: var(--primary-dark); font-weight: 800; margin: 0;">
+                            👨‍🏫 11 Poin Tata Tertib Guru & Tenaga Kependidikan
+                        </h3>
+                        <a href="sop.html" class="btn btn-secondary" style="font-size: 12px; padding: 6px 14px; background: #e0f2fe; color: #0369a1; border-color: #bae6fd;">Lihat Dokumen SOP Lengkap →</a>
+                    </div>
+                    <ol style="margin: 0; padding-left: 20px; font-size: 14px; color: #334155; line-height: 1.7; display: flex; flex-direction: column; gap: 8px;" id="guruTataTertibList">
+                        <li><strong>Hadir Jam 07.00 WIT</strong> – Seluruh dewan guru sudah hadir di sekolah sebelum jam pembelajaran dimulai.</li>
+                        <li><strong>Budaya 5S</strong> – Membiasakan <em>Senyum, Salam, Sapa, Sopan, dan Santun</em> kepada seluruh siswa, rekan pendidik, dan tamu.</li>
+                        <li><strong>Upacara Bendera 07.15 WIT</strong> – Pukul 07.00 persiapan barisan dan pukul 07.15 upacara bendera dimulai secara tertib.</li>
+                        <li><strong>Pembina Upacara Bergilir</strong> – Guru secara terjadwal menjadi Pembina Upacara sesuai urutan giliran resmi.</li>
+                        <li><strong>Keteladanan Karakter</strong> – Guru meneladani peserta didik dalam menjaga ketertiban, sopan santun, dan kebersihan.</li>
+                        <li><strong>Disiplin Waktu</strong> – Disiplin waktu datang dan pulang sesuai ketentuan kedinasan.</li>
+                        <li><strong>Kewajiban Seragam</strong> – Wajib memakai seragam dinas sesuai ketentuan jadwal mingguan (siklus 5 minggu).</li>
+                        <li><strong>Ekstrakurikuler Pramuka</strong> – Wajib mengikuti dan mendampingi kegiatan ekstrakurikuler Pramuka.</li>
+                        <li><strong>Izin Ketidakhadiran</strong> – Guru yang tidak hadir/masuk sekolah wajib memberikan surat pemberitahuan/izin resmi.</li>
+                        <li><strong>Presensi Akhir</strong> – Menandatangani daftar hadir resmi pada akhir pembelajaran setiap hari kerja.</li>
+                        <li><strong>Tanggung Jawab Guru Piket</strong> – Guru piket wajib mengisi buku piket dan bertanggung jawab penuh selama jam sekolah.</li>
+                    </ol>
+                </div>
+
+                <!-- JADWAL PIKET GURU HARIAN -->
+                <div class="card" style="padding: 28px; margin-bottom: 25px;">
+                    <h3 style="font-size: 18px; color: var(--primary-dark); font-weight: 800; margin-bottom: 16px;">
+                        📋 Jadwal Piket Harian Guru (Senin – Jumat)
+                    </h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px;" id="guruJadwalPiketGrid">
+                        <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: 8px; padding: 14px;">
+                            <strong style="color: var(--primary); font-size: 13.5px; display: block; margin-bottom: 6px;">SENIN</strong>
+                            <div style="font-size: 13.5px; font-weight: 600; color: #0f172a;">1. Elias Tabuni, S.Pd</div>
+                            <div style="font-size: 13.5px; font-weight: 600; color: #0f172a;">2. Flavianus Renaldus, S.Ag</div>
+                        </div>
+                        <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: 8px; padding: 14px;">
+                            <strong style="color: var(--primary); font-size: 13.5px; display: block; margin-bottom: 6px;">SELASA</strong>
+                            <div style="font-size: 13.5px; font-weight: 600; color: #0f172a;">1. Esther Tina M. Panjaitan, S.Pd</div>
+                            <div style="font-size: 13.5px; font-weight: 600; color: #0f172a;">2. Cicik Mursidah, S.Pd</div>
+                        </div>
+                        <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: 8px; padding: 14px;">
+                            <strong style="color: var(--primary); font-size: 13.5px; display: block; margin-bottom: 6px;">RABU</strong>
+                            <div style="font-size: 13.5px; font-weight: 600; color: #0f172a;">1. Warno, S.Pd.SD</div>
+                            <div style="font-size: 13.5px; font-weight: 600; color: #0f172a;">2. Yuli Syetia Sari, S.Pd</div>
+                        </div>
+                        <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: 8px; padding: 14px;">
+                            <strong style="color: var(--primary); font-size: 13.5px; display: block; margin-bottom: 6px;">KAMIS</strong>
+                            <div style="font-size: 13.5px; font-weight: 600; color: #0f172a;">1. Rini Handayani, S.Pd</div>
+                            <div style="font-size: 13.5px; font-weight: 600; color: #0f172a;">2. Ferdinand, S.Pd</div>
+                        </div>
+                        <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: 8px; padding: 14px;">
+                            <strong style="color: var(--primary); font-size: 13.5px; display: block; margin-bottom: 6px;">JUMAT</strong>
+                            <div style="font-size: 13.5px; font-weight: 600; color: #0f172a;">1. Zainal Habib Al Arif, S.Pd</div>
+                            <div style="font-size: 13.5px; font-weight: 600; color: #0f172a;">2. Umi Wildana Zulfa, S.Pd</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ROTASI SERAGAM GURU 5 MINGGU -->
+                <div class="card" style="padding: 28px; margin-bottom: 25px;">
+                    <h3 style="font-size: 18px; color: var(--primary-dark); font-weight: 800; margin-bottom: 12px;">
+                        👔 Jadwal Pemakaian Seragam Guru (5 Siklus Mingguan Berputar)
+                    </h3>
+                    <div style="overflow-x: auto;">
+                        <table style="width: 100%; border-collapse: collapse; font-size: 13.5px;">
+                            <thead>
+                                <tr style="background: #f8fafc; border-bottom: 2px solid #cbd5e1; text-align: left;">
+                                    <th style="padding: 10px;">Siklus</th>
+                                    <th style="padding: 10px;">Senin & Selasa</th>
+                                    <th style="padding: 10px;">Rabu</th>
+                                    <th style="padding: 10px;">Kamis</th>
+                                    <th style="padding: 10px;">Jumat</th>
+                                </tr>
+                            </thead>
+                            <tbody id="guruSeragamTableBody">
+                                <tr style="border-bottom: 1px solid #f1f5f9;">
+                                    <td style="padding: 10px;"><strong>Minggu 1</strong></td>
+                                    <td style="padding: 10px;"><span style="background: #fef3c7; color: #92400e; padding: 3px 8px; border-radius: 4px; font-weight: 600;">Seragam Keki</span></td>
+                                    <td style="padding: 10px;">Putih - Hitam</td>
+                                    <td style="padding: 10px;"><span style="color: #166534; font-weight: 600;">Batik Papua Hijau</span></td>
+                                    <td style="padding: 10px; color: #991b1b; font-weight: 600;">Kaos Merah Maroon</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid #f1f5f9;">
+                                    <td style="padding: 10px;"><strong>Minggu 2</strong></td>
+                                    <td style="padding: 10px;"><span style="background: #fef3c7; color: #92400e; padding: 3px 8px; border-radius: 4px; font-weight: 600;">Seragam Keki</span></td>
+                                    <td style="padding: 10px;">Putih - Hitam</td>
+                                    <td style="padding: 10px;"><span style="color: #991b1b; font-weight: 600;">Batik Papua Merah</span></td>
+                                    <td style="padding: 10px; font-weight: 600;">Kaos Hitam</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid #f1f5f9;">
+                                    <td style="padding: 10px;"><strong>Minggu 3</strong></td>
+                                    <td style="padding: 10px;"><span style="background: #fef3c7; color: #92400e; padding: 3px 8px; border-radius: 4px; font-weight: 600;">Seragam Keki</span></td>
+                                    <td style="padding: 10px;">Putih - Hitam</td>
+                                    <td style="padding: 10px; font-weight: 600;">Batik Papua Cenderawasih</td>
+                                    <td style="padding: 10px; color: #1d4ed8; font-weight: 600;">Kaos Biru Lengan Panjang</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid #f1f5f9;">
+                                    <td style="padding: 10px;"><strong>Minggu 4</strong></td>
+                                    <td style="padding: 10px;"><span style="background: #fef3c7; color: #92400e; padding: 3px 8px; border-radius: 4px; font-weight: 600;">Seragam Keki</span></td>
+                                    <td style="padding: 10px;">Putih - Hitam</td>
+                                    <td style="padding: 10px; font-weight: 600;">Batik Jawa Lengan Panjang</td>
+                                    <td style="padding: 10px; color: #991b1b; font-weight: 600;">Kaos Merah Lengan Panjang</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px;"><strong>Minggu 5</strong></td>
+                                    <td style="padding: 10px;"><span style="background: #fef3c7; color: #92400e; padding: 3px 8px; border-radius: 4px; font-weight: 600;">Seragam Keki</span></td>
+                                    <td style="padding: 10px;">Putih - Hitam</td>
+                                    <td style="padding: 10px; font-weight: 600;">Batik Papua Bebas</td>
+                                    <td style="padding: 10px; color: #854d0e; font-weight: 600;">Kaos Kuning Lengan Panjang</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TIM PEMBINA PRAMUKA & PEMBINA UPACARA -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px;">
+                    <div class="card" style="padding: 24px; border-top: 4px solid var(--secondary);">
+                        <h4 style="font-size: 16px; color: var(--secondary); font-weight: 800; margin: 0 0 10px;">
+                            ⛺ Pembina Pramuka Siaga (Kls 1, 2, 3)
+                        </h4>
+                        <ul style="margin: 0; padding-left: 18px; font-size: 13.5px; color: #334155; display: flex; flex-direction: column; gap: 4px;" id="guruPramukaSiagaList">
+                            <li>Yuli Syetia Sari, S.Pd</li>
+                            <li>Ferdinand, S.Pd</li>
+                            <li>Rita Paulina Wabiser, S.Pd</li>
+                            <li>Elias Tabuni, S.Pd</li>
+                            <li>Esther Tina Maria Panjaitan, S.Pd</li>
+                            <li>Flavianus Renaldus, S.Ag</li>
+                        </ul>
+                    </div>
+
+                    <div class="card" style="padding: 24px; border-top: 4px solid var(--primary);">
+                        <h4 style="font-size: 16px; color: var(--primary); font-weight: 800; margin: 0 0 10px;">
+                            ⛺ Pembina Pramuka Penggalang (Kls 4, 5, 6)
+                        </h4>
+                        <ul style="margin: 0; padding-left: 18px; font-size: 13.5px; color: #334155; display: flex; flex-direction: column; gap: 4px;" id="guruPramukaPenggalangList">
+                            <li>Warno, S.Pd.SD</li>
+                            <li>Cicik Mursidah, S.Pd</li>
+                            <li>Rini Handayani, S.Pd</li>
+                            <li>Zainal Habib Al Arif, S.Pd</li>
+                            <li>Umi Wildana Zulfa, S.Pd</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                        <img src="images/logo-keerom.png" alt="Logo Keerom" style="width: 44px; height: 44px; object-fit: contain;" decoding="async" loading="lazy">
+                        <div>
+                            <h4 style="margin: 0; padding: 0; font-size: 16px; border: none;">SDN INPRES ARSO VIII</h4>
+                            <span style="font-size: 12px; color: #94a3b8;">Kabupaten Keerom, Papua</span>
+                        </div>
+                    </div>
+                    <p>Lembaga pendidikan dasar negeri yang mendidik 157 putra-putri di Kampung Dukwia, Arso Barat. Berorientasi pada pembinaan iman, karakter mulia, dan kecakapan IPTEK.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Menu Utama</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">🏠 Beranda</a></li>
+                        <li><a href="profil.html">📖 Profil & Visi Misi</a></li>
+                        <li><a href="guru.html">👩‍🏫 Dewan Guru & GTK</a></li>
+                        <li><a href="siswa.html">👨‍🎓 Data Kesiswaan</a></li>
+                        <li><a href="sop.html">📜 SOP & Tata Tertib</a></li>
+                        <li><a href="sapras.html">🏫 Kondisi Sarpras</a></li>
+                        <li><a href="kolaborasi.html">🤝 Mitra & Kolaborasi</a></li>
+                        <li><a href="pengembangan-guru.html">📚 Pengembangan Guru (K3S/KKG)</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Layanan</h4>
+                    <ul class="footer-links">
+                        <li><a href="pengumuman.html#ppdb">📝 Pendaftaran PPDB</a></li>
+                        <li><a href="berita.html">📰 Berita & Kegiatan</a></li>
+                        <li><a href="galeri.html">📷 Galeri Foto</a></li>
+                        <li><a href="kontak.html">📍 Kontak & Lokasi</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Kontak Kami</h4>
+                    <ul class="footer-contact-list">
+                        <li><span>📍</span><span>Jln. Sulawesi, RT 05 / RW 03, Dukwia, Arso Barat, Keerom, Papua 99473</span></li>
+                        <li><span>📞</span><span>0812-4821-9125</span></li>
+                        <li><span>✉️</span><span>sdninpresarso8@gmail.com</span></li>
+                        <li><span>🕒</span><span>Senin - Jumat: 07.15 - 12.30 WIT</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div>&copy; 2026 SDN Inpres Arso VIII - Pemerintah Kabupaten Keerom.</div>
+                <div>Koordinat: Lat -2.822991º, Long 140.703999º</div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- FLOATING ACTIONS -->
+    <div class="floating-actions">
+        <a href="https://wa.me/6281248219125" target="_blank" class="fab fab-whatsapp" aria-label="WhatsApp">💬</a>
+        <button class="fab fab-scroll-top" aria-label="Kembali ke atas">▲</button>
+    </div>
+
+    <script src="js/data_sekolah.js?v=20261116_v51"></script>
+    <script src="js/main.js?v=20261116_v51"></script>
+    <!-- MODAL LIGHTBOX DISPLAY -->
+    <div class="lightbox-modal" onclick="if(event.target===this||event.target.classList.contains('lightbox-content'))window.closeActiveLightbox()">
+        <button type="button" class="lightbox-close" onclick="window.closeActiveLightbox()" aria-label="Tutup Tampilan" title="Tutup Tampilan (Esc)">✕</button>
+        <div class="lightbox-content">
+            <img src="" alt="Perbesar Foto Dewan Guru" decoding="async" loading="lazy">
+            <div style="position: absolute; bottom: 12px; left: 0; width: 100%; text-align: center; pointer-events: none;">
+                <span style="background: rgba(0,0,0,0.65); color: #e2e8f0; font-size: 12px; padding: 4px 12px; border-radius: 9999px;">✕ Klik di mana saja atau tekan Esc untuk menutup</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

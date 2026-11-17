@@ -1,0 +1,9 @@
+# robots.txt untuk Website Resmi SD Negeri Inpres Arso VIII
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /login.html
+Disallow: /panduan.html
+Disallow: /panduan-serah-terima.html
+
+Sitemap: https://sdninpresarso8.sch.id/sitemap.xml

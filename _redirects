@@ -1,0 +1,6 @@
+# Netlify Clean URLs & Routing
+/admin    /admin.html    200
+/login    /login.html    200
+/ppdb     /pengumuman.html#ppdb    302
+/portal   /index.html    200
+/*        /404.html      404

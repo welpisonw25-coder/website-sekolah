@@ -1,0 +1,2584 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Pengelola - SDN Inpres Arso VIII</title>
+    <script>
+        (function() {
+            var isLogged = sessionStorage.getItem('sdn_admin_logged') === 'true' || localStorage.getItem('sdn_admin_logged') === 'true';
+            if (!isLogged) {
+                window.location.replace('login.html');
+            }
+        })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css?v=20261116_v51">
+    <style>
+        .admin-layout {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            min-height: calc(100vh - 65px);
+        }
+        .admin-sidebar {
+            background: #ffffff;
+            border-right: 1px solid var(--border-color);
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .admin-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            border-radius: var(--radius-md);
+            font-size: 13.5px;
+            font-weight: 600;
+            color: #475569;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        .admin-nav-item:hover, .admin-nav-item.active {
+            background-color: var(--primary-subtle);
+            color: var(--primary);
+        }
+        .admin-nav-item.active {
+            font-weight: 700;
+            border-left: 4px solid var(--primary);
+        }
+        .admin-content {
+            padding: 30px;
+            background-color: #f8fafc;
+            overflow-y: auto;
+        }
+        .admin-tab-panel {
+            display: none;
+        }
+        .admin-tab-panel.active {
+            display: block;
+        }
+        @media (max-width: 900px) {
+            .admin-layout {
+                grid-template-columns: 1fr;
+            }
+            .admin-sidebar {
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+                flex-direction: row;
+                overflow-x: auto;
+                padding: 12px;
+            }
+            .admin-nav-item {
+                white-space: nowrap;
+            }
+        }
+    
+        /* MODERN & TIDY ADMIN HEADER */
+        .admin-topbar {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            min-height: 64px;
+            padding: 10px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(15,23,42,0.04);
+        }
+        .admin-topbar-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .admin-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .admin-brand-logo {
+            width: 42px;
+            height: 42px;
+            object-fit: contain;
+        }
+        .admin-brand-title {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 0;
+            line-height: 1.2;
+        }
+        .admin-brand-subtitle {
+            font-size: 11.5px;
+            color: var(--dark-muted);
+            font-weight: 600;
+        }
+        .admin-topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .admin-status-capsule {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 6px 14px;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #334155;
+        }
+        .status-indicator-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10b981;
+            box-shadow: 0 0 6px #10b981;
+            display: inline-block;
+        }
+        .status-indicator-text {
+            color: #047857;
+        }
+        .status-separator {
+            color: #cbd5e1;
+            margin: 0 2px;
+        }
+        .status-clock-text {
+            color: #475569;
+        }
+        .admin-btn-group {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .admin-header-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 14px;
+            font-size: 12.5px;
+            font-weight: 700;
+            border-radius: 8px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        .btn-view-public {
+            background: #f0fdf4;
+            color: var(--primary);
+            border: 1px solid #bbf7d0;
+        }
+        .btn-view-public:hover {
+            background: #dcfce7;
+            border-color: #86efac;
+            transform: translateY(-1px);
+        }
+        .btn-sync-cloud {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: #ffffff;
+            border: none;
+            box-shadow: 0 2px 8px rgba(16,185,129,0.25);
+        }
+        .btn-sync-cloud:hover {
+            filter: brightness(1.05);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(16,185,129,0.35);
+        }
+        .btn-logout {
+            background: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+        }
+        .btn-logout:hover {
+            background: #fca5a5;
+            color: #7f1d1d;
+            border-color: #f87171;
+            transform: translateY(-1px);
+        }
+        @media (max-width: 600px) {
+            .admin-header-btn {
+                padding: 6px 10px;
+                font-size: 11.5px;
+            }
+            .admin-status-capsule {
+                font-size: 11px;
+                padding: 4px 10px;
+            }
+        }
+
+    </style>
+    <link rel="dns-prefetch" href="https://arso8-a2bcf-default-rtdb.firebaseio.com">
+    <!-- Favicon & Mobile Touch Icons Resmi SDN Inpres Arso VIII -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="images/logo-keerom-192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon-180.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0d5c3a">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="SDN Arso VIII">
+</head>
+<body style="background: #f8fafc;">
+
+    <!-- TOP BAR ADMIN RAPI & MODERN -->
+    <header class="admin-topbar">
+        <div class="container admin-topbar-inner">
+            <div class="admin-brand">
+                <img src="images/logo-keerom.png" alt="Logo Keerom" class="admin-brand-logo" decoding="async" loading="lazy">
+                <div>
+                    <h1 class="admin-brand-title">SDN INPRES ARSO VIII</h1>
+                    <span class="admin-brand-subtitle">Panel Pengelola Resmi (Admin Dashboard)</span>
+                </div>
+            </div>
+
+            <div class="admin-topbar-actions">
+                <div class="admin-status-capsule" title="Koneksi Cloud Realtime & Waktu Operasional">
+                    <span class="status-indicator-dot"></span>
+                    <span class="status-indicator-text">Cloud Live</span>
+                    <span class="status-separator">|</span>
+                    <span>🕒</span>
+                    <span id="witClock" class="status-clock-text">Memuat waktu...</span>
+                </div>
+                
+                <div class="admin-btn-group">
+                    <a href="index.html" target="_blank" class="admin-header-btn btn-view-public" title="Buka Website Publik (Tab Baru)">
+                        🌐 <span>Buka Website</span> ↗
+                    </a>
+                    <button onclick="publishAllToOnline(); return false;" class="admin-header-btn btn-sync-cloud" title="Simpan dan sinkronkan semua perubahan ke database Google Cloud">
+                        🚀 <span>Sinkronkan ke Cloud</span>
+                    </button>
+                    <button id="adminLogoutBtn" class="admin-header-btn btn-logout" title="Keluar dari Panel Admin">
+                        🚪 <span>Keluar</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- BANNER PERINGATAN BILA DIBUKA DARI FILE OFFLINE LAPTOP (file:///) -->
+    <div id="fileProtocolWarning" style="display: none; background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border-bottom: 2px solid #f59e0b; padding: 12px 20px; text-align: center; font-size: 13px; color: #92400e; font-weight: 600; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+        ⚠️ <strong>Perhatian Pengelola:</strong> Anda sedang membuka file Admin secara offline dari folder laptop (<code>file:///</code>). 
+        Agar berita, foto, dan pengumuman yang Anda buat <strong>langsung otomatis tayang di internet (HP semua orang)</strong> tanpa perlu buka file atau jalankan .bat, silakan gunakan Dashboard Admin Online Resmi:
+        <a href="https://sdninpresarso8.sch.id/admin.html" target="_blank" style="display: inline-block; margin-left: 8px; background: #d97706; color: #ffffff; padding: 5px 16px; border-radius: 6px; text-decoration: none; font-weight: 800; font-size: 12px; box-shadow: 0 2px 6px rgba(217,119,6,0.3);">🌐 Buka Admin Online Resmi (sdninpresarso8.sch.id/admin.html) →</a>
+    </div>
+
+    <!-- LAYOUT DASHBOARD -->
+    <div class="admin-layout">
+        
+        <!-- SIDEBAR NAVIGASI LENGKAP -->
+        <aside class="admin-sidebar">
+            <div style="font-size: 11px; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.8px; padding: 4px 14px; margin-bottom: 4px;">
+                Dashboard & Beranda
+            </div>
+            <a href="#" class="admin-nav-item active" data-tab="tab-ringkasan" onclick="switchAdminTab('tab-ringkasan'); return false;">
+                <span>📊</span> <span>Dashboard Utama</span>
+            </a>
+            <a href="#" class="admin-nav-item" data-tab="tab-sambutan" onclick="switchAdminTab('tab-sambutan'); return false;">
+                <span>🎙️</span> <span>Beranda & Sambutan</span>
+            </a>
+            <a href="#" class="admin-nav-item" data-tab="tab-profil" onclick="switchAdminTab('tab-profil'); return false;">
+                <span>🏛️</span> <span>Profil Sekolah (Visi Misi)</span>
+            </a>
+
+            <div style="font-size: 11px; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.8px; padding: 4px 14px; margin: 16px 0 4px;">
+                Publikasi & Konten
+            </div>
+            <a href="#" class="admin-nav-item" data-tab="tab-berita" onclick="switchAdminTab('tab-berita'); return false;">
+                <span>📰</span> <span>Kelola Berita Sekolah</span>
+            </a>
+            <a href="#" class="admin-nav-item" data-tab="tab-pengumuman" onclick="switchAdminTab('tab-pengumuman'); return false;">
+                <span>📢</span> <span>Kelola Pengumuman</span>
+            </a>
+            <a href="#" class="admin-nav-item" data-tab="tab-galeri" onclick="switchAdminTab('tab-galeri'); return false;">
+                <span>📷</span> <span>Kelola Galeri Foto</span>
+            </a>
+
+            <div style="font-size: 11px; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.8px; padding: 4px 14px; margin: 16px 0 4px;">
+                Data Pokok Pendidikan
+            </div>
+            <a href="#" class="admin-nav-item" data-tab="tab-siswa" onclick="switchAdminTab('tab-siswa'); return false;">
+                <span>👨‍🎓</span> <span>Data Siswa & Kelas</span>
+            </a>
+            <a href="#" class="admin-nav-item" data-tab="tab-guru" onclick="switchAdminTab('tab-guru'); return false;">
+                <span>👩‍🏫</span> <span>Data Dewan Guru</span>
+            </a>
+            <a href="#" class="admin-nav-item" data-tab="tab-ppdb" onclick="switchAdminTab('tab-ppdb'); return false;">
+                <span>📝</span> <span>Pendaftar PPDB Online</span>
+            </a>
+            <a href="#" class="admin-nav-item" data-tab="tab-sarpras" onclick="switchAdminTab('tab-sarpras'); return false;">
+                <span>🏫</span> <span>Status Sarpras</span>
+            </a>
+
+            <div style="font-size: 11px; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.8px; padding: 4px 14px; margin: 16px 0 4px;">
+                Kemitraan & Keprofesian
+            </div>
+            <a href="#" class="admin-nav-item" data-tab="tab-kolaborasi" onclick="switchAdminTab('tab-kolaborasi'); return false;">
+                <span>🤝</span> <span>Mitra & Kolaborasi</span>
+            </a>
+            <a href="#" class="admin-nav-item" data-tab="tab-kkg" onclick="switchAdminTab('tab-kkg'); return false;">
+                <span>📚</span> <span>Pengembangan Guru (K3S/KKG)</span>
+            </a>
+            <a href="#" class="admin-nav-item" data-tab="tab-kontak" onclick="switchAdminTab('tab-kontak'); return false;">
+                <span>📞</span> <span>Kontak & Pesan Masuk</span>
+            </a>
+
+            <div style="font-size: 11px; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.8px; padding: 4px 14px; margin: 16px 0 4px;">
+                Buku Kerja & Dokumen
+            </div>
+            <a href="#" class="admin-nav-item" data-tab="tab-panduan" onclick="switchAdminTab('tab-panduan'); return false;">
+                <span>📖</span> <span>Buku Panduan Pengelola</span>
+            </a>
+            <a href="#" class="admin-nav-item" data-tab="tab-sop" onclick="switchAdminTab('tab-sop'); return false;">
+                <span>📜</span> <span>Dokumen SOP Sekolah</span>
+            </a>
+
+            <div style="font-size: 11px; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.8px; padding: 4px 14px; margin: 16px 0 4px;">
+                Pengaturan Sistem
+            </div>
+            <a href="#" class="admin-nav-item" data-tab="tab-pengaturan" onclick="switchAdminTab('tab-pengaturan'); return false;">
+                <span>⚙️</span> <span>Ganti Password & Keamanan</span>
+            </a>
+        </aside>
+
+        <!-- KONTEN DASHBOARD -->
+        <main class="admin-content">
+
+            <!-- ==============================================
+                 1. TAB RINGKASAN (OVERVIEW)
+                 ============================================== -->
+            <div id="tab-ringkasan" class="admin-tab-panel active">
+                <div style="margin-bottom: 24px;">
+                    <h2 style="font-size: 24px; font-weight: 800; color: var(--primary-dark);">Selamat Datang di Portal Pengelola</h2>
+                    <p style="font-size: 14px; color: var(--dark-muted);">
+                        Pusat kendali dan administrasi data SD Negeri Inpres Arso VIII, Distrik Arso Barat, Kabupaten Keerom.
+                    </p>
+                </div>
+
+                <!-- KARTU STATISTIK CEPAT -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; margin-bottom: 30px;">
+                    <div class="card" onclick="switchAdminTab('tab-siswa')" style="padding: 20px; border-left: 4px solid var(--primary); cursor: pointer;" title="Klik untuk kelola Data Siswa">
+                        <div style="font-size: 12px; font-weight: 700; color: var(--dark-muted);">TOTAL SISWA</div>
+                        <div id="dashCountSiswa" style="font-size: 32px; font-weight: 800; color: var(--primary); margin: 4px 0;">157</div>
+                        <div style="font-size: 12px; color: #64748b;">76 L / 79 P (6 Rombel)</div>
+                    </div>
+                    <div class="card" onclick="switchAdminTab('tab-guru')" style="padding: 20px; border-left: 4px solid #2563eb; cursor: pointer;" title="Klik untuk kelola Dewan Guru">
+                        <div style="font-size: 12px; font-weight: 700; color: var(--dark-muted);">DEWAN GURU & GTK</div>
+                        <div id="dashCountGuru" style="font-size: 32px; font-weight: 800; color: #2563eb; margin: 4px 0;">12</div>
+                        <div style="font-size: 12px; color: #64748b;">PNS, P3K, dan Honorer</div>
+                    </div>
+                    <div class="card" onclick="switchAdminTab('tab-berita')" style="padding: 20px; border-left: 4px solid #0284c7; cursor: pointer;" title="Klik untuk kelola Berita">
+                        <div style="font-size: 12px; font-weight: 700; color: var(--dark-muted);">BERITA AKTIF</div>
+                        <div id="dashCountBerita" style="font-size: 32px; font-weight: 800; color: #0284c7; margin: 4px 0;">4</div>
+                        <div style="font-size: 12px; color: #64748b;">Kabar & Publikasi Terbit</div>
+                    </div>
+                    <div class="card" onclick="switchAdminTab('tab-pengumuman')" style="padding: 20px; border-left: 4px solid var(--secondary); cursor: pointer;" title="Klik untuk kelola Pengumuman">
+                        <div style="font-size: 12px; font-weight: 700; color: var(--dark-muted);">PENGUMUMAN AKTIF</div>
+                        <div id="dashCountPengumuman" style="font-size: 32px; font-weight: 800; color: var(--secondary); margin: 4px 0;">3</div>
+                        <div style="font-size: 12px; color: #64748b;">Tampil di Beranda Publik</div>
+                    </div>
+                    <div class="card" onclick="switchAdminTab('tab-ppdb')" style="padding: 20px; border-left: 4px solid #16a34a; cursor: pointer;" title="Klik untuk kelola Pendaftar PPDB">
+                        <div style="font-size: 12px; font-weight: 700; color: var(--dark-muted);">PENDAFTAR PPDB</div>
+                        <div id="dashCountPPDB" style="font-size: 32px; font-weight: 800; color: #16a34a; margin: 4px 0;">2</div>
+                        <div style="font-size: 12px; color: #64748b;">Calon Murid Baru Masuk</div>
+                    </div>
+                    <div class="card" onclick="switchAdminTab('tab-galeri')" style="padding: 20px; border-left: 4px solid #8b5cf6; cursor: pointer;" title="Klik untuk kelola Galeri Foto">
+                        <div style="font-size: 12px; font-weight: 700; color: var(--dark-muted);">FOTO DOKUMENTASI</div>
+                        <div id="dashCountGaleri" style="font-size: 32px; font-weight: 800; color: #8b5cf6; margin: 4px 0;">10</div>
+                        <div style="font-size: 12px; color: #64748b;">Tayang di Galeri Publik</div>
+                    </div>
+                </div>
+
+                <!-- STATUS KONEKTIVITAS & IDENTITAS RESMI -->
+                <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 24px; margin-bottom: 30px;">
+                    <div class="card" style="padding: 24px;">
+                        <h3 style="font-size: 17px; font-weight: 800; color: var(--primary-dark); margin-bottom: 14px;">
+                            📌 Status Legalitas & Identitas Satuan Pendidikan
+                        </h3>
+                        <table style="width: 100%; font-size: 13.5px; border-collapse: collapse;">
+                            <tr style="border-bottom: 1px solid #f1f5f9;"><td style="padding: 8px 0; color: var(--dark-muted); width: 35%;">NPSN</td><td style="padding: 8px 0; font-weight: 700;">60300868</td></tr>
+                            <tr style="border-bottom: 1px solid #f1f5f9;"><td style="padding: 8px 0; color: var(--dark-muted);">Akreditasi</td><td style="padding: 8px 0; font-weight: 700; color: #16a34a;">A (Unggul - BAN-SM 2023)</td></tr>
+                            <tr style="border-bottom: 1px solid #f1f5f9;"><td style="padding: 8px 0; color: var(--dark-muted);">SK Operasional</td><td style="padding: 8px 0;">0005/OPS.SD/DPM-PTSP/VII/2026</td></tr>
+                            <tr style="border-bottom: 1px solid #f1f5f9;"><td style="padding: 8px 0; color: var(--dark-muted);">Kepala Sekolah</td><td style="padding: 8px 0; font-weight: 700;">Adi Puspito, S.Pd (IV/c)</td></tr>
+                            <tr><td style="padding: 8px 0; color: var(--dark-muted);">Wilayah</td><td style="padding: 8px 0;">Jln. Sulawesi, Dukwia, Arso Barat, Keerom</td></tr>
+                        </table>
+                    </div>
+
+                    <div class="card" style="padding: 24px; background: linear-gradient(135deg, #0f172a, #1e293b); color: white;">
+                        <h3 style="font-size: 17px; font-weight: 800; color: #38bdf8; margin-bottom: 12px;">
+                            🛰️ Infrastruktur Jaringan & TIK
+                        </h3>
+                        <div style="font-size: 13.5px; line-height: 1.7; color: #cbd5e1; margin-bottom: 16px;">
+                            Sekolah terkoneksi satelit <strong>Starlink</strong> dan modem <strong>Telkomsel Orbit</strong> untuk keperluan ANBK, Dapodik, dan pembelajaran digital ruang TIK.
+                        </div>
+                        <div style="background: rgba(255,255,255,0.1); padding: 12px; border-radius: 8px; font-size: 12.5px;">
+                            ✅ Jaringan: <strong>Aktif / Online</strong><br>
+                            ⚡ Daya Listrik: <strong>2.200 Watt</strong><br>
+                            📍 Koordinat: <strong>-2.822991º, 140.703999º</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BERITA & KEGIATAN TERBARU DI DASHBOARD UTAMA -->
+                <div class="card" style="padding: 24px; margin-bottom: 30px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+                        <div>
+                            <h3 style="font-size: 17px; font-weight: 800; color: var(--primary-dark); margin: 0 0 4px;">📰 Kabar Berita Sekolah Terkini</h3>
+                            <p style="font-size: 13px; color: var(--dark-muted); margin: 0;">Berita dan artikel kegiatan yang sedang aktif terbit di website publik.</p>
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="switchAdminTab('tab-berita')" style="font-size: 12.5px; padding: 7px 16px; cursor: pointer;">
+                            ➕ Tulis Berita Baru
+                        </button>
+                    </div>
+                    <div id="dashBeritaPreviewList" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+                        <!-- Diisi otomatis oleh JavaScript -->
+                    </div>
+                </div>
+
+                <!-- DOKUMENTASI FOTO GALERI TERBARU DI DASHBOARD UTAMA -->
+                <div class="card" style="padding: 24px; margin-bottom: 30px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+                        <div>
+                            <h3 style="font-size: 17px; font-weight: 800; color: var(--primary-dark); margin: 0 0 4px;">📷 Dokumentasi Foto Galeri Terbaru</h3>
+                            <p style="font-size: 13px; color: var(--dark-muted); margin: 0;">Foto-foto dokumentasi kegiatan sekolah yang sedang aktif tampil di website publik.</p>
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="switchAdminTab('tab-galeri')" style="font-size: 12.5px; padding: 7px 16px; cursor: pointer;">
+                            ➕ Kelola / Tambah Foto
+                        </button>
+                    </div>
+                    <div id="dashGaleriPreviewGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px;">
+                        <!-- Diisi otomatis oleh JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+                        <!-- ==============================================
+                 TAB SAMBUTAN KEPALA SEKOLAH
+                 ============================================== -->
+            <div id="tab-sambutan" class="admin-tab-panel">
+                <div style="margin-bottom: 24px;">
+                    <h2 style="font-size: 22px; font-weight: 800; color: var(--primary-dark);">🎙️ Kelola Sambutan Kepala Sekolah</h2>
+                    <p style="font-size: 13.5px; color: var(--dark-muted);">Perbarui amanat tahun ajaran baru, pidato, atau kata sambutan resmi Bapak Kepala Sekolah. Teks dan foto otomatis langsung terpasang di Beranda Utama (index.html).</p>
+                </div>
+
+                <div class="card" style="padding: 24px; margin-bottom: 25px;">
+                    <form id="sambutanForm">
+                        <div class="form-row">
+                            <div class="form-group" style="flex: 1;">
+                                <label class="form-label" for="inputSambutanNama">Nama Kepala Sekolah & Gelar *</label>
+                                <input type="text" id="inputSambutanNama" class="form-control" placeholder="Contoh: Adi Puspito, S.Pd" required>
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label class="form-label" for="inputSambutanJabatan">Jabatan & Pangkat Resmi *</label>
+                                <input type="text" id="inputSambutanJabatan" class="form-control" placeholder="Contoh: Kepala Sekolah SDN Inpres Arso VIII (Pembina Utama Muda, IV/c)" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 16px;">
+                            <label class="form-label" for="inputSambutanJudul">Judul / Tema Amanat Sambutan *</label>
+                            <input type="text" id="inputSambutanJudul" class="form-control" placeholder="Contoh: Mendidik dengan Hati, Merajut Asa di Ujung Timur Nusantara" required>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group" style="flex: 1;">
+                                <label class="form-label" for="inputSambutanFotoFile">Ganti Foto Resmi Kepala Sekolah (Opsional)</label>
+                                <input type="file" id="inputSambutanFotoFile" class="form-control" accept="image/*" style="padding: 7px;">
+                                <small style="color: #64748b; font-size: 11.5px; margin-top: 4px; display: block;">Biarkan kosong jika tetap menggunakan foto saat ini.</small>
+                            </div>
+                            <div class="form-group" style="flex: 1; display: flex; align-items: center; gap: 14px;">
+                                <img id="previewSambutanFoto" src="images/kepala-sekolah.jpg" alt="Foto Kepala Sekolah" style="width: 70px; height: 85px; object-fit: cover; border-radius: 8px; border: 2px solid #e2e8f0; box-shadow: 0 2px 6px rgba(0,0,0,0.1);" decoding="async" loading="lazy">
+                                <div style="font-size: 12px; color: #475569;">
+                                    <strong>Pratinjau Foto Aktif</strong><br>
+                                    <span style="color: #64748b;">Foto otomatis disesuaikan ukurannya</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 20px;">
+                            <label class="form-label" for="inputSambutanIsi">Teks Lengkap Sambutan Kepala Sekolah *</label>
+                            <textarea id="inputSambutanIsi" class="form-control" rows="8" placeholder="Tuliskan kata sambutan atau pidato resmi Kepala Sekolah di sini..." required style="line-height: 1.6;"></textarea>
+                            <small style="color: #64748b; font-size: 12px; margin-top: 4px; display: block;">💡 Tips: Gunakan tombol Enter 2x untuk memisahkan antar paragraf agar tampil rapi di website.</small>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                            <button type="button" id="btnResetSambutanDefault" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 10px 18px; border-radius: 6px; font-size: 12.5px; font-weight: 600; color: #475569; cursor: pointer;">
+                                ↺ Pulihkan Sambutan Awal
+                            </button>
+                            <button type="submit" id="btnSimpanSambutan" class="btn btn-primary" style="padding: 10px 26px; font-size: 14px; font-weight: 700;">
+                                💾 Simpan & Perbarui Sambutan
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- ==============================================
+                 TAB PROFIL SEKOLAH (VISI, MISI, SEJARAH, IDENTITAS)
+                 ============================================== -->
+            <div id="tab-profil" class="admin-tab-panel">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; flex-wrap: wrap; gap: 14px;">
+                    <div>
+                        <h2 style="font-size: 24px; font-weight: 800; color: var(--primary-dark); margin: 0 0 6px;">
+                            🏛️ Kelola Profil Sekolah & Identitas
+                        </h2>
+                        <p style="font-size: 14px; color: var(--dark-muted); margin: 0;">
+                            Kelola Visi, Misi, Tujuan, Sejarah Singkat, dan Data Pokok Legalitas SDN Inpres Arso VIII yang tampil di halaman Profil Sekolah.
+                        </p>
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="saveProfilData();" style="display: flex; align-items: center; gap: 8px; font-weight: 700; padding: 10px 22px;">
+                        <span>💾</span> <span>Simpan Profil ke Cloud</span>
+                    </button>
+                </div>
+
+                <form id="formProfilSekolah" onsubmit="event.preventDefault(); saveProfilData();">
+                    <!-- VISI SEKOLAH -->
+                    <div class="card" style="padding: 24px; margin-bottom: 24px; border-left: 4px solid var(--primary);">
+                        <h3 style="font-size: 17px; font-weight: 800; color: var(--primary-dark); margin-bottom: 12px;">
+                            🎯 Visi Sekolah
+                        </h3>
+                        <div class="form-group" style="margin-bottom: 16px;">
+                            <label style="font-weight: 700; font-size: 13.5px;">Rumusan Visi Sekolah:</label>
+                            <textarea id="profilVisiInput" class="form-control" rows="3" style="width: 100%; font-size: 14.5px; font-weight: 600; line-height: 1.6; border-radius: 8px; padding: 12px; border: 1.5px solid #cbd5e1;"></textarea>
+                            <small style="color: #64748b;">Visi ini ditampilkan secara menonjol pada banner hijau di halaman profil.html.</small>
+                        </div>
+                    </div>
+
+                    <!-- MISI & TUJUAN -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 24px; margin-bottom: 24px;">
+                        <div class="card" style="padding: 24px; border-left: 4px solid var(--secondary);">
+                            <h3 style="font-size: 17px; font-weight: 800; color: var(--primary-dark); margin-bottom: 12px;">
+                                🚀 Misi Sekolah (1 butir per baris)
+                            </h3>
+                            <div class="form-group">
+                                <textarea id="profilMisiInput" class="form-control" rows="7" style="width: 100%; font-size: 13.5px; line-height: 1.6; border-radius: 8px; padding: 12px; border: 1.5px solid #cbd5e1;"></textarea>
+                                <small style="color: #64748b;">Tuliskan setiap butir misi sekolah di baris baru (tekan Enter untuk butir berikutnya).</small>
+                            </div>
+                        </div>
+
+                        <div class="card" style="padding: 24px; border-left: 4px solid #16a34a;">
+                            <h3 style="font-size: 17px; font-weight: 800; color: var(--primary-dark); margin-bottom: 12px;">
+                                🏆 Tujuan Sekolah
+                            </h3>
+                            <div class="form-group">
+                                <textarea id="profilTujuanInput" class="form-control" rows="7" style="width: 100%; font-size: 13.5px; line-height: 1.6; border-radius: 8px; padding: 12px; border: 1.5px solid #cbd5e1;"></textarea>
+                                <small style="color: #64748b;">Rumusan tujuan pendidikan dasar yang ingin dicapai sekolah.</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SEJARAH SINGKAT -->
+                    <div class="card" style="padding: 24px; margin-bottom: 24px; border-left: 4px solid #8b5cf6;">
+                        <h3 style="font-size: 17px; font-weight: 800; color: var(--primary-dark); margin-bottom: 12px;">
+                            📜 Kilas Sejarah & Konteks Geografis Sekolah
+                        </h3>
+                        <div class="form-group">
+                            <textarea id="profilSejarahInput" class="form-control" rows="5" style="width: 100%; font-size: 13.5px; line-height: 1.7; border-radius: 8px; padding: 12px; border: 1.5px solid #cbd5e1;"></textarea>
+                            <small style="color: #64748b;">Gunakan 2 kali Enter (baris kosong) untuk memisahkan antar paragraf sejarah.</small>
+                        </div>
+                    </div>
+
+                    <!-- DATA IDENTITAS & LEGALITAS SEKOLAH -->
+                    <div class="card" style="padding: 24px; margin-bottom: 24px; border-left: 4px solid #0284c7;">
+                        <h3 style="font-size: 17px; font-weight: 800; color: var(--primary-dark); margin-bottom: 16px;">
+                            📌 Data Pokok Legalitas & Identitas Satuan Pendidikan
+                        </h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px;">
+                            <div>
+                                <label style="font-weight: 700; font-size: 13px; color: #334155;">NPSN:</label>
+                                <input type="text" id="identitasNPSN" class="form-control" style="width: 100%; font-weight: 700;">
+                            </div>
+                            <div>
+                                <label style="font-weight: 700; font-size: 13px; color: #334155;">NSS:</label>
+                                <input type="text" id="identitasNSS" class="form-control" style="width: 100%;">
+                            </div>
+                            <div>
+                                <label style="font-weight: 700; font-size: 13px; color: #334155;">Status Akreditasi:</label>
+                                <input type="text" id="identitasAkreditasi" class="form-control" style="width: 100%; font-weight: 700; color: #16a34a;">
+                            </div>
+                            <div>
+                                <label style="font-weight: 700; font-size: 13px; color: #334155;">Status Kepemilikan:</label>
+                                <input type="text" id="identitasKepemilikan" class="form-control" style="width: 100%;">
+                            </div>
+                            <div>
+                                <label style="font-weight: 700; font-size: 13px; color: #334155;">SK Pendirian Sekolah:</label>
+                                <input type="text" id="identitasSKPendirian" class="form-control" style="width: 100%;">
+                            </div>
+                            <div>
+                                <label style="font-weight: 700; font-size: 13px; color: #334155;">SK Izin Operasional:</label>
+                                <input type="text" id="identitasSKOperasional" class="form-control" style="width: 100%;">
+                            </div>
+                            <div>
+                                <label style="font-weight: 700; font-size: 13px; color: #334155;">Luas Tanah (m²):</label>
+                                <input type="text" id="identitasLuasTanah" class="form-control" style="width: 100%;">
+                            </div>
+                            <div>
+                                <label style="font-weight: 700; font-size: 13px; color: #334155;">Daya Listrik:</label>
+                                <input type="text" id="identitasDayaListrik" class="form-control" style="width: 100%;">
+                            </div>
+                            <div style="grid-column: 1 / -1;">
+                                <label style="font-weight: 700; font-size: 13px; color: #334155;">Alamat Lengkap Satuan Pendidikan:</label>
+                                <input type="text" id="identitasAlamat" class="form-control" style="width: 100%;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px;">
+                        <button type="button" class="btn btn-secondary" onclick="populateProfilForm();">Batal / Muat Ulang</button>
+                        <button type="submit" class="btn btn-primary" style="padding: 10px 24px; font-weight: 800;">
+                            💾 Simpan Perubahan Profil ke Cloud
+                        </button>
+                    </div>
+                </form>
+
+                            </div>
+
+            <!-- ==============================================
+                 TAB KELOLA BERITA SEKOLAH
+                 ============================================== -->
+            <div id="tab-berita" class="admin-tab-panel">
+                <div style="margin-bottom: 24px;">
+                    <h2 style="font-size: 22px; font-weight: 800; color: var(--primary-dark);">📰 Manajemen Berita & Kegiatan Sekolah</h2>
+                    <p style="font-size: 13.5px; color: var(--dark-muted);">Tulis dan terbitkan liputan kegiatan belajar mengajar, pembinaan karakter, dan prestasi siswa.</p>
+                </div>
+
+                <div class="card" style="padding: 24px; margin-bottom: 30px;" id="cardBeritaForm">
+                    <h3 id="formBeritaHeading" style="font-size: 16px; font-weight: 800; margin-bottom: 16px; color: var(--primary);">+ Tulis Berita Baru</h3>
+                    <form id="addBeritaForm">
+                        <input type="hidden" id="editBeritaId" value="">
+                        <div class="form-row">
+                            <div class="form-group" style="flex: 2;">
+                                <label class="form-label">Judul Berita *</label>
+                                <input type="text" id="beritaJudul" class="form-input" placeholder="Contoh: Siswa SDN Inpres Arso VIII Antusias Mengikuti Simulasi ANBK" required>
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label class="form-label">Status Publikasi *</label>
+                                <select id="beritaStatus" class="form-input" style="font-weight: 700; margin-bottom: 12px;">
+                                    <option value="published" selected>🚀 Terbitkan Langsung (Publik)</option>
+                                    <option value="draft">💾 Simpan Sebagai Draft</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label class="form-label">Kategori Berita *</label>
+                                <select id="beritaKategori" class="form-input" required>
+                                    <option value="Teknologi & ANBK">Teknologi & ANBK</option>
+                                    <option value="Akademik & Kurikulum">Akademik & Kurikulum</option>
+                                    <option value="Karakter & Budi Pekerti">Karakter & Budi Pekerti</option>
+                                    <option value="Kesehatan & Olahraga">Kesehatan & Olahraga</option>
+                                    <option value="Seni & Budaya Papua">Seni & Budaya Papua</option>
+                                    <option value="Kemitraan Masyarakat">Kemitraan Masyarakat</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group" style="flex: 1;">
+                                <label class="form-label">Penulis / Sumber *</label>
+                                <input type="text" id="beritaPenulis" class="form-input" value="Humas SDN Inpres Arso VIII" required>
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label class="form-label">Pilih Foto Berita (Komputer / HP)</label>
+                                <input type="file" id="beritaFileInput" class="form-input" accept="image/*" style="padding: 7px;">
+                            </div>
+                        </div>
+
+                        <!-- Pratinjau Foto Berita -->
+                        <div id="beritaPreviewContainer" style="display: none; margin-bottom: 16px; padding: 12px; background: #f8fafc; border-radius: 8px; border: 1px dashed #cbd5e1; text-align: center;">
+                            <img id="beritaPreviewImg" src="" alt="Pratinjau Foto Berita" style="max-height: 200px; border-radius: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);" decoding="async" loading="lazy">
+                            <div style="font-size: 12px; color: #64748b; margin-top: 6px;">Pratinjau Foto Utama Berita</div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 14px;">
+                            <label class="form-label">Ringkasan Berita (1-2 Paragraf Singkat) *</label>
+                            <textarea id="beritaSnippet" class="form-input" rows="2" placeholder="Tuliskan intisari berita yang akan muncul di halaman depan..." required></textarea>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 16px;">
+                            <label class="form-label">Isi Berita Lengkap *</label>
+                            <textarea id="beritaIsi" class="form-input" rows="5" placeholder="Tuliskan berita secara lengkap dan jelas..." required></textarea>
+                        </div>
+
+                        <div style="display: flex; gap: 10px; justify-content: flex-end; align-items: center;">
+                            <button type="button" id="btnBatalEditBerita" style="display: none; background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 10px 18px; border-radius: 6px; font-weight: 600; cursor: pointer;">
+                                ✕ Batal Edit
+                            </button>
+                            <button type="submit" id="btnSimpanBerita" class="btn btn-primary" style="padding: 10px 24px; font-weight: 700;">
+                                📢 Terbitkan Berita Sekarang
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="card" style="padding: 24px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+                        <h3 style="font-size: 16px; font-weight: 800; color: var(--primary);">Daftar Berita yang Sedang Terbit</h3>
+                        <button type="button" id="btnResetBeritaDefault" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; color: #475569; cursor: pointer;">
+                            ↺ Pulihkan Berita Bawaan
+                        </button>
+                    </div>
+                                        <div class="table-filter-bar" style="margin-bottom: 14px;">
+                        <div class="table-filter-search">
+                            <span style="font-size: 15px;">🔍</span>
+                            <input type="text" id="adminBeritaSearch" placeholder="Cari judul berita, penulis, tanggal, atau kategori...">
+                        </div>
+                        <div class="table-filter-actions">
+                            <span style="font-size: 12px; color: #64748b; font-weight: 600;">Tampilkan:</span>
+                            <select id="adminBeritaPageSize" class="table-filter-select">
+                                <option value="5" selected>5 baris</option>
+                                <option value="10">10 baris</option>
+                                <option value="25">25 baris</option>
+                                <option value="ALL">Semua Berita</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="data-table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 40px; text-align: center;">No</th>
+                                    <th style="width: 100px;">Foto</th>
+                                    <th>Judul & Ringkasan Berita</th>
+                                    <th style="width: 160px;">Kategori & Tanggal</th>
+                                    <th style="width: 90px; text-align: center;">Tindakan</th>
+                                </tr>
+                            </thead>
+                            <tbody id="beritaTableBody"></tbody>
+                        </table>
+                    </div>
+                    <div id="adminBeritaPagination" class="pagination-container"></div>
+                </div>
+            </div>
+
+            <!-- ==============================================
+                 2. TAB KELOLA PENGUMUMAN
+                 ============================================== -->
+            <div id="tab-pengumuman" class="admin-tab-panel">
+                <div style="margin-bottom: 24px;">
+                    <h2 style="font-size: 22px; font-weight: 800; color: var(--primary-dark);">📢 Manajemen Pengumuman & Edaran Sekolah</h2>
+                    <p style="font-size: 13.5px; color: var(--dark-muted);">Kelola, tambah, dan edit pengumuman resmi. Perubahan otomatis langsung terbit di website publik (halaman Beranda dan Pengumuman).</p>
+                </div>
+
+                <div class="card" style="padding: 24px; margin-bottom: 30px;" id="cardPengumumanForm">
+                    <h3 id="formPengumumanHeading" style="font-size: 16px; font-weight: 800; margin-bottom: 16px; color: var(--primary);">+ Tambah Pengumuman Baru</h3>
+                    <form id="addPengumumanForm">
+                        <input type="hidden" id="editPengumumanId" value="">
+                        <div class="form-row">
+                            <div class="form-group" style="flex: 2;">
+                                <label class="form-label">Judul Pengumuman *</label>
+                                <input type="text" id="inputJudul" class="form-control" placeholder="Contoh: Jadwal Pembagian Rapor Semester Ganjil" required>
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label class="form-label">Status Publikasi *</label>
+                                <select id="pengumumanStatus" class="form-control" style="font-weight: 700; margin-bottom: 12px;">
+                                    <option value="published" selected>🚀 Terbitkan Langsung (Publik)</option>
+                                    <option value="draft">💾 Simpan Sebagai Draft</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label class="form-label">Kategori *</label>
+                                <select id="inputKategori" class="form-control" required>
+                                    <option value="AKADEMIK">AKADEMIK</option>
+                                    <option value="KEGIATAN">KEGIATAN</option>
+                                    <option value="PPDB">PPDB</option>
+                                    <option value="LIBUR">LIBUR SEKOLAH</option>
+                                    <option value="LINGKUNGAN">LINGKUNGAN</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Isi Lengkap Edaran *</label>
+                            <textarea id="inputIsi" class="form-control" placeholder="Tuliskan isi pengumuman untuk orang tua dan siswa..." rows="4" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Tertanda Pengirim</label>
+                            <input type="text" id="inputPengirim" class="form-control" value="Kepala Sekolah - Adi Puspito, S.Pd">
+                        </div>
+                        <div style="display: flex; gap: 10px; justify-content: flex-end; align-items: center; margin-top: 15px;">
+                            <button type="button" id="btnBatalEditPengumuman" style="display: none; background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 10px 18px; border-radius: 6px; font-weight: 600; cursor: pointer;">
+                                ✕ Batal Edit
+                            </button>
+                            <button type="submit" id="btnSimpanPengumuman" class="btn btn-primary" style="padding: 10px 24px; font-size: 13.5px; font-weight: 700;">
+                                💾 Simpan & Terbitkan Pengumuman
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="card" style="padding: 24px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+                        <h3 style="font-size: 16px; font-weight: 800; margin: 0; color: var(--primary);">Daftar Pengumuman Tersimpan</h3>
+                        <button type="button" id="btnResetPengumumanDefault" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; color: #475569; cursor: pointer;">
+                            ↺ Pulihkan Pengumuman Bawaan
+                        </button>
+                    </div>
+                                        <div class="table-filter-bar" style="margin-bottom: 14px;">
+                        <div class="table-filter-search">
+                            <span style="font-size: 15px;">🔍</span>
+                            <input type="text" id="adminPengumumanSearch" placeholder="Cari judul pengumuman, tanggal, atau nomor edaran...">
+                        </div>
+                        <div class="table-filter-actions">
+                            <span style="font-size: 12px; color: #64748b; font-weight: 600;">Tampilkan:</span>
+                            <select id="adminPengumumanPageSize" class="table-filter-select">
+                                <option value="5" selected>5 baris</option>
+                                <option value="10">10 baris</option>
+                                <option value="25">25 baris</option>
+                                <option value="ALL">Semua Pengumuman</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="data-table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 40px; text-align: center;">No</th>
+                                    <th>Judul & Cuplikan Isi</th>
+                                    <th style="width: 140px;">Kategori</th>
+                                    <th style="width: 150px;">Tanggal</th>
+                                    <th style="width: 140px; text-align: center;">Tindakan</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pengumumanTableBody"></tbody>
+                        </table>
+                    </div>
+                    <div id="adminPengumumanPagination" class="pagination-container"></div>
+                </div>
+            </div>
+
+
+            <!-- ==============================================
+                 3. TAB KELOLA SISWA PER KELAS
+                 ============================================== -->
+            <div id="tab-siswa" class="admin-tab-panel">
+                <div style="margin-bottom: 24px;">
+                    <h2 style="font-size: 22px; font-weight: 800; color: var(--primary-dark);">👨‍🎓 Manajemen Data Siswa per Rombel Kelas</h2>
+                    <p style="font-size: 13.5px; color: var(--dark-muted);">Kelola jumlah siswa laki-laki (L) dan perempuan (P) per tingkat kelas. Data ini otomatis mensinkronkan statistik di Halaman Kesiswaan (siswa.html) dan Beranda.</p>
+                </div>
+
+                <div class="card" style="padding: 24px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+                        <div>
+                            <h3 style="font-size: 16px; font-weight: 800; color: var(--primary); margin: 0;">Tabel Jumlah Siswa & Wali Kelas T.A. 2026/2027</h3>
+                            <p style="font-size: 12.5px; color: var(--dark-muted); margin: 3px 0 0;">Ubah angka L/P dan pilih Wali Kelas dari <strong>daftar Dewan Guru</strong> (terhubung & tersinkronisasi otomatis).</p>
+                        </div>
+                        <button type="button" id="btnResetSiswaDefault" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; color: #475569; cursor: pointer;">
+                            ↺ Pulihkan Data Bawaan (157 Siswa)
+                        </button>
+                    </div>
+
+                    <form id="siswaUpdateForm">
+                        <div class="data-table-wrapper" style="margin-bottom: 20px;">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Tingkat Kelas</th>
+                                        <th style="min-width: 230px;">Wali Kelas (Terkoneksi Dewan Guru)</th>
+                                        <th style="text-align: center; color: #1d4ed8;">Laki-laki (L)</th>
+                                        <th style="text-align: center; color: #be185d;">Perempuan (P)</th>
+                                        <th style="text-align: center;">Subtotal Siswa</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Kelas I (Satu)</strong></td>
+                                        <td>
+                                            <select id="k1_wali" class="form-control form-select-wali" style="padding: 7px 10px; font-size: 13px; font-weight: 600; color: #1e293b; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 6px; width: 100%;">
+                                                <option value="Yuli Syetia Sari, S.Pd">Yuli Syetia Sari, S.Pd (Guru Kelas I)</option>
+                                            </select>
+                                        </td>
+                                        <td style="text-align: center;"><input type="number" id="k1_l" class="form-control" style="width: 80px; margin: 0 auto; text-align: center; font-weight: 700;" min="0"></td>
+                                        <td style="text-align: center;"><input type="number" id="k1_p" class="form-control" style="width: 80px; margin: 0 auto; text-align: center; font-weight: 700;" min="0"></td>
+                                        <td style="text-align: center; font-weight: 800; font-size: 15px; color: var(--primary);" id="k1_total">26</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Kelas II (Dua)</strong></td>
+                                        <td>
+                                            <select id="k2_wali" class="form-control form-select-wali" style="padding: 7px 10px; font-size: 13px; font-weight: 600; color: #1e293b; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 6px; width: 100%;">
+                                                <option value="Elias Tabuni, S.Pd">Elias Tabuni, S.Pd (Guru Kelas II)</option>
+                                            </select>
+                                        </td>
+                                        <td style="text-align: center;"><input type="number" id="k2_l" class="form-control" style="width: 80px; margin: 0 auto; text-align: center; font-weight: 700;" min="0"></td>
+                                        <td style="text-align: center;"><input type="number" id="k2_p" class="form-control" style="width: 80px; margin: 0 auto; text-align: center; font-weight: 700;" min="0"></td>
+                                        <td style="text-align: center; font-weight: 800; font-size: 15px; color: var(--primary);" id="k2_total">25</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Kelas III (Tiga)</strong></td>
+                                        <td>
+                                            <select id="k3_wali" class="form-control form-select-wali" style="padding: 7px 10px; font-size: 13px; font-weight: 600; color: #1e293b; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 6px; width: 100%;">
+                                                <option value="Rita Paulina Wabiser, S.Pd">Rita Paulina Wabiser, S.Pd (Guru Kelas III)</option>
+                                            </select>
+                                        </td>
+                                        <td style="text-align: center;"><input type="number" id="k3_l" class="form-control" style="width: 80px; margin: 0 auto; text-align: center; font-weight: 700;" min="0"></td>
+                                        <td style="text-align: center;"><input type="number" id="k3_p" class="form-control" style="width: 80px; margin: 0 auto; text-align: center; font-weight: 700;" min="0"></td>
+                                        <td style="text-align: center; font-weight: 800; font-size: 15px; color: var(--primary);" id="k3_total">27</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Kelas IV (Empat)</strong></td>
+                                        <td>
+                                            <select id="k4_wali" class="form-control form-select-wali" style="padding: 7px 10px; font-size: 13px; font-weight: 600; color: #1e293b; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 6px; width: 100%;">
+                                                <option value="Warno, S.Pd.SD">Warno, S.Pd.SD (Guru Kelas IV)</option>
+                                            </select>
+                                        </td>
+                                        <td style="text-align: center;"><input type="number" id="k4_l" class="form-control" style="width: 80px; margin: 0 auto; text-align: center; font-weight: 700;" min="0"></td>
+                                        <td style="text-align: center;"><input type="number" id="k4_p" class="form-control" style="width: 80px; margin: 0 auto; text-align: center; font-weight: 700;" min="0"></td>
+                                        <td style="text-align: center; font-weight: 800; font-size: 15px; color: var(--primary);" id="k4_total">23</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Kelas V (Lima)</strong></td>
+                                        <td>
+                                            <select id="k5_wali" class="form-control form-select-wali" style="padding: 7px 10px; font-size: 13px; font-weight: 600; color: #1e293b; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 6px; width: 100%;">
+                                                <option value="Rini Handayani, S.Pd">Rini Handayani, S.Pd (Guru Kelas V)</option>
+                                            </select>
+                                        </td>
+                                        <td style="text-align: center;"><input type="number" id="k5_l" class="form-control" style="width: 80px; margin: 0 auto; text-align: center; font-weight: 700;" min="0"></td>
+                                        <td style="text-align: center;"><input type="number" id="k5_p" class="form-control" style="width: 80px; margin: 0 auto; text-align: center; font-weight: 700;" min="0"></td>
+                                        <td style="text-align: center; font-weight: 800; font-size: 15px; color: var(--primary);" id="k5_total">27</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Kelas VI (Enam)</strong></td>
+                                        <td>
+                                            <select id="k6_wali" class="form-control form-select-wali" style="padding: 7px 10px; font-size: 13px; font-weight: 600; color: #1e293b; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 6px; width: 100%;">
+                                                <option value="Cicik Mursidah, S.Pd">Cicik Mursidah, S.Pd (Guru Kelas VI)</option>
+                                            </select>
+                                        </td>
+                                        <td style="text-align: center;"><input type="number" id="k6_l" class="form-control" style="width: 80px; margin: 0 auto; text-align: center; font-weight: 700;" min="0"></td>
+                                        <td style="text-align: center;"><input type="number" id="k6_p" class="form-control" style="width: 80px; margin: 0 auto; text-align: center; font-weight: 700;" min="0"></td>
+                                        <td style="text-align: center; font-weight: 800; font-size: 15px; color: var(--primary);" id="k6_total">29</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr style="background: #f8fafc; font-weight: 800;">
+                                        <td colspan="2" style="text-align: right; padding-right: 15px; font-size: 14px;">TOTAL KESELURUHAN (6 ROMBEL):</td>
+                                        <td style="text-align: center; font-size: 17px; color: #1d4ed8;" id="calcTotalL">76</td>
+                                        <td style="text-align: center; font-size: 17px; color: #be185d;" id="calcTotalP">79</td>
+                                        <td style="text-align: center; font-size: 19px; color: var(--primary);" id="calcTotalAll">157</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <div style="display: flex; gap: 14px; align-items: center; flex-wrap: wrap;">
+                            <button type="submit" class="btn btn-primary" style="padding: 10px 24px; font-size: 13.5px; font-weight: 700;">
+                                💾 Simpan Perubahan Data Siswa
+                            </button>
+                            <span id="siswaSaveAlert" style="font-size: 13px; font-weight: 700; color: #16a34a; display: none;">
+                                ✔ Data siswa berhasil disimpan dan langsung tayang di website publik!
+                            </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- ==============================================
+                 4. TAB KELOLA DEWAN GURU
+                 ============================================== -->
+            <div id="tab-guru" class="admin-tab-panel">
+                <div style="margin-bottom: 24px;">
+                    <h2 style="font-size: 22px; font-weight: 800; color: var(--primary-dark);">👩‍🏫 Manajemen Data Dewan Guru & Tenaga Kependidikan</h2>
+                    <p style="font-size: 13.5px; color: var(--dark-muted);">Kelola, tambah, edit profil, dan foto tenaga pendidik resmi sekolah. Perubahan otomatis langsung terbit di halaman Dewan Guru (guru.html) publik.</p>
+                </div>
+
+                <!-- PENGELOLAAN BAGAN STRUKTUR ORGANISASI SEKOLAH -->
+                <div class="card" style="padding: 24px; margin-bottom: 25px; border-left: 4px solid var(--secondary); background: #ffffff; box-shadow: 0 4px 15px rgba(0,0,0,0.04);">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 14px; margin-bottom: 16px;">
+                        <div>
+                            <h3 style="font-size: 16.5px; font-weight: 800; color: var(--primary-dark); margin-bottom: 4px; display: flex; align-items: center; gap: 8px;">
+                                <span>🏛️</span> Pengelolaan Bagan Struktur Organisasi Dewan Guru
+                            </h3>
+                            <p style="font-size: 13px; color: var(--dark-muted); margin: 0;">
+                                Sistem ini mendukung dua mode: <strong>Bagan Interaktif Otomatis</strong> (nama guru langsung terhubung dari data di bawah) atau <strong>Unggah File Bagan Baru</strong>.
+                            </p>
+                        </div>
+                        <span id="baganStatusBadge" class="badge" style="padding: 6px 12px; font-size: 12px; font-weight: 700; background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd;">
+                            ✨ Mode: Terkoneksi Otomatis dengan Data Guru
+                        </span>
+                    </div>
+
+                    <!-- Panel Unggah File Bagan Kustom -->
+                    <div style="background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 10px; padding: 18px; margin-bottom: 14px;">
+                        <label class="form-label" style="font-weight: 700; color: #1e293b; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+                            <span>📁</span> Ganti / Masukkan Berkas Bagan Struktur Baru (Foto / Desain Gambar):
+                        </label>
+                        <p style="font-size: 12px; color: #64748b; margin-bottom: 12px;">
+                            Bila sekolah memiliki berkas gambar bagan baru (hasil foto papan struktur sekolah atau desain grafis JPG/PNG/WEBP), unggah di sini agar langsung tayang menggantikan bagan lama di website publik.
+                        </p>
+                        <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+                            <input type="file" id="inputCustomBaganFile" class="form-control" accept="image/*" style="flex: 1; min-width: 240px; padding: 7px 12px;">
+                            <button type="button" id="btnUploadCustomBagan" class="btn btn-primary" style="padding: 9px 18px; font-size: 13px; font-weight: 700;">
+                                📤 Pasang Bagan Gambar Baru
+                            </button>
+                            <button type="button" id="btnResetBaganToSvg" class="btn btn-secondary" style="padding: 9px 16px; font-size: 13px; font-weight: 700;" title="Kembalikan ke bagan interaktif yang terkoneksi otomatis dengan nama-nama guru">
+                                ↺ Kembalikan ke Bagan Interaktif Otomatis
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Area Pratinjau Bagan Kustom Saat Ini -->
+                    <div id="adminBaganPreviewContainer" style="display: none; padding: 14px; background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 10px; margin-top: 10px;">
+                        <div style="font-size: 12.5px; font-weight: 700; color: #334155; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                            <span>👁️ Gambar Bagan Kustom yang Sedang Tayang di Website:</span>
+                            <button type="button" id="btnHapusCustomBagan" class="btn btn-danger" style="padding: 5px 12px; font-size: 12px; font-weight: 700;">🗑️ Hapus Gambar & Pakai Bagan Otomatis</button>
+                        </div>
+                        <div style="text-align: center; background: #ffffff; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1;">
+                            <img id="adminBaganPreviewImg" src="" alt="Pratinjau Bagan Struktur Sekolah" style="max-height: 240px; width: auto; max-width: 100%; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                        </div>
+                    </div>
+
+                    <!-- Keterangan Sinkronisasi Otomatis -->
+                    <div style="font-size: 12px; color: #0369a1; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 8px; padding: 10px 14px; margin-top: 12px; display: flex; align-items: center; gap: 8px;">
+                        <span style="font-size: 16px;">💡</span>
+                        <span><strong>Info Sinkronisasi Cerdas:</strong> Saat menggunakan Bagan Interaktif Bawaan, setiap kali Kaka menambah, mengedit, atau mengganti guru (misal: Kepala Sekolah, Wali Kelas 1-6, Guru PJOK, atau Guru Agama) pada tabel di bawah, nama di bagan struktur otomatis ikut terbarukan seketika tanpa perlu mengubah manual satu per satu!</span>
+                    </div>
+                </div>
+
+                <div class="card" style="padding: 24px; margin-bottom: 25px;" id="cardGuruForm">
+                    <h3 id="formGuruHeading" style="font-size: 16px; font-weight: 800; margin-bottom: 16px; color: var(--primary);">+ Tambah Pendidik / GTK Baru</h3>
+                    <form id="addGuruForm">
+                        <input type="hidden" id="editGuruId" value="">
+                        <div class="form-row">
+                            <div class="form-group" style="flex: 2;">
+                                <label class="form-label">Nama Lengkap & Gelar *</label>
+                                <input type="text" id="guruNama" class="form-control" placeholder="Contoh: Maria Wenda, S.Pd" required>
+                            </div>
+                            <div class="form-group" style="flex: 2;">
+                                <label class="form-label">Jabatan / Tugas Pokok *</label>
+                                <input type="text" id="guruJabatan" class="form-control" placeholder="Contoh: Guru Kelas I / Guru PJOK / Operator" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group" style="flex: 1;">
+                                <label class="form-label">Status Kepegawaian *</label>
+                                <select id="guruStatus" class="form-control" required>
+                                    <option value="PNS">PNS</option>
+                                    <option value="P3K">P3K</option>
+                                    <option value="Honor">Honor</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label class="form-label">Pangkat / Golongan</label>
+                                <input type="text" id="guruGol" class="form-control" placeholder="Contoh: Pembina Utama Muda, IV/c">
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label class="form-label">Tempat & Tanggal Lahir</label>
+                                <input type="text" id="guruTtl" class="form-control" placeholder="Contoh: Banyuwangi, 14-02-1967">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group" style="flex: 1;">
+                                <label class="form-label">NIP (Nomor Induk Pegawai)</label>
+                                <input type="text" id="guruNip" class="form-control" placeholder="18 digit angka NIP (jika ada)">
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label class="form-label">NUPTK</label>
+                                <input type="text" id="guruNuptk" class="form-control" placeholder="16 digit angka NUPTK (jika ada)">
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label class="form-label">Pilih Foto Guru (Komputer / HP)</label>
+                                <input type="file" id="guruFotoFileInput" class="form-control" accept="image/*" style="padding: 7px;">
+                            </div>
+                        </div>
+
+                        <!-- Pratinjau Foto Guru -->
+                        <div id="guruFotoPreviewContainer" style="display: none; margin-bottom: 16px; padding: 12px; background: #f8fafc; border-radius: 8px; border: 1px dashed #cbd5e1; text-align: center;">
+                            <img id="guruFotoPreviewImg" src="" alt="Pratinjau Foto Guru" style="width: 100px; height: 120px; object-fit: cover; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); border: 2px solid #e2e8f0;" decoding="async" loading="lazy">
+                            <div style="font-size: 12px; color: #64748b; margin-top: 6px;">Pratinjau Foto Profil Guru</div>
+                        </div>
+
+                        <div style="display: flex; gap: 10px; justify-content: flex-end; align-items: center; margin-top: 15px;">
+                            <button type="button" id="btnBatalEditGuru" style="display: none; background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 10px 18px; border-radius: 6px; font-weight: 600; cursor: pointer;">
+                                ✕ Batal Edit
+                            </button>
+                            <button type="submit" id="btnSimpanGuru" class="btn btn-primary" style="padding: 10px 24px; font-size: 13.5px; font-weight: 700;">
+                                💾 Simpan Data Guru
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="card" style="padding: 24px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+                        <h3 style="font-size: 16px; font-weight: 800; margin: 0; color: var(--primary);">Daftar Dewan Guru & Tenaga Kependidikan Aktif</h3>
+                        <button type="button" id="btnResetGuruDefault" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; color: #475569; cursor: pointer;">
+                            ↺ Pulihkan 12 Guru Bawaan
+                        </button>
+                    </div>
+                                        <div class="table-filter-bar" style="margin-bottom: 14px;">
+                        <div class="table-filter-search">
+                            <span style="font-size: 15px;">🔍</span>
+                            <input type="text" id="adminGuruSearch" placeholder="Cari nama guru, NIP, jabatan, atau mata pelajaran...">
+                        </div>
+                        <div class="table-filter-actions">
+                            <span style="font-size: 12px; color: #64748b; font-weight: 600;">Tampilkan:</span>
+                            <select id="adminGuruPageSize" class="table-filter-select">
+                                <option value="6">6 guru</option>
+                                <option value="12" selected>12 guru</option>
+                                <option value="ALL">Semua Guru</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="data-table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 40px; text-align: center;">No</th>
+                                    <th style="width: 70px; text-align: center;">Foto</th>
+                                    <th>Nama Lengkap & NIP</th>
+                                    <th>Jabatan & TTL</th>
+                                    <th style="width: 80px; text-align: center;">Status</th>
+                                    <th>Pangkat/Gol & NUPTK</th>
+                                    <th style="width: 180px; text-align: center;">Urutan & Tindakan</th>
+                                </tr>
+                            </thead>
+                            <tbody id="guruTableBody"></tbody>
+                        </table>
+                    </div>
+                    <div id="adminGuruPagination" class="pagination-container"></div>
+                </div>
+            </div>
+
+            <!-- ==============================================
+                 5. TAB PENDAFTAR & PENGATURAN PPDB ONLINE
+                 ============================================== -->
+            <div id="tab-ppdb" class="admin-tab-panel">
+                <div style="margin-bottom: 24px;">
+                    <h2 style="font-size: 22px; font-weight: 800; color: var(--primary-dark);">📝 Kelola & Pengaturan PPDB Online</h2>
+                    <p style="font-size: 13.5px; color: var(--dark-muted);">Ubah jadwal, syarat, kuota pendaftaran yang tampil di website publik, serta verifikasi data calon siswa yang masuk.</p>
+                </div>
+
+                <!-- FORM KELOLA INFORMASI PPDB -->
+                <div class="card" style="padding: 24px; margin-bottom: 24px; border-top: 4px solid var(--secondary);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 18px;">
+                        <div>
+                            <h3 style="font-size: 17px; font-weight: 800; color: var(--primary-dark); margin: 0;">
+                                ⚙️ Pengaturan & Jadwal PPDB (Tampil di Website Publik)
+                            </h3>
+                            <p style="font-size: 12.5px; color: var(--dark-muted); margin: 3px 0 0;">
+                                Perubahan di bawah ini langsung otomatis mengubah teks informasi di halaman Pengumuman & PPDB website.
+                            </p>
+                        </div>
+                        <div id="ppdbStatusBadgeDisplay"></div>
+                    </div>
+
+                    <form id="ppdbConfigForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="cfgPpdbStatus">Status Pendaftaran PPDB *</label>
+                                <select id="cfgPpdbStatus" class="form-control" style="font-weight: 700;" required>
+                                    <option value="BUKA">🟢 DIBUKA (Menerima Pendaftaran Siswa Baru)</option>
+                                    <option value="TUTUP">🔴 DITUTUP (Pendaftaran Belum Dibuka / Telah Berakhir)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="cfgPpdbTahun">Tahun Ajaran PPDB *</label>
+                                <input type="text" id="cfgPpdbTahun" class="form-control" placeholder="Contoh: 2026/2027" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="cfgPpdbJadwal">Jadwal & Gelombang Pendaftaran *</label>
+                                <input type="text" id="cfgPpdbJadwal" class="form-control" placeholder="Contoh: Gelombang 1 (Mei - Juni), Gelombang 2 (Juli)" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="cfgPpdbJam">Jam Pelayanan *</label>
+                                <input type="text" id="cfgPpdbJam" class="form-control" placeholder="Contoh: Senin - Jumat pukul 08.00 - 12.00 WIT" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="cfgPpdbKuota">Kuota Kelas I *</label>
+                                <input type="text" id="cfgPpdbKuota" class="form-control" placeholder="Contoh: 1 Rombongan Belajar (28-30 siswa)" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="cfgPpdbBiaya">Biaya Pendaftaran *</label>
+                                <input type="text" id="cfgPpdbBiaya" class="form-control" placeholder="Contoh: GRATIS (Tanpa Pungutan Biaya)" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="cfgPpdbSyarat">Syarat & Ketentuan Pendaftaran (1 syarat per baris) *</label>
+                            <textarea id="cfgPpdbSyarat" class="form-control" rows="5" placeholder="Tuliskan poin-poin syarat..." required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="cfgPpdbKontak">Narahubung / Kontak Panitia PPDB *</label>
+                            <input type="text" id="cfgPpdbKontak" class="form-control" placeholder="Contoh: 0812-4821-9125 (Pak Adi Puspito, S.Pd)" required>
+                        </div>
+
+                        <div style="display: flex; gap: 14px; align-items: center; margin-top: 18px; flex-wrap: wrap;">
+                            <button type="submit" class="btn btn-primary" style="padding: 10px 24px; font-weight: 700;">
+                                💾 Simpan Informasi PPDB
+                            </button>
+                            <span id="ppdbConfigAlert" style="font-size: 13px; font-weight: 700; color: #16a34a; display: none;">
+                                ✔ Informasi PPDB berhasil disimpan dan langsung aktif di website!
+                            </span>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- TABEL DATA PENDAFTAR -->
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin: 28px 0 16px;">
+                    <div>
+                        <h3 style="font-size: 18px; font-weight: 800; color: var(--primary-dark); margin: 0;">
+                            📋 Data Calon Siswa Masuk Melalui Formulir Online
+                        </h3>
+                        <p style="font-size: 12.5px; color: var(--dark-muted); margin: 4px 0 0;">
+                            Untuk konfirmasi kelulusan: klik <strong>✓ Terima</strong> atau <strong>✕ Tolak</strong>, lalu klik tombol hijau <strong>💬 WA</strong> untuk langsung mengirim konfirmasi resmi ke WhatsApp orang tua.
+                        </p>
+                    </div>
+                    <button type="button" onclick="printPPDBRecap()" class="btn btn-secondary" style="padding: 8px 16px; font-size: 12.5px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
+                        🖨️ Cetak Rekapitulasi / Pengumuman Papan
+                    </button>
+                </div>
+
+                <div class="card" style="padding: 24px;">
+                                        <div class="table-filter-bar" style="margin-bottom: 14px;">
+                        <div class="table-filter-search">
+                            <span style="font-size: 15px;">🔍</span>
+                            <input type="text" id="adminPPDBSearch" placeholder="Cari nama calon siswa, No. Registrasi (PPDB-xxxxxx), ortu, atau alamat...">
+                        </div>
+                        <div class="table-filter-actions">
+                            <select id="adminPPDBFilterStatus" class="table-filter-select">
+                                <option value="ALL">Semua Status</option>
+                                <option value="Diterima">Diterima</option>
+                                <option value="Tidak Diterima">Tidak Diterima</option>
+                                <option value="Menunggu">Menunggu Berkas</option>
+                            </select>
+                            <span style="font-size: 12px; color: #64748b; font-weight: 600;">Tampilkan:</span>
+                            <select id="adminPPDBPageSize" class="table-filter-select">
+                                <option value="5">5 baris</option>
+                                <option value="10" selected>10 baris</option>
+                                <option value="25">25 baris</option>
+                                <option value="ALL">Semua Pendaftar</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="data-table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 40px; text-align: center;">No</th>
+                                    <th>Nama Calon Siswa & No. Reg</th>
+                                    <th>Gender & TTL</th>
+                                    <th>Orang Tua & WhatsApp</th>
+                                    <th>Alamat di Keerom</th>
+                                    <th>Status Berkas</th>
+                                    <th style="width: 170px; text-align: center;">Tindakan & Konfirmasi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ppdbTableBody"></tbody>
+                        </table>
+                    </div>
+                    <div id="adminPPDBPagination" class="pagination-container"></div>
+                </div>
+            </div>
+
+            <!-- ==============================================
+                 6. TAB STATUS & KELOLA SARANA PRASARANA
+                 ============================================== -->
+            <div id="tab-sarpras" class="admin-tab-panel">
+                <div style="margin-bottom: 24px;">
+                    <h2 style="font-size: 22px; font-weight: 800; color: var(--primary-dark);">🏫 Manajemen Sarana & Prasarana Sekolah</h2>
+                    <p style="font-size: 13.5px; color: var(--dark-muted);">Kelola data ruang fisik, perangkat TIK/Starlink, mebeler, dan fasilitas pendukung. Perubahan otomatis langsung terbit di halaman Sarpras Publik (sapras.html).</p>
+                </div>
+
+                <!-- KARTU REKAP KONDISI SARPRAS -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 24px;">
+                    <div class="card" style="padding: 16px; border-left: 4px solid var(--primary); text-align: center;">
+                        <div style="font-size: 11px; font-weight: 700; color: var(--dark-muted);">TOTAL INVENTARIS</div>
+                        <div id="adminSarprasTotal" style="font-size: 28px; font-weight: 800; color: var(--primary); margin: 3px 0;">31</div>
+                        <div style="font-size: 11.5px; color: #64748b;">Sarpras & Fasilitas</div>
+                    </div>
+                    <div class="card" style="padding: 16px; border-left: 4px solid #16a34a; text-align: center;">
+                        <div style="font-size: 11px; font-weight: 700; color: #16a34a;">KONDISI BAIK</div>
+                        <div id="adminSarprasBaik" style="font-size: 28px; font-weight: 800; color: #16a34a; margin: 3px 0;">10</div>
+                        <div style="font-size: 11.5px; color: #64748b;">Siap Digunakan</div>
+                    </div>
+                    <div class="card" style="padding: 16px; border-left: 4px solid #d97706; text-align: center;">
+                        <div style="font-size: 11px; font-weight: 700; color: #d97706;">RUSAK SEDANG</div>
+                        <div id="adminSarprasSedang" style="font-size: 28px; font-weight: 800; color: #d97706; margin: 3px 0;">19</div>
+                        <div style="font-size: 11.5px; color: #64748b;">Perlu Servis / Rawat</div>
+                    </div>
+                    <div class="card" style="padding: 16px; border-left: 4px solid #dc2626; text-align: center;">
+                        <div style="font-size: 11px; font-weight: 700; color: #dc2626;">RUSAK BERAT</div>
+                        <div id="adminSarprasBerat" style="font-size: 28px; font-weight: 800; color: #dc2626; margin: 3px 0;">1</div>
+                        <div style="font-size: 11.5px; color: #64748b;">Perlu Rehab Total</div>
+                    </div>
+                    <div class="card" style="padding: 16px; border-left: 4px solid #64748b; text-align: center;">
+                        <div style="font-size: 11px; font-weight: 700; color: #64748b;">BELUM TERSEDIA</div>
+                        <div id="adminSarprasTidakAda" style="font-size: 28px; font-weight: 800; color: #64748b; margin: 3px 0;">1</div>
+                        <div style="font-size: 11.5px; color: #64748b;">Usulan Baru</div>
+                    </div>
+                </div>
+
+                <!-- FORM TAMBAH / EDIT SARPRAS -->
+                <div class="card" style="padding: 24px; margin-bottom: 25px;" id="cardSarprasForm">
+                    <h3 id="formSarprasHeading" style="font-size: 16px; font-weight: 800; margin-bottom: 16px; color: var(--primary);">+ Tambah Sarana / Prasarana Baru</h3>
+                    <form id="sarprasForm">
+                        <input type="hidden" id="editSarprasId" value="">
+                        <div class="form-row">
+                            <div class="form-group" style="flex: 2;">
+                                <label class="form-label">Nama Sarana / Prasarana / Ruangan *</label>
+                                <input type="text" id="sarprasNama" class="form-control" placeholder="Contoh: Ruang Kelas I, Lab Komputer, Toilet Siswa" required>
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label class="form-label">Kondisi Riil *</label>
+                                <select id="sarprasKondisi" class="form-control" required>
+                                    <option value="baik">🟢 Kondisi Baik</option>
+                                    <option value="rusak-sedang">⚠️ Rusak Sedang</option>
+                                    <option value="rusak-berat">⛔ Rusak Berat</option>
+                                    <option value="tidak-ada">❌ Belum Tersedia / Usulan</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group" style="flex: 1;">
+                                <label class="form-label">Status Kepemilikan *</label>
+                                <input type="text" id="sarprasKepemilikan" class="form-control" value="Pemerintah" placeholder="Pemerintah / Bantuan Swadaya / Komite" required>
+                            </div>
+                            <div class="form-group" style="flex: 2;">
+                                <label class="form-label">Keterangan Kondisi & Tindak Lanjut *</label>
+                                <input type="text" id="sarprasKeterangan" class="form-control" placeholder="Contoh: Ditempati 26 siswa kelas 1, butuh perbaikan plafon" required>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 10px; justify-content: flex-end; align-items: center; margin-top: 15px;">
+                            <button type="button" id="btnBatalEditSarpras" style="display: none; background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 10px 18px; border-radius: 6px; font-weight: 600; cursor: pointer;">
+                                ✕ Batal Edit
+                            </button>
+                            <button type="submit" id="btnSimpanSarpras" class="btn btn-primary" style="padding: 10px 24px; font-size: 13.5px; font-weight: 700;">
+                                💾 Simpan Sarana Prasarana
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- TABEL DATA SARPRAS DI ADMIN -->
+                <div class="card" style="padding: 24px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+                        <div>
+                            <h3 style="font-size: 16px; font-weight: 800; margin: 0; color: var(--primary);">Daftar Inventaris Sarana & Prasarana Sekolah</h3>
+                            <p style="font-size: 12.5px; color: var(--dark-muted); margin: 3px 0 0;">Total sarpras yang tercatat dan tampil pada halaman informasi publik.</p>
+                        </div>
+                        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                            <a href="sapras.html" target="_blank" class="btn btn-secondary" style="font-size: 12px; padding: 6px 14px; text-decoration: none;">
+                                🌐 Lihat Halaman Publik
+                            </a>
+                            <button type="button" id="btnResetSarprasDefault" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; color: #475569; cursor: pointer;">
+                                ↺ Pulihkan 31 Sarpras Bawaan
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Filter Kategori di Admin -->
+                    <div style="display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap;">
+                        <button type="button" class="btn-filter-admin-sapras active" data-filter="all" style="background: var(--primary); color: white; border: none; padding: 5px 12px; border-radius: 99px; font-size: 12px; font-weight: 700; cursor: pointer;">Semua</button>
+                        <button type="button" class="btn-filter-admin-sapras" data-filter="baik" style="background: #f1f5f9; color: #16a34a; border: 1px solid #cbd5e1; padding: 5px 12px; border-radius: 99px; font-size: 12px; font-weight: 700; cursor: pointer;">Baik</button>
+                        <button type="button" class="btn-filter-admin-sapras" data-filter="rusak-sedang" style="background: #f1f5f9; color: #d97706; border: 1px solid #cbd5e1; padding: 5px 12px; border-radius: 99px; font-size: 12px; font-weight: 700; cursor: pointer;">Rusak Sedang</button>
+                        <button type="button" class="btn-filter-admin-sapras" data-filter="rusak-berat" style="background: #f1f5f9; color: #dc2626; border: 1px solid #cbd5e1; padding: 5px 12px; border-radius: 99px; font-size: 12px; font-weight: 700; cursor: pointer;">Rusak Berat</button>
+                        <button type="button" class="btn-filter-admin-sapras" data-filter="tidak-ada" style="background: #f1f5f9; color: #64748b; border: 1px solid #cbd5e1; padding: 5px 12px; border-radius: 99px; font-size: 12px; font-weight: 700; cursor: pointer;">Belum Ada</button>
+                    </div>
+
+                                        <div class="table-filter-bar" style="margin-bottom: 14px;">
+                        <div class="table-filter-search">
+                            <span style="font-size: 15px;">🔍</span>
+                            <input type="text" id="adminSarprasSearch" placeholder="Cari nama ruang, mebeler, chromebook/Starlink, atau fasilitas...">
+                        </div>
+                        <div class="table-filter-actions">
+                            <select id="adminSarprasFilterKondisi" class="table-filter-select">
+                                <option value="ALL">Semua Kondisi</option>
+                                <option value="baik">Kondisi Baik</option>
+                                <option value="rusak-sedang">Rusak Sedang</option>
+                                <option value="rusak-berat">Rusak Berat</option>
+                                <option value="tidak-ada">Tidak Ada / Usulan</option>
+                            </select>
+                            <span style="font-size: 12px; color: #64748b; font-weight: 600;">Tampilkan:</span>
+                            <select id="adminSarprasPageSize" class="table-filter-select">
+                                <option value="5">5 baris</option>
+                                <option value="10" selected>10 baris</option>
+                                <option value="25">25 baris</option>
+                                <option value="ALL">Semua Sarpras</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="data-table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 40px; text-align: center;">No</th>
+                                    <th>Nama Sarana / Prasarana</th>
+                                    <th style="width: 150px; text-align: center;">Kondisi Riil</th>
+                                    <th style="width: 120px;">Kepemilikan</th>
+                                    <th>Keterangan / Tindak Lanjut</th>
+                                    <th style="width: 140px; text-align: center;">Tindakan</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sarprasTableBody"></tbody>
+                        </table>
+                    </div>
+                    <div id="adminSarprasPagination" class="pagination-container"></div>
+                </div>
+            </div>
+
+            <!-- ==============================================
+                 7. TAB KELOLA GALERI KEGIATAN SEKOLAH
+                 ============================================== -->
+            <div id="tab-galeri" class="admin-tab-panel">
+                <div style="margin-bottom: 24px;">
+                    <h2 style="font-size: 22px; font-weight: 800; color: var(--primary-dark);">📷 Manajemen Galeri & Foto Kegiatan</h2>
+                    <p style="font-size: 13.5px; color: var(--dark-muted);">Unggah dokumentasi foto kegiatan belajar, upacara, dan aktivitas siswa untuk ditampilkan di galeri website.</p>
+                </div>
+
+                <!-- INFO CARA KERJA FOTO -->
+                <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 16px; margin-bottom: 24px; font-size: 13.5px; color: #1e40af;">
+                    💡 <strong>Tips Pengelolaan:</strong> Anda dapat mengunggah file foto langsung dari HP/komputer di bawah ini. Foto akan langsung tersimpan di sistem browser dan muncul di halaman <a href="galeri.html" target="_blank" style="color: #1d4ed8; font-weight: 700; text-decoration: underline;">Galeri Foto Publik</a>.
+                </div>
+
+                <!-- FORM UPLOAD / TAMBAH FOTO -->
+                <div class="card" style="padding: 24px; margin-bottom: 30px;" id="cardGaleriForm">
+                    <h3 id="formGaleriHeading" style="font-size: 16px; font-weight: 800; margin-bottom: 16px; color: var(--primary);">+ Tambah Foto Kegiatan Baru</h3>
+                    <form id="addGaleriForm">
+                        <input type="hidden" id="editGaleriId" value="">
+                        <div class="form-row">
+                            <div class="form-group" style="flex: 2;">
+                                <label class="form-label">Judul / Keterangan Foto Kegiatan *</label>
+                                <input type="text" id="galeriJudul" class="form-input" placeholder="Contoh: Upacara Bendera Hari Senin di Halaman Sekolah" required>
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label class="form-label">Status Publikasi Foto *</label>
+                                <select id="galeriStatus" class="form-input" style="font-weight: 700; margin-bottom: 12px;">
+                                    <option value="published" selected>🚀 Terbitkan Langsung (Galeri Publik)</option>
+                                    <option value="draft">💾 Simpan Sebagai Draft</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label class="form-label">Kategori Kegiatan *</label>
+                                <select id="galeriKategori" class="form-input" required>
+                                    <option value="Kegiatan Sekolah">Kegiatan Sekolah</option>
+                                    <option value="Pembelajaran Kelas">Pembelajaran Kelas</option>
+                                    <option value="Upacara Bendera">Upacara Bendera</option>
+                                    <option value="Olahraga & Senam">Olahraga & Senam</option>
+                                    <option value="Teknologi & ANBK">Teknologi & ANBK</option>
+                                    <option value="Pentas Seni & Budaya">Pentas Seni & Budaya</option>
+                                    <option value="Lingkungan Sekolah">Lingkungan Sekolah</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 16px;">
+                            <label class="form-label">Pilih Berkas Foto dari Komputer / HP *</label>
+                            <input type="file" id="galeriFileInput" class="form-input" accept="image/*" style="padding: 9px;" required>
+                            <small style="color: var(--dark-muted); display: block; margin-top: 5px;">Format yang didukung: JPG, JPEG, PNG, WEBP. Ukuran file otomatis dioptimalkan.</small>
+                        </div>
+
+                        <!-- Preview Foto Sebelum Simpan -->
+                        <div id="galeriPreviewContainer" style="display: none; margin-bottom: 16px; padding: 12px; background: #f8fafc; border-radius: 8px; border: 1px dashed #cbd5e1; text-align: center;">
+                            <img id="galeriPreviewImg" src="" alt="Pratinjau Foto" style="max-height: 220px; max-width: 100%; border-radius: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);" decoding="async" loading="lazy">
+                            <div style="font-size: 12px; color: #64748b; margin-top: 6px;">Pratinjau Foto yang akan ditambahkan ke Galeri</div>
+                        </div>
+
+                        <div style="display: flex; gap: 10px; justify-content: flex-end; align-items: center;">
+                            <button type="button" id="btnBatalEditGaleri" style="display: none; background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 10px 18px; border-radius: 6px; font-weight: 600; cursor: pointer;">
+                                ✕ Batal Edit
+                            </button>
+                            <button type="submit" id="btnSimpanGaleri" class="btn btn-primary" style="padding: 10px 24px; font-weight: 700;">
+                                💾 Tambahkan ke Galeri
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- DAFTAR FOTO AKTIF DI GALERI -->
+                <div class="card" style="padding: 24px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+                        <div>
+                            <h3 style="font-size: 16px; font-weight: 800; color: var(--primary-dark); margin: 0 0 4px;">Daftar Foto Dokumentasi Galeri</h3>
+                            <p style="font-size: 13px; color: var(--dark-muted); margin: 0;">Total <span id="galeriCount" style="font-weight: 700; color: var(--primary);">0</span> foto dokumentasi kegiatan aktif.</p>
+                        </div>
+                        <button type="button" id="btnResetGaleriDefault" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; color: #475569; cursor: pointer;">
+                            ↺ Pulihkan Foto Bawaan
+                        </button>
+                    </div>
+
+                                        <div class="table-filter-bar" style="margin-bottom: 16px;">
+                        <div class="table-filter-search">
+                            <span style="font-size: 15px;">🔍</span>
+                            <input type="text" id="adminGaleriSearch" placeholder="Cari judul dokumentasi foto kegiatan...">
+                        </div>
+                        <div class="table-filter-actions">
+                            <span style="font-size: 12px; color: #64748b; font-weight: 600;">Tampilkan:</span>
+                            <select id="adminGaleriPageSize" class="table-filter-select">
+                                <option value="6">6 foto</option>
+                                <option value="12" selected>12 foto</option>
+                                <option value="24">24 foto</option>
+                                <option value="ALL">Semua Foto</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="adminGaleriGrid"  style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 18px;">
+                        <!-- Diisi otomatis oleh JavaScript -->
+                    </div>
+                    <div id="adminGaleriPagination" class="pagination-container" style="margin-top: 18px;"></div>
+                </div>
+            </div>
+
+                        <!-- ==============================================
+                 TAB KEMITRAAN & KOLABORASI SEKOLAH (6 PILAR)
+                 ============================================== -->
+            <div id="tab-kolaborasi" class="admin-tab-panel">
+                <div style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                    <div>
+                        <h2 style="font-size: 22px; font-weight: 800; color: var(--primary-dark);">🤝 Kelola Kemitraan & Kolaborasi Sekolah (6 Pilar)</h2>
+                        <p style="font-size: 13.5px; color: var(--dark-muted);">Kelola program nyata kemitraan strategis: guru dgn guru, guru dgn siswa, sekolah dgn komite, sekolah dgn warga, Puskesmas Arso Barat, & Lembaga Kampung.</p>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <a href="kolaborasi.html" target="_blank" class="btn btn-secondary" style="font-size: 12.5px; padding: 7px 16px; text-decoration: none;">
+                            🌐 Buka Halaman Publik
+                        </a>
+                    </div>
+                </div>
+
+                <!-- FORM TAMBAH / EDIT KEMITRAAN -->
+                <div class="card" style="padding: 24px; margin-bottom: 25px;" id="cardKolaborasiForm">
+                    <h3 id="formKolaborasiHeading" style="font-size: 16px; font-weight: 800; margin-bottom: 16px; color: var(--primary);">+ Tambah / Edit Kemitraan</h3>
+                    <form id="kolaborasiForm">
+                        <input type="hidden" id="editKolaborasiId" value="">
+                        <div class="form-row">
+                            <div class="form-group" style="flex: 2;">
+                                <label class="form-label">Judul Kolaborasi / Pilar Kemitraan *</label>
+                                <input type="text" id="kolaborasiJudul" class="form-control" placeholder="Contoh: Kolaborasi Guru dengan Guru (Teman Sejawat)" required>
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label class="form-label">Kategori / Badge *</label>
+                                <input type="text" id="kolaborasiKategori" class="form-control" placeholder="Contoh: PENDIDIK & TENAGA KEPENDIDIKAN" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group" style="flex: 1;">
+                                <label class="form-label">Mitra / Pihak Terlibat *</label>
+                                <input type="text" id="kolaborasiMitra" class="form-control" placeholder="Contoh: Puskesmas Arso Barat" required>
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label class="form-label">Ikon Emoji</label>
+                                <input type="text" id="kolaborasiIcon" class="form-control" placeholder="Contoh: 👩‍🏫, 🎒, 🏛️, 👨‍👩‍👧‍👦, 🏥, 🏡" value="🤝">
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label class="form-label">Status *</label>
+                                <select id="kolaborasiStatus" class="form-control" required>
+                                    <option value="Aktif Berjalan Rutin">🟢 Aktif Berjalan Rutin</option>
+                                    <option value="Sedang Berlangsung">🔵 Sedang Berlangsung</option>
+                                    <option value="Rencana Program">🟡 Rencana Program</option>
+                                    <option value="Selesai">⚪ Selesai</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 16px;">
+                            <label class="form-label">Ringkasan Sinergi Kemitraan *</label>
+                            <textarea id="kolaborasiRingkasan" class="form-control" rows="2" placeholder="Jelaskan ringkasan tujuan kemitraan ini..." required></textarea>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 16px;">
+                            <label class="form-label">Uraian Kerja & Program Nyata (Tulis 1 baris per poin program) *</label>
+                            <textarea id="kolaborasiUraianKerja" class="form-control" rows="5" placeholder="Contoh:
+Mengadakan musyawarah mingguan dewan guru untuk menyelaraskan Capaian Pembelajaran.
+Melaksanakan supervisi klinis dan observasi kelas sejawat.
+Pemanfaatan bersama fasilitas laboratorium TIK dan Starlink." required></textarea>
+                            <small style="color: var(--dark-muted); font-size: 12px;">Tips: Setiap baris baru otomatis dijadikan poin daftar (bullet list) di halaman publik.</small>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group" style="flex: 1;">
+                                <label class="form-label">Penanggung Jawab (PIC) *</label>
+                                <input type="text" id="kolaborasiPic" class="form-control" placeholder="Contoh: Warno, S.Pd.SD & Tim Kurikulum Sekolah" required>
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label class="form-label">Periode / Waktu Pelaksanaan *</label>
+                                <input type="text" id="kolaborasiPeriode" class="form-control" placeholder="Contoh: Setiap Pekan & Pertemuan Berkala" required>
+                            </div>
+                        </div>
+
+                        <!-- UPLOAD FOTO DOKUMENTASI KEMITRAAN -->
+                        <div class="form-group" style="margin-top: 16px; margin-bottom: 12px; padding: 16px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;">
+                            <label class="form-label" style="font-weight: 800; color: #0284c7; display: flex; align-items: center; gap: 6px;">
+                                <span>📸</span> <span>Foto Dokumentasi Kegiatan Kemitraan (Opsional)</span>
+                            </label>
+                            <input type="file" id="kolaborasiFotoInput" class="form-control" accept="image/*" style="padding: 9px; margin-bottom: 8px; background: #ffffff;">
+                            <small style="color: var(--dark-muted); font-size: 12px; display: block; margin-bottom: 10px;">
+                                Unggah foto kegiatan kemitraan dari HP atau Laptop. Otomatis dioptimalkan untuk koneksi internet Starlink.
+                            </small>
+
+                            <!-- Pratinjau Foto Dokumentasi -->
+                            <div id="kolaborasiPreviewContainer" style="display: none; padding: 12px; background: #ffffff; border-radius: 8px; border: 1px dashed #cbd5e1; text-align: center; margin-bottom: 12px;">
+                                <img id="kolaborasiPreviewImg" src="" alt="Pratinjau Foto Dokumentasi" style="max-height: 220px; max-width: 100%; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 8px;" decoding="async" loading="lazy">
+                                <div style="display: flex; justify-content: center; gap: 8px;">
+                                    <button type="button" id="btnHapusFotoKolaborasi" style="background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; padding: 5px 14px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer;">
+                                        🗑️ Hapus Foto Ini
+                                    </button>
+                                </div>
+                            </div>
+
+                            <label class="form-label" style="font-size: 12.5px; margin-bottom: 4px;">Keterangan Foto / Catatan Kegiatan (Opsional):</label>
+                            <input type="text" id="kolaborasiKeteranganFoto" class="form-control" placeholder="Contoh: Rapat koordinasi imunisasi dan pemeriksaan berkala bersama tim medis Puskesmas Arso Barat" style="background: #ffffff;">
+                        </div>
+
+                        <div style="display: flex; gap: 10px; justify-content: flex-end; align-items: center; margin-top: 15px;">
+                            <button type="button" id="btnBatalEditKolaborasi" style="display: none; background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 10px 18px; border-radius: 6px; font-weight: 600; cursor: pointer;">
+                                ✕ Batal Edit
+                            </button>
+                            <button type="submit" id="btnSimpanKolaborasi" class="btn btn-primary" style="padding: 10px 24px; font-size: 13.5px; font-weight: 700;">
+                                💾 Simpan Kemitraan
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- DAFTAR KEMITRAAN DI ADMIN -->
+                <div class="card" style="padding: 24px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+                        <div>
+                            <h3 style="font-size: 16px; font-weight: 800; margin: 0; color: var(--primary);">Daftar 6 Pilar Kemitraan & Kolaborasi</h3>
+                            <p style="font-size: 12.5px; color: var(--dark-muted); margin: 3px 0 0;">Total <span id="adminKolaborasiCount" style="font-weight: 700; color: var(--primary);">6</span> pilar kemitraan yang aktif tampil di halaman publik.</p>
+                        </div>
+                        <button type="button" id="btnResetKolaborasiDefault" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; color: #475569; cursor: pointer;">
+                            ↺ Pulihkan 6 Pilar Bawaan
+                        </button>
+                    </div>
+
+                                        <div class="table-filter-bar" style="margin-bottom: 16px;">
+                        <div class="table-filter-search">
+                            <span style="font-size: 15px;">🔍</span>
+                            <input type="text" id="adminKolaborasiSearch" placeholder="Cari pilar kemitraan, instansi mitra, atau program kerjasama...">
+                        </div>
+                        <div class="table-filter-actions">
+                            <span style="font-size: 12px; color: #64748b; font-weight: 600;">Tampilkan:</span>
+                            <select id="adminKolaborasiPageSize" class="table-filter-select">
+                                <option value="3">3 mitra</option>
+                                <option value="6" selected>6 mitra</option>
+                                <option value="ALL">Semua Mitra</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="adminKolaborasiListContainer" style="display: flex; flex-direction: column; gap: 16px;">
+                        <!-- Diisi otomatis oleh JavaScript -->
+                    </div>
+                    <div id="adminKolaborasiPagination" class="pagination-container" style="margin-top: 18px;"></div>
+                </div>
+            </div>
+
+            <!-- ==============================================
+                 TAB PENGEMBANGAN GURU (K3S & KKG TINGKAT GUSEK 1)
+                 ============================================== -->
+            <div id="tab-kkg" class="admin-tab-panel">
+                <div style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                    <div>
+                        <h2 style="font-size: 22px; font-weight: 800; color: var(--primary-dark);">📚 Kelola Pengembangan Guru: KKKS & KKG Gusek 1 Arso Barat</h2>
+                        <p style="font-size: 13.5px; color: var(--dark-muted);">Kelola program pembinaan guru se-Gugus 1 Arso Barat dan jadwal pertemuan bergilir bulanan (Kelompok A: Kelas 1, 2, 3 & Agama; Kelompok B: Kelas 4, 5, 6, PJOK & Bahasa Inggris).</p>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <a href="pengembangan-guru.html" target="_blank" class="btn btn-secondary" style="font-size: 12.5px; padding: 7px 16px; text-decoration: none;">
+                            🌐 Buka Halaman Publik
+                        </a>
+                    </div>
+                </div>
+
+                <!-- PENGELOLA PROFIL GUGUS 1, K3S & KKG KELOMPOK A/B (DINAMIS & DAPAT DIUBAH) -->
+                <div class="card" style="padding: 24px; margin-bottom: 25px; border-left: 5px solid #0284c7;" id="cardKKGProfilManager">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
+                        <div>
+                            <h3 style="font-size: 17px; font-weight: 800; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 8px;">
+                                <span>🏛️</span> <span>Pengelola Profil Gugus 1, Program Strategis K3S & KKG Kelompok A / B</span>
+                            </h3>
+                            <p style="font-size: 13px; color: var(--dark-muted); margin: 3px 0 0;">
+                                Kelola alamat sekretariat bila ada perpindahan, pimpinan pengelola, waktu pertemuan rutin, dasar penetapan SK, uraian program kerja K3S, dan fokus kerja Kelompok A & B secara dinamis.
+                            </p>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button type="button" id="btnSimpanKKGProfil" class="btn btn-primary" style="font-size: 12.5px; padding: 7px 16px;">
+                                💾 Simpan Profil & Program Gugus
+                            </button>
+                            <button type="button" id="btnResetKKGProfil" class="btn btn-secondary" style="font-size: 12.5px; padding: 7px 14px;">
+                                ↺ Pulihkan Default
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- BAGIAN 1: IDENTITAS RESMI GUGUS 1 -->
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 18px; margin-bottom: 18px;">
+                        <h4 style="font-size: 14.5px; font-weight: 800; color: #0369a1; margin: 0 0 12px 0;">
+                            📌 1. Identitas Resmi Gugus 1 Arso Barat:
+                        </h4>
+                        <div class="form-row">
+                            <div class="form-group" style="flex: 2;">
+                                <label class="form-label">Alamat Sekretariat Gugus 1 * (Dapat diganti bila ada perubahan kantor)</label>
+                                <input type="text" id="kkgSekretariatInput" class="form-control" placeholder="Contoh: Jalan Melati Barat Arso I, Kampung Sanggaria, Distrik Arso Barat 99473">
+                            </div>
+                            <div class="form-group" style="flex: 1.2;">
+                                <label class="form-label">Waktu Pertemuan Rutin *</label>
+                                <input type="text" id="kkgWaktuInput" class="form-control" placeholder="Contoh: Hari Rabu Bergilir (Semester Gasal TP 2026/2027)">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group" style="flex: 1.5;">
+                                <label class="form-label">Ketua Pengelola Gugus (Nama Lengkap & Gelar) *</label>
+                                <input type="text" id="kkgKetuaInput" class="form-control" placeholder="Contoh: Robi Ulludin, S.Pd.SD.">
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label class="form-label">NIP Ketua Pengelola *</label>
+                                <input type="text" id="kkgNIPKetuaInput" class="form-control" placeholder="Contoh: 196906201992031018">
+                            </div>
+                            <div class="form-group" style="flex: 1.5;">
+                                <label class="form-label">Dasar Penetapan Gugus (SK Resmi & Tanggal) *</label>
+                                <input type="text" id="kkgDasarSKInput" class="form-control" placeholder="Contoh: SK Resmi Gusek 1 Arso Barat, 23 Juli 2026">
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label">Deskripsi & Tujuan Gugus Sekolah 1</label>
+                            <textarea id="kkgDeskripsiInput" class="form-control" rows="2" placeholder="Deskripsi umum gugus kemitraan antar-satuan pendidikan..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- BAGIAN 2: URAIAN PROGRAM KERJA STRATEGIS K3S -->
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 18px; margin-bottom: 18px;">
+                        <h4 style="font-size: 14.5px; font-weight: 800; color: #0284c7; margin: 0 0 6px 0;">
+                            📋 2. Uraian Program Kerja Strategis K3S (Kelompok Kerja Kepala Sekolah):
+                        </h4>
+                        <p style="font-size: 12px; color: #64748b; margin: 0 0 10px 0;">
+                            Tuliskan 1 poin program kerja per baris. Program ini akan tampil langsung di halaman publik Pengembangan Guru.
+                        </p>
+                        <textarea id="k3sProgramsInput" class="form-control" rows="5" placeholder="Tuliskan program kerja K3S (1 poin per baris)..."></textarea>
+                    </div>
+
+                    <!-- BAGIAN 3 & 4: KELOMPOK KERJA A & B -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px;">
+                        <!-- KELOMPOK A -->
+                        <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 18px;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+                                <span style="font-size: 20px;">🟢</span>
+                                <h4 style="font-size: 14.5px; font-weight: 800; color: #166534; margin: 0;">KKG Kelompok A (Kelas Awal & Agama)</h4>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" style="font-size: 12px;">Judul Kelompok Kerja:</label>
+                                <input type="text" id="kkgKelAJudul" class="form-control" placeholder="Guru Kelas I, II, III & Guru Pendidikan Agama">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" style="font-size: 12px;">Cakupan Anggota Guru:</label>
+                                <input type="text" id="kkgKelACakupan" class="form-control" placeholder="Guru Kelas 1, Kelas 2, Kelas 3, dan Guru Agama">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" style="font-size: 12px;">Hari / Jadwal Pertemuan:</label>
+                                <input type="text" id="kkgKelAJadwal" class="form-control" placeholder="Hari Rabu Bergilir di Sekolah Anggota Gugus">
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label" style="font-size: 12px;">Uraian Program Nyata Kelompok A (1 Poin Per Baris):</label>
+                                <textarea id="kkgKelAPrograms" class="form-control" rows="5" placeholder="Tuliskan program materi/fokus Kelompok A (1 poin per baris)..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- KELOMPOK B -->
+                        <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px; padding: 18px;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+                                <span style="font-size: 20px;">🔵</span>
+                                <h4 style="font-size: 14.5px; font-weight: 800; color: #1e40af; margin: 0;">KKG Kelompok B (Kelas Tinggi & Mapel)</h4>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" style="font-size: 12px;">Judul Kelompok Kerja:</label>
+                                <input type="text" id="kkgKelBJudul" class="form-control" placeholder="Guru Kelas IV, V, VI, PJOK & Bahasa Inggris">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" style="font-size: 12px;">Cakupan Anggota Guru:</label>
+                                <input type="text" id="kkgKelBCakupan" class="form-control" placeholder="Guru Kelas 4, Kelas 5, Kelas 6, Guru PJOK, Seni & B.Inggris">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" style="font-size: 12px;">Hari / Jadwal Pertemuan:</label>
+                                <input type="text" id="kkgKelBJadwal" class="form-control" placeholder="Hari Rabu Bergilir di Sekolah Anggota Gugus">
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label" style="font-size: 12px;">Uraian Program Nyata Kelompok B (1 Poin Per Baris):</label>
+                                <textarea id="kkgKelBPrograms" class="form-control" rows="5" placeholder="Tuliskan program materi/fokus Kelompok B (1 poin per baris)..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FORM TAMBAH / EDIT JADWAL PERTEMUAN -->
+                <div class="card" style="padding: 24px; margin-bottom: 25px;" id="cardKKGJadwalForm">
+                    <h3 id="formKKGHeading" style="font-size: 16px; font-weight: 800; margin-bottom: 16px; color: var(--primary);">+ Tambah Jadwal Pertemuan Bergilir K3S / KKG</h3>
+                    <form id="kkgJadwalForm">
+                        <input type="hidden" id="editKKGId" value="">
+                        <div class="form-row">
+                            <div class="form-group" style="flex: 1;">
+                                <label class="form-label">Tanggal Pelaksanaan *</label>
+                                <input type="text" id="kkgTanggal" class="form-control" placeholder="Contoh: 12 September 2026" required>
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label class="form-label">Bulan *</label>
+                                <input type="text" id="kkgBulan" class="form-control" placeholder="Contoh: September 2026" required>
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label class="form-label">Status *</label>
+                                <select id="kkgStatus" class="form-control" required>
+                                    <option value="Terlaksana">🟢 Terlaksana</option>
+                                    <option value="Dijadwalkan">🔵 Dijadwalkan</option>
+                                    <option value="Ditunda">🔴 Ditunda</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group" style="flex: 1.5;">
+                                <label class="form-label">Tuan Rumah (Sekolah Pelaksana) *</label>
+                                <input type="text" id="kkgTuanRumah" class="form-control" placeholder="Contoh: SDN Inpres Arso VIII (Dukwia)" required>
+                            </div>
+                            <div class="form-group" style="flex: 1.5;">
+                                <label class="form-label">Sasaran Kelompok *</label>
+                                <select id="kkgKelompok" class="form-control" required>
+                                    <option value="Kelompok A (Kelas 1, 2, 3 & Guru Agama)">Kelompok A (Kelas 1, 2, 3 & Guru Agama)</option>
+                                    <option value="Kelompok B (Kelas 4, 5, 6, PJOK & B.Inggris)">Kelompok B (Kelas 4, 5, 6, PJOK & B.Inggris)</option>
+                                    <option value="K3S & Semua Kelompok KKG (A & B)">K3S & Semua Kelompok KKG (A & B)</option>
+                                    <option value="K3S (Kelompok Kerja Kepala Sekolah)">K3S (Kelompok Kerja Kepala Sekolah)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 16px;">
+                            <label class="form-label">Agenda / Topik Bahasan Pertemuan *</label>
+                            <textarea id="kkgAgenda" class="form-control" rows="2" placeholder="Contoh: Pemantapan bimbingan dan simulasi ANBK Berbasis Komputer..." required></textarea>
+                        </div>
+
+                        <!-- UPLOAD FOTO DOKUMENTASI PERTEMUAN K3S / KKG -->
+                        <div class="form-group" style="margin-top: 16px; margin-bottom: 12px; padding: 16px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;">
+                            <label class="form-label" style="font-weight: 800; color: #0284c7; display: flex; align-items: center; gap: 6px;">
+                                <span>📸</span> <span>Foto Dokumentasi Kegiatan Pertemuan (Opsional)</span>
+                            </label>
+                            <input type="file" id="kkgFotoInput" class="form-control" accept="image/*" style="padding: 9px; margin-bottom: 8px; background: #ffffff;">
+                            <small style="color: var(--dark-muted); font-size: 12px; display: block; margin-bottom: 10px;">
+                                Unggah foto suasana pertemuan K3S / KKG dari HP atau Laptop. Otomatis dikompres agar ringan.
+                            </small>
+
+                            <!-- Pratinjau Foto Dokumentasi -->
+                            <div id="kkgPreviewContainer" style="display: none; padding: 12px; background: #ffffff; border-radius: 8px; border: 1px dashed #cbd5e1; text-align: center; margin-bottom: 12px;">
+                                <img id="kkgPreviewImg" src="" alt="Pratinjau Foto Pertemuan" style="max-height: 220px; max-width: 100%; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 8px;" decoding="async" loading="lazy">
+                                <div style="display: flex; justify-content: center; gap: 8px;">
+                                    <button type="button" id="btnHapusFotoKKG" style="background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; padding: 5px 14px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer;">
+                                        🗑️ Hapus Foto Ini
+                                    </button>
+                                </div>
+                            </div>
+
+                            <label class="form-label" style="font-size: 12.5px; margin-bottom: 4px;">Uraian Singkat / Notulen Dokumentasi Pertemuan:</label>
+                            <textarea id="kkgNotulen" class="form-control" rows="2" placeholder="Contoh: Rapat koordinasi modul ajar kurikulum merdeka dan simulasi soal ANBK bersama dewan guru se-Gugus 1 Arso Barat" style="background: #ffffff;"></textarea>
+                        </div>
+
+                        <div style="display: flex; gap: 10px; justify-content: flex-end; align-items: center; margin-top: 15px;">
+                            <button type="button" id="btnBatalEditKKG" style="display: none; background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 10px 18px; border-radius: 6px; font-weight: 600; cursor: pointer;">
+                                ✕ Batal Edit
+                            </button>
+                            <button type="submit" id="btnSimpanKKG" class="btn btn-primary" style="padding: 10px 24px; font-size: 13.5px; font-weight: 700;">
+                                💾 Simpan Jadwal Pertemuan
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- TABEL JADWAL PERTEMUAN DI ADMIN -->
+                <div class="card" style="padding: 24px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+                        <div>
+                            <h3 style="font-size: 16px; font-weight: 800; margin: 0; color: var(--primary);">Jadwal Pertemuan Bergilir K3S & KKG (1 Bulan Sekali)</h3>
+                            <p style="font-size: 12.5px; color: var(--dark-muted); margin: 3px 0 0;">Total <span id="adminKKGCount" style="font-weight: 700; color: var(--primary);">8</span> agenda pertemuan terdaftar di gugus.</p>
+                        </div>
+                        <button type="button" id="btnResetKKGDefault" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; color: #475569; cursor: pointer;">
+                            ↺ Pulihkan Jadwal Bawaan
+                        </button>
+                    </div>
+
+                                        <div class="table-filter-bar" style="margin-bottom: 14px;">
+                        <div class="table-filter-search">
+                            <span style="font-size: 15px;">🔍</span>
+                            <input type="text" id="adminKKGSearch" placeholder="Cari materi kegiatan, pemateri (Turut, S.Pd), atau sekolah...">
+                        </div>
+                        <div class="table-filter-actions">
+                            <select id="adminKKGFilterKelompok" class="table-filter-select">
+                                <option value="ALL">Semua Kelompok</option>
+                                <option value="Awal">Kelas Awal & Agama</option>
+                                <option value="Tinggi">Kelas Tinggi</option>
+                            </select>
+                            <span style="font-size: 12px; color: #64748b; font-weight: 600;">Tampilkan:</span>
+                            <select id="adminKKGPageSize" class="table-filter-select">
+                                <option value="5" selected>5 baris</option>
+                                <option value="10">10 baris</option>
+                                <option value="ALL">Semua Agenda</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="data-table-wrapper" style="overflow-x: auto;">
+                        <table class="data-table" style="width: 100%; border-collapse: collapse; font-size: 13.5px;">
+                            <thead>
+                                <tr style="background: #0284c7; color: #ffffff;">
+                                    <th style="padding: 10px 12px; width: 40px; text-align: center;">No</th>
+                                    <th style="padding: 10px 12px; width: 140px;">Bulan & Tanggal</th>
+                                    <th style="padding: 10px 12px; width: 200px;">Tuan Rumah</th>
+                                    <th style="padding: 10px 12px; width: 200px;">Sasaran Kelompok</th>
+                                    <th style="padding: 10px 12px;">Agenda / Topik Bahasan</th>
+                                    <th style="padding: 10px 12px; width: 110px; text-align: center;">Status</th>
+                                    <th style="padding: 10px 12px; width: 130px; text-align: center;">Tindakan</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminKKGTableBody">
+                                <!-- Diisi otomatis oleh JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="adminKKGPagination" class="pagination-container"></div>
+                </div>
+            </div>
+
+            <!-- ==============================================
+                 TAB BUKU PANDUAN PENGELOLA
+                 ============================================== -->
+            <div id="tab-panduan" class="admin-tab-panel">
+                <div style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                    <div>
+                        <h2 style="font-size: 22px; font-weight: 800; color: var(--primary-dark);">📖 Buku Panduan Pengelola Website</h2>
+                        <p style="font-size: 13.5px; color: var(--dark-muted);">Petunjuk praktis bagi Kepala Sekolah, Dewan Guru, dan Operator SDN Inpres Arso VIII.</p>
+                    </div>
+                    <a href="panduan.html" target="_blank" class="btn btn-secondary" style="font-size: 13px; padding: 8px 18px; text-decoration: none;">
+                        🔍 Buka di Halaman Khusus
+                    </a>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                    <div class="card" style="padding: 24px; border-left: 4px solid var(--primary);">
+                        <h3 style="font-size: 16px; font-weight: 800; color: var(--primary); margin-bottom: 8px;">1. Membuka & Menjalankan Website</h3>
+                        <p style="font-size: 13.5px; color: #475569; line-height: 1.6; margin-bottom: 10px;">
+                            Website dibangun menggunakan HTML5 murni tanpa ketergantungan server database rumit.
+                        </p>
+                        <ul style="font-size: 13px; color: #334155; padding-left: 18px; line-height: 1.6;">
+                            <li>Klik 2x file <strong>KLIK_UNTUK_BUKA_WEBSITE.bat</strong> untuk membuka website offline maupun online.</li>
+                            <li>Dapat disimpan di flashdisk untuk presentasi dinas tanpa perlu instalasi aplikasi server.</li>
+                        </ul>
+                    </div>
+
+                    <div class="card" style="padding: 24px; border-left: 4px solid #0284c7;">
+                        <h3 style="font-size: 16px; font-weight: 800; color: #0284c7; margin-bottom: 8px;">2. Mengelola Berita & Pengumuman</h3>
+                        <p style="font-size: 13.5px; color: #475569; line-height: 1.6; margin-bottom: 10px;">
+                            Kini seluruh kabar sekolah dan pengumuman dapat ditambahkan langsung lewat portal ini.
+                        </p>
+                        <ul style="font-size: 13px; color: #334155; padding-left: 18px; line-height: 1.6;">
+                            <li>Gunakan tab <strong>Kelola Berita</strong> untuk artikel kegiatan siswa.</li>
+                            <li>Gunakan tab <strong>Kelola Pengumuman</strong> untuk edaran akademik / PAS / PPDB.</li>
+                        </ul>
+                    </div>
+
+                    <div class="card" style="padding: 24px; border-left: 4px solid #10b981;">
+                        <h3 style="font-size: 16px; font-weight: 800; color: #047857; margin-bottom: 8px;">3. Mengunggah Foto Galeri</h3>
+                        <p style="font-size: 13.5px; color: #475569; line-height: 1.6; margin-bottom: 10px;">
+                            Foto kegiatan otomatis dikompres agar website tetap dibuka super cepat di koneksi Starlink.
+                        </p>
+                        <ul style="font-size: 13px; color: #334155; padding-left: 18px; line-height: 1.6;">
+                            <li>Buka tab <strong>Kelola Galeri Foto</strong>, pilih foto dari HP/komputer.</li>
+                            <li>Foto langsung tayang di galeri publik dan beranda sekolah.</li>
+                        </ul>
+                    </div>
+
+                    <div class="card" style="padding: 24px; border-left: 4px solid #f59e0b;">
+                        <h3 style="font-size: 16px; font-weight: 800; color: #d97706; margin-bottom: 8px;">4. Cadangkan Data (Backup)</h3>
+                        <p style="font-size: 13.5px; color: #475569; line-height: 1.6; margin-bottom: 10px;">
+                            Pastikan mencadangkan data secara berkala ke flashdisk sekolah.
+                        </p>
+                        <ul style="font-size: 13px; color: #334155; padding-left: 18px; line-height: 1.6;">
+                            <li>Buka tab <strong>Ganti Password & Cadangan</strong>.</li>
+                            <li>Klik tombol hijau <em>Unduh File Cadangan Lengkap (.JSON)</em>.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==============================================
+                 TAB DOKUMEN SOP SEKOLAH
+                 ============================================== -->
+            <div id="tab-sop" class="admin-tab-panel">
+                <div style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                    <div>
+                        <h2 style="font-size: 22px; font-weight: 800; color: var(--primary-dark);">📜 Kelola SOP, Tata Tertib, Piket, Seragam & Pembina Pramuka</h2>
+                        <p style="font-size: 13.5px; color: var(--dark-muted);">Kelola poin tata tertib pendidik & peserta didik, jadwal piket harian guru, rotasi seragam dinas 5 minggu, dan tim pembina kepramukaan yang tersinkronisasi dinamis ke halaman publik.</p>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <a href="sop.html" target="_blank" class="btn btn-secondary" style="font-size: 12.5px; padding: 7px 16px; text-decoration: none;">
+                            🌐 Buka Halaman SOP Publik
+                        </a>
+                        <a href="guru.html" target="_blank" class="btn btn-secondary" style="font-size: 12.5px; padding: 7px 16px; text-decoration: none;">
+                            👨‍🏫 Buka Halaman Dewan Guru
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 1. KELOLA POIN TATA TERTIB GURU & SISWA -->
+                <div class="card" style="padding: 24px; margin-bottom: 25px; border-left: 5px solid #0284c7;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
+                        <div>
+                            <h3 style="font-size: 17px; font-weight: 800; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 8px;">
+                                <span>📋</span> <span>1. Kelola Poin-Poin Tata Tertib & Kedisiplinan Sekolah</span>
+                            </h3>
+                            <p style="font-size: 13px; color: var(--dark-muted); margin: 3px 0 0;">
+                                Ubah, tambah, atau kurangi tata tertib guru dan siswa bila ada aturan baru. Tuliskan 1 poin per baris (awali dengan judul singkat dan tanda '–').
+                            </p>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button type="button" id="btnSimpanSOPTatib" class="btn btn-primary" style="font-size: 12.5px; padding: 7px 16px;">
+                                💾 Simpan Tata Tertib
+                            </button>
+                            <button type="button" id="btnResetSOPTatib" class="btn btn-secondary" style="font-size: 12.5px; padding: 7px 14px;">
+                                ↺ Pulihkan Default
+                            </button>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px;">
+                        <!-- TATA TERTIB GURU -->
+                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 18px;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                                <span style="font-size: 20px;">👨‍🏫</span>
+                                <h4 style="font-size: 14.5px; font-weight: 800; color: #0f172a; margin: 0;">Tata Tertib Guru & Tenaga Kependidikan</h4>
+                            </div>
+                            <p style="font-size: 12px; color: #64748b; margin: 0 0 10px 0;">Poin disiplin pendidik, kehadiran jam 07.00, budaya 5S, dan keteladanan.</p>
+                            <textarea id="sopTatibGuruInput" class="form-control" rows="10" placeholder="Tuliskan 1 poin per baris..."></textarea>
+                        </div>
+
+                        <!-- TATA TERTIB SISWA -->
+                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 18px;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                                <span style="font-size: 20px;">👨‍🎓</span>
+                                <h4 style="font-size: 14.5px; font-weight: 800; color: #0f172a; margin: 0;">Tata Tertib & Larangan Peserta Didik</h4>
+                            </div>
+                            <p style="font-size: 12px; color: #64748b; margin: 0 0 10px 0;">Poin disiplin murid, jam masuk, upacara bendera, piket kelas, dan aturan belajar.</p>
+                            <textarea id="sopTatibSiswaInput" class="form-control" rows="10" placeholder="Tuliskan 1 poin per baris..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. KELOLA JADWAL PIKET HARIAN GURU (SENIN S/D JUMAT) -->
+                <div class="card" style="padding: 24px; margin-bottom: 25px; border-left: 5px solid #10b981;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
+                        <div>
+                            <h3 style="font-size: 17px; font-weight: 800; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 8px;">
+                                <span>👥</span> <span>2. Kelola Jadwal Piket Harian Guru (Senin – Jumat)</span>
+                            </h3>
+                            <p style="font-size: 13px; color: var(--dark-muted); margin: 3px 0 0;">
+                                Pilih nama guru piket dari menu dropdown yang terhubung otomatis dengan database Dewan Guru SDN Inpres Arso VIII.
+                            </p>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button type="button" id="btnSimpanSOPPiket" class="btn btn-primary" style="font-size: 12.5px; padding: 7px 16px; background: #059669; border-color: #059669;">
+                                💾 Simpan Jadwal Piket
+                            </button>
+                            <button type="button" id="btnResetSOPPiket" class="btn btn-secondary" style="font-size: 12.5px; padding: 7px 14px;">
+                                ↺ Pulihkan Default
+                            </button>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px;">
+                        <!-- SENIN -->
+                        <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 14px;">
+                            <div style="font-weight: 800; color: #0f172a; font-size: 14px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+                                <span>📅</span> <span>SENIN</span>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 8px;">
+                                <label style="font-size: 11px; font-weight: 700; color: #475569;">Guru Piket 1:</label>
+                                <select id="sopPiket_senin_1" class="form-control guru-dropdown"></select>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label style="font-size: 11px; font-weight: 700; color: #475569;">Guru Piket 2:</label>
+                                <select id="sopPiket_senin_2" class="form-control guru-dropdown"></select>
+                            </div>
+                        </div>
+
+                        <!-- SELASA -->
+                        <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 14px;">
+                            <div style="font-weight: 800; color: #0f172a; font-size: 14px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+                                <span>📅</span> <span>SELASA</span>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 8px;">
+                                <label style="font-size: 11px; font-weight: 700; color: #475569;">Guru Piket 1:</label>
+                                <select id="sopPiket_selasa_1" class="form-control guru-dropdown"></select>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label style="font-size: 11px; font-weight: 700; color: #475569;">Guru Piket 2:</label>
+                                <select id="sopPiket_selasa_2" class="form-control guru-dropdown"></select>
+                            </div>
+                        </div>
+
+                        <!-- RABU -->
+                        <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 14px;">
+                            <div style="font-weight: 800; color: #0f172a; font-size: 14px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+                                <span>📅</span> <span>RABU</span>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 8px;">
+                                <label style="font-size: 11px; font-weight: 700; color: #475569;">Guru Piket 1:</label>
+                                <select id="sopPiket_rabu_1" class="form-control guru-dropdown"></select>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label style="font-size: 11px; font-weight: 700; color: #475569;">Guru Piket 2:</label>
+                                <select id="sopPiket_rabu_2" class="form-control guru-dropdown"></select>
+                            </div>
+                        </div>
+
+                        <!-- KAMIS -->
+                        <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 14px;">
+                            <div style="font-weight: 800; color: #0f172a; font-size: 14px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+                                <span>📅</span> <span>KAMIS</span>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 8px;">
+                                <label style="font-size: 11px; font-weight: 700; color: #475569;">Guru Piket 1:</label>
+                                <select id="sopPiket_kamis_1" class="form-control guru-dropdown"></select>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label style="font-size: 11px; font-weight: 700; color: #475569;">Guru Piket 2:</label>
+                                <select id="sopPiket_kamis_2" class="form-control guru-dropdown"></select>
+                            </div>
+                        </div>
+
+                        <!-- JUMAT -->
+                        <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 14px;">
+                            <div style="font-weight: 800; color: #0f172a; font-size: 14px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+                                <span>📅</span> <span>JUMAT</span>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 8px;">
+                                <label style="font-size: 11px; font-weight: 700; color: #475569;">Guru Piket 1:</label>
+                                <select id="sopPiket_jumat_1" class="form-control guru-dropdown"></select>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label style="font-size: 11px; font-weight: 700; color: #475569;">Guru Piket 2:</label>
+                                <select id="sopPiket_jumat_2" class="form-control guru-dropdown"></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. KELOLA JADWAL PEMAKAIAN SERAGAM GURU (5 SIKLUS MINGGUAN) -->
+                <div class="card" style="padding: 24px; margin-bottom: 25px; border-left: 5px solid #f59e0b;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
+                        <div>
+                            <h3 style="font-size: 17px; font-weight: 800; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 8px;">
+                                <span>👔</span> <span>3. Kelola Jadwal Pemakaian Seragam Guru (5 Siklus Mingguan)</span>
+                            </h3>
+                            <p style="font-size: 13px; color: var(--dark-muted); margin: 3px 0 0;">
+                                Tentukan ketentuan seragam dinas guru untuk Senin–Selasa, Rabu, Kamis, dan Jumat pada setiap siklus pekan 1 sampai 5.
+                            </p>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button type="button" id="btnSimpanSOPSeragam" class="btn btn-primary" style="font-size: 12.5px; padding: 7px 16px; background: #d97706; border-color: #d97706;">
+                                💾 Simpan Jadwal Seragam
+                            </button>
+                            <button type="button" id="btnResetSOPSeragam" class="btn btn-secondary" style="font-size: 12.5px; padding: 7px 14px;">
+                                ↺ Pulihkan Default
+                            </button>
+                        </div>
+                    </div>
+
+                    <div style="overflow-x: auto;">
+                        <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+                            <thead>
+                                <tr style="background: #f8fafc; border-bottom: 2px solid #cbd5e1; text-align: left;">
+                                    <th style="padding: 10px; width: 14%;">Siklus</th>
+                                    <th style="padding: 10px; width: 24%;">Senin & Selasa</th>
+                                    <th style="padding: 10px; width: 20%;">Rabu</th>
+                                    <th style="padding: 10px; width: 22%;">Kamis</th>
+                                    <th style="padding: 10px; width: 20%;">Jumat</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- MINGGU 1 -->
+                                <tr style="border-bottom: 1px solid #f1f5f9;">
+                                    <td style="padding: 10px;"><strong>Minggu Ke-1</strong></td>
+                                    <td style="padding: 8px;"><input type="text" id="sopSeragam_m1_senin" class="form-control" placeholder="Contoh: Seragam Keki (Khaki)"></td>
+                                    <td style="padding: 8px;"><input type="text" id="sopSeragam_m1_rabu" class="form-control" placeholder="Contoh: Putih - Hitam"></td>
+                                    <td style="padding: 8px;"><input type="text" id="sopSeragam_m1_kamis" class="form-control" placeholder="Contoh: Batik Papua Warna Hijau"></td>
+                                    <td style="padding: 8px;"><input type="text" id="sopSeragam_m1_jumat" class="form-control" placeholder="Contoh: Kaos Merah Maroon"></td>
+                                </tr>
+                                <!-- MINGGU 2 -->
+                                <tr style="border-bottom: 1px solid #f1f5f9;">
+                                    <td style="padding: 10px;"><strong>Minggu Ke-2</strong></td>
+                                    <td style="padding: 8px;"><input type="text" id="sopSeragam_m2_senin" class="form-control" placeholder="Seragam Keki (Khaki)"></td>
+                                    <td style="padding: 8px;"><input type="text" id="sopSeragam_m2_rabu" class="form-control" placeholder="Putih - Hitam"></td>
+                                    <td style="padding: 8px;"><input type="text" id="sopSeragam_m2_kamis" class="form-control" placeholder="Batik Papua Merah"></td>
+                                    <td style="padding: 8px;"><input type="text" id="sopSeragam_m2_jumat" class="form-control" placeholder="Kaos Hitam"></td>
+                                </tr>
+                                <!-- MINGGU 3 -->
+                                <tr style="border-bottom: 1px solid #f1f5f9;">
+                                    <td style="padding: 10px;"><strong>Minggu Ke-3</strong></td>
+                                    <td style="padding: 8px;"><input type="text" id="sopSeragam_m3_senin" class="form-control" placeholder="Seragam Keki (Khaki)"></td>
+                                    <td style="padding: 8px;"><input type="text" id="sopSeragam_m3_rabu" class="form-control" placeholder="Putih - Hitam"></td>
+                                    <td style="padding: 8px;"><input type="text" id="sopSeragam_m3_kamis" class="form-control" placeholder="Batik Papua Cenderawasih"></td>
+                                    <td style="padding: 8px;"><input type="text" id="sopSeragam_m3_jumat" class="form-control" placeholder="Kaos Biru Lengan Panjang"></td>
+                                </tr>
+                                <!-- MINGGU 4 -->
+                                <tr style="border-bottom: 1px solid #f1f5f9;">
+                                    <td style="padding: 10px;"><strong>Minggu Ke-4</strong></td>
+                                    <td style="padding: 8px;"><input type="text" id="sopSeragam_m4_senin" class="form-control" placeholder="Seragam Keki (Khaki)"></td>
+                                    <td style="padding: 8px;"><input type="text" id="sopSeragam_m4_rabu" class="form-control" placeholder="Putih - Hitam"></td>
+                                    <td style="padding: 8px;"><input type="text" id="sopSeragam_m4_kamis" class="form-control" placeholder="Batik Jawa Lengan Panjang"></td>
+                                    <td style="padding: 8px;"><input type="text" id="sopSeragam_m4_jumat" class="form-control" placeholder="Kaos Merah Lengan Panjang"></td>
+                                </tr>
+                                <!-- MINGGU 5 -->
+                                <tr>
+                                    <td style="padding: 10px;"><strong>Minggu Ke-5</strong></td>
+                                    <td style="padding: 8px;"><input type="text" id="sopSeragam_m5_senin" class="form-control" placeholder="Seragam Keki (Khaki)"></td>
+                                    <td style="padding: 8px;"><input type="text" id="sopSeragam_m5_rabu" class="form-control" placeholder="Putih - Hitam"></td>
+                                    <td style="padding: 8px;"><input type="text" id="sopSeragam_m5_kamis" class="form-control" placeholder="Batik Papua Bebas"></td>
+                                    <td style="padding: 8px;"><input type="text" id="sopSeragam_m5_jumat" class="form-control" placeholder="Kaos Kuning Lengan Panjang"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 4. KELOLA TIM PEMBINA PRAMUKA (SIAGA & PENGGALANG) -->
+                <div class="card" style="padding: 24px; margin-bottom: 25px; border-left: 5px solid #8b5cf6;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
+                        <div>
+                            <h3 style="font-size: 17px; font-weight: 800; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 8px;">
+                                <span>⛺</span> <span>4. Kelola Tim Pembina Gerakan Pramuka (Siaga & Penggalang)</span>
+                            </h3>
+                            <p style="font-size: 13px; color: var(--dark-muted); margin: 3px 0 0;">
+                                Atur jadwal latihan dan daftar nama pembina pendamping Pramuka Siaga (Kelas 1–3) dan Pramuka Penggalang (Kelas 4–6).
+                            </p>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button type="button" id="btnSimpanSOPPramuka" class="btn btn-primary" style="font-size: 12.5px; padding: 7px 16px; background: #7c3aed; border-color: #7c3aed;">
+                                💾 Simpan Pembina Pramuka
+                            </button>
+                            <button type="button" id="btnResetSOPPramuka" class="btn btn-secondary" style="font-size: 12.5px; padding: 7px 14px;">
+                                ↺ Pulihkan Default
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 18px;">
+                        <label class="form-label">Waktu & Jadwal Pelaksanaan Latihan Pramuka:</label>
+                        <input type="text" id="sopPramukaJadwalInput" class="form-control" placeholder="Dilaksanakan 2 (dua) kali setiap bulan pada hari Jumat pukul 15.00 – 17.00 WIT di lingkungan sekolah.">
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px;">
+                        <!-- PRAMUKA SIAGA -->
+                        <div style="background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 10px; padding: 18px;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                                <span style="font-size: 20px;">🟡</span>
+                                <h4 style="font-size: 14.5px; font-weight: 800; color: #92400e; margin: 0;">PRAMUKA SIAGA (Kelas 1, 2, dan 3)</h4>
+                            </div>
+                            <p style="font-size: 12px; color: #78350f; margin: 0 0 8px 0;">Daftar guru pembina pendamping (1 nama per baris):</p>
+                            <textarea id="sopPramukaSiagaInput" class="form-control" rows="6" placeholder="Tuliskan nama pembina (1 per baris)..."></textarea>
+                            <div style="margin-top: 8px;">
+                                <select id="sopPramukaSiagaAddGuru" class="form-control guru-dropdown" style="font-size: 12px; background: #ffffff;">
+                                    <option value="">➕ Tambah Guru dari Database Dewan Guru...</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- PRAMUKA PENGGALANG -->
+                        <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 10px; padding: 18px;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                                <span style="font-size: 20px;">🔵</span>
+                                <h4 style="font-size: 14.5px; font-weight: 800; color: #1e40af; margin: 0;">PRAMUKA PENGGALANG (Kelas 4, 5, dan 6)</h4>
+                            </div>
+                            <p style="font-size: 12px; color: #1e3a8a; margin: 0 0 8px 0;">Daftar guru pembina pendamping (1 nama per baris):</p>
+                            <textarea id="sopPramukaPenggalangInput" class="form-control" rows="6" placeholder="Tuliskan nama pembina (1 per baris)..."></textarea>
+                            <div style="margin-top: 8px;">
+                                <select id="sopPramukaPenggalangAddGuru" class="form-control guru-dropdown" style="font-size: 12px; background: #ffffff;">
+                                    <option value="">➕ Tambah Guru dari Database Dewan Guru...</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. PEDOMAN RINGKAS SOP RESMI (REFERENSI KELEMBAGAAN) -->
+                <div style="margin-top: 35px; margin-bottom: 12px;">
+                    <h3 style="font-size: 16px; font-weight: 800; color: #475569; margin: 0 0 14px 0;">
+                        📖 Referensi Dokumen Standar Operasional Prosedur (SOP) Kelembagaan
+                    </h3>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+                    <div class="card" style="padding: 20px;">
+                        <span class="badge-tag" style="background: #e0f2fe; color: #0369a1; font-weight: 700; margin-bottom: 8px; display: inline-block;">SOP-01 : AKADEMIK & PEMBELAJARAN</span>
+                        <h4 style="font-size: 15px; font-weight: 800; color: var(--primary-dark); margin-bottom: 6px;">Jam Kerja Guru & Kehadiran Peserta Didik</h4>
+                        <p style="font-size: 12.5px; color: #475569; line-height: 1.6; margin: 0;">
+                            Guru dan siswa hadir selambat-lambatnya pukul <strong>07.15 WIT</strong>. Upacara Senin & Senam Jumat dimulai pukul <strong>07.30 WIT</strong>. Jam pembelajaran efektif 07.45 s.d. 12.30 WIT.
+                        </p>
+                    </div>
+
+                    <div class="card" style="padding: 20px;">
+                        <span class="badge-tag" style="background: #fef3c7; color: #92400e; font-weight: 700; margin-bottom: 8px; display: inline-block;">SOP-02 : KEDISIPLINAN & SERAGAM</span>
+                        <h4 style="font-size: 15px; font-weight: 800; color: var(--primary-dark); margin-bottom: 6px;">Ketentuan Seragam Resmi 5 Hari Sekolah</h4>
+                        <p style="font-size: 12.5px; color: #475569; line-height: 1.6; margin: 0;">
+                            <strong>Senin:</strong> Merah Putih lengkap topi & dasi.<br>
+                            <strong>Selasa & Rabu:</strong> Batik Sekolah / Pramuka.<br>
+                            <strong>Kamis:</strong> Pakaian Adat / Batik Papua.<br>
+                            <strong>Jumat:</strong> Kaos Olahraga & Senam Pagi.
+                        </p>
+                    </div>
+
+                    <div class="card" style="padding: 20px;">
+                        <span class="badge-tag" style="background: #dcfce7; color: #166534; font-weight: 700; margin-bottom: 8px; display: inline-block;">SOP-03 : TEKNOLOGI & TIK</span>
+                        <h4 style="font-size: 15px; font-weight: 800; color: var(--primary-dark); margin-bottom: 6px;">Pemanfaatan Ruang Komputer & Jaringan Starlink</h4>
+                        <p style="font-size: 12.5px; color: #475569; line-height: 1.6; margin: 0;">
+                            Fasilitas satelit Starlink diutamakan untuk ANBK, pelaporan Dapodik, dan pembelajaran TIK. Komputer wajib dimatikan dan kabel dirapikan setelah digunakan.
+                        </p>
+                    </div>
+
+                    <div class="card" style="padding: 20px;">
+                        <span class="badge-tag" style="background: #f1f5f9; color: #334155; font-weight: 700; margin-bottom: 8px; display: inline-block;">SOP-04 : KESISWAAN</span>
+                        <h4 style="font-size: 15px; font-weight: 800; color: var(--primary-dark); margin-bottom: 6px;">Penerimaan Peserta Didik Baru (PPDB Online)</h4>
+                        <p style="font-size: 12.5px; color: #475569; line-height: 1.6; margin: 0;">
+                            Pendaftaran tidak dipungut biaya (Gratis). Berkas Akta Kelahiran, KK, dan KTP Orang Tua diverifikasi dalam 1x24 jam kerja.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==============================================
+                 TAB KONTAK & KOTAK MASUK PESAN TAMU
+                 ============================================== -->
+            <div id="tab-kontak" class="admin-tab-panel">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; flex-wrap: wrap; gap: 14px;">
+                    <div>
+                        <h2 style="font-size: 24px; font-weight: 800; color: var(--primary-dark); margin: 0 0 6px;">
+                            📞 Kelola Kontak Resmi & Kotak Masuk Pesan
+                        </h2>
+                        <p style="font-size: 14px; color: var(--dark-muted); margin: 0;">
+                            Kelola informasi saluran komunikasi resmi sekolah dan pantau pertanyaan/aspirasi masyarakat dari form kontak publik.
+                        </p>
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="saveKontakData();" style="display: flex; align-items: center; gap: 8px; font-weight: 700; padding: 10px 22px;">
+                        <span>💾</span> <span>Simpan Kontak ke Cloud</span>
+                    </button>
+                </div>
+
+                <!-- 1. FORM PENGATURAN KONTAK RESMI -->
+                <div class="card" style="padding: 24px; margin-bottom: 30px; border-left: 4px solid var(--primary);">
+                    <h3 style="font-size: 17px; font-weight: 800; color: var(--primary-dark); margin-bottom: 16px;">
+                        ⚙️ Saluran Komunikasi Resmi Sekolah
+                    </h3>
+                    <form id="formKontakResmi" onsubmit="event.preventDefault(); saveKontakData();">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin-bottom: 18px;">
+                            <div>
+                                <label style="font-weight: 700; font-size: 13px;">Nomor Telepon Dinas:</label>
+                                <input type="text" id="kontakInputTelepon" class="form-control" style="width: 100%; font-weight: 700;">
+                            </div>
+                            <div>
+                                <label style="font-weight: 700; font-size: 13px;">Nomor WhatsApp Resmi (Awali 62):</label>
+                                <input type="text" id="kontakInputWhatsApp" class="form-control" style="width: 100%; font-weight: 700; color: #16a34a;">
+                            </div>
+                            <div>
+                                <label style="font-weight: 700; font-size: 13px;">Email Resmi Sekolah:</label>
+                                <input type="email" id="kontakInputEmail" class="form-control" style="width: 100%;">
+                            </div>
+                            <div>
+                                <label style="font-weight: 700; font-size: 13px;">Jam Operasional Pelayanan:</label>
+                                <input type="text" id="kontakInputJamKerja" class="form-control" style="width: 100%;">
+                            </div>
+                            <div style="grid-column: 1 / -1;">
+                                <label style="font-weight: 700; font-size: 13px;">Alamat Surat Menyurat:</label>
+                                <input type="text" id="kontakInputAlamat" class="form-control" style="width: 100%;">
+                            </div>
+                            <div>
+                                <label style="font-weight: 700; font-size: 13px;">Koordinat GPS (Lat, Long):</label>
+                                <input type="text" id="kontakInputKoordinat" class="form-control" style="width: 100%;">
+                            </div>
+                            <div>
+                                <label style="font-weight: 700; font-size: 13px;">Link Google Maps Embed (iframe src):</label>
+                                <input type="text" id="kontakInputMaps" class="form-control" style="width: 100%;">
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <button type="submit" class="btn btn-primary" style="padding: 9px 20px; font-weight: 700;">
+                                Simpan Saluran Kontak
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- 2. KOTAK MASUK PESAN DARI MASYARAKAT / WALI MURID -->
+                <div class="card" style="padding: 24px; border-left: 4px solid var(--secondary);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+                        <div>
+                            <h3 style="font-size: 17px; font-weight: 800; color: var(--primary-dark); margin: 0 0 4px;">
+                                📬 Kotak Masuk Pesan Pengunjung (Form Kontak Publik)
+                            </h3>
+                            <p style="font-size: 13px; color: var(--dark-muted); margin: 0;">Pesan dan pertanyaan yang dikirimkan oleh orang tua atau warga melalui kontak.html.</p>
+                        </div>
+                        <button type="button" class="btn btn-secondary" onclick="renderPesanKontakTable();" style="font-size: 12.5px; padding: 6px 14px;">
+                            🔄 Muat Ulang Pesan
+                        </button>
+                    </div>
+
+                    <div style="overflow-x: auto;">
+                        <table class="table" style="width: 100%; border-collapse: collapse; font-size: 13.5px;">
+                            <thead>
+                                <tr style="background: #f8fafc; border-bottom: 2px solid #e2e8f0; text-align: left;">
+                                    <th style="padding: 10px 12px; width: 140px;">Waktu & Tanggal</th>
+                                    <th style="padding: 10px 12px; width: 180px;">Nama Pengirim</th>
+                                    <th style="padding: 10px 12px; width: 130px;">No. Telepon / WA</th>
+                                    <th style="padding: 10px 12px; width: 160px;">Subjek</th>
+                                    <th style="padding: 10px 12px;">Isi Pesan</th>
+                                    <th style="padding: 10px 12px; width: 110px;">Status</th>
+                                    <th style="padding: 10px 12px; width: 130px; text-align: center;">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pesanKontakTableBody">
+                                <!-- Diisi otomatis oleh JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==============================================
+                 8. TAB PENGATURAN AKUN
+                 ============================================== -->
+            <div id="tab-pengaturan" class="admin-tab-panel">
+                <div style="margin-bottom: 24px;">
+                    <h2 style="font-size: 22px; font-weight: 800; color: var(--primary-dark);">⚙️ Pengaturan Keamanan Akun Admin</h2>
+                    <p style="font-size: 13.5px; color: var(--dark-muted);">Ubah nama pengguna (username) dan kata sandi untuk keamanan akses dashboard.</p>
+                </div>
+
+                <!-- KREDENSIAL AKTIF SAAT INI (KODE ADMIN) -->
+                <div class="card" style="padding: 24px; border-left: 5px solid #0284c7; margin-bottom: 24px; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.08);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px;">
+                        <div>
+                            <h3 style="font-size: 17px; font-weight: 800; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 8px;">
+                                <span>🔑</span> <span>Kredensial Login Pengelola Aktif Saat Ini</span>
+                            </h3>
+                            <p style="font-size: 13px; color: var(--dark-muted); margin: 3px 0 0;">
+                                Akun resmi yang saat ini aktif digunakan untuk masuk ke Dashboard Pengelola website.
+                            </p>
+                        </div>
+                        <span style="background: #dcfce7; color: #166534; font-size: 12px; font-weight: 700; padding: 5px 12px; border-radius: 9999px; display: inline-flex; align-items: center; gap: 6px;">
+                            <span style="width: 8px; height: 8px; background: #16a34a; border-radius: 50%;"></span>
+                            Tersinkronisasi Cloud Google
+                        </span>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; background: #f8fafc; padding: 16px 18px; border-radius: 10px; border: 1.5px solid #e2e8f0;">
+                        <div>
+                            <span style="font-size: 11.5px; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 5px;">Nama Pengguna (Username):</span>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <code id="displayActiveUser" style="font-size: 15px; font-weight: 800; color: #0284c7; background: #ffffff; padding: 7px 14px; border-radius: 8px; border: 1.5px solid #cbd5e1; letter-spacing: 0.5px;">admin</code>
+                            </div>
+                        </div>
+
+                        <div>
+                            <span style="font-size: 11.5px; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 5px;">Kata Sandi / Kode Admin (Password):</span>
+                            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                <input type="password" id="displayActivePass" value="sdnarso8juara" readonly style="font-size: 15px; font-weight: 800; color: #0f172a; background: #ffffff; padding: 7px 14px; border-radius: 8px; border: 1.5px solid #cbd5e1; width: 170px; outline: none; letter-spacing: 1px;">
+                                <button type="button" id="btnToggleShowActivePass" class="btn btn-secondary" style="padding: 7px 13px; font-size: 12.5px; display: inline-flex; align-items: center; gap: 6px; font-weight: 700; cursor: pointer;" title="Tampilkan / Sembunyikan Kode Admin">
+                                    <span id="eyeIconActive">👁️</span> <span id="eyeTextActive">Lihat Kode</span>
+                                </button>
+                                <button type="button" id="btnCopyActiveCreds" class="btn btn-secondary" style="padding: 7px 13px; font-size: 12.5px; font-weight: 700; cursor: pointer;" title="Salin Username & Password">
+                                    📋 Salin
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- KUNCI PEMULIHAN RAHASIA PENGELOLA -->
+                    <div style="margin-top: 14px; padding: 12px 16px; background: #fefce8; border: 1.5px solid #fef08a; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                        <div>
+                            <span style="font-size: 11.5px; color: #854d0e; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 3px;">🔐 Kunci Rahasia Pemulihan Sandi (Master Recovery Key):</span>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <code style="font-size: 14px; font-weight: 800; color: #a16207; background: #ffffff; padding: 5px 12px; border-radius: 6px; border: 1px solid #fde047; letter-spacing: 0.5px;">ARSO8-PENGELOLA-2026</code>
+                                <button type="button" class="btn btn-secondary" style="padding: 5px 10px; font-size: 11.5px; cursor: pointer; font-weight: 700;" onclick="navigator.clipboard.writeText('ARSO8-PENGELOLA-2026'); alert('✅ Kunci Rahasia Pemulihan Disalin: ARSO8-PENGELOLA-2026');">📋 Salin Kunci</button>
+                            </div>
+                        </div>
+                        <small style="color: #713f12; font-size: 11.5px; max-width: 380px;">Kunci ini bersifat <strong>RAHASIA</strong> khusus pengelola sekolah untuk memulihkan sandi jika lupa di halaman login. Jangan dibagikan ke publik.</small>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
+                    <!-- KREDENSIAL LOGIN -->
+                    <div class="card" style="padding: 24px;">
+                        <h3 style="font-size: 16px; font-weight: 800; color: var(--primary); margin-bottom: 14px;">🔒 Ubah Kredensial Login</h3>
+                        <form id="accountSettingsForm">
+                            <div class="form-group" style="margin-bottom: 14px;">
+                                <label class="form-label">Username Baru</label>
+                                <input type="text" id="newUsername" class="form-control" placeholder="admin" required>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 18px;">
+                                <label class="form-label">Password Baru (Minimal 6 karakter)</label>
+                                <div style="position: relative; display: flex; align-items: center;">
+                                    <input type="password" id="newPassword" class="form-control" placeholder="Ketik kata sandi baru..." required style="padding-right: 48px;">
+                                    <button type="button" id="toggleNewPass" aria-label="Lihat kata sandi baru" style="position: absolute; right: 8px; background: none; border: none; font-size: 17px; cursor: pointer; color: #64748b; padding: 6px 8px; border-radius: 6px; outline: none;" title="Tampilkan / Sembunyikan Kata Sandi">
+                                        👁️
+                                    </button>
+                                </div>
+                                <div style="margin-top: 8px;">
+                                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 12.5px; font-weight: 600; color: #0369a1; user-select: none;">
+                                        <input type="checkbox" id="showNewPassCheckbox" style="width: 16px; height: 16px; accent-color: #0284c7; cursor: pointer;">
+                                        <span>👁️ Tampilkan Kata Sandi Baru</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="padding: 10px 20px; font-size: 13.5px; width: 100%;">
+                                Simpan Kredensial Baru
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- PENCADANGAN & PEMULIHAN DATA LENGKAP -->
+                    <div class="card" style="padding: 24px; border-left: 4px solid #10b981;">
+                        <h3 style="font-size: 16px; font-weight: 800; color: #047857; margin-bottom: 6px;">💾 Cadangkan & Pulihkan Data Sekolah</h3>
+                        <p style="font-size: 13px; color: var(--dark-muted); margin-bottom: 16px;">Amankan seluruh data sekolah (PPDB, Pengumuman, Guru, Siswa, dan Galeri) ke dalam satu file cadangan (.JSON) agar aman digunakan berkepanjangan.</p>
+
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                            <button type="button" id="btnExportAllData" class="btn btn-primary" style="background: #059669; border-color: #047857; padding: 10px 16px; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                                <span>📥 Unduh File Cadangan Lengkap (.JSON)</span>
+                            </button>
+
+                            <div style="border-top: 1px dashed #cbd5e1; margin: 6px 0;"></div>
+
+                            <label class="form-label" style="margin-bottom: 4px;">Pulihkan Data dari File Cadangan:</label>
+                            <input type="file" id="restoreFileInput" accept=".json" class="form-input" style="padding: 7px; font-size: 12px;">
+                            <button type="button" id="btnRestoreAllData" style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; padding: 8px 16px; border-radius: 6px; font-size: 12.5px; font-weight: 700; cursor: pointer;">
+                                📤 Pulihkan Data Sekarang
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                            
+</div>
+
+        </main>
+    </div>
+
+    <!-- Script Dashboard Admin -->
+    <script src="js/data_sekolah.js?v=20261116_v51"></script>
+        <!-- MODAL LIGHTBOX GLOBAL (ZOOM FOTO DOKUMENTASI & PREVIEW) -->
+    <div class="lightbox-modal" id="globalLightbox" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.92); z-index: 999999; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; backdrop-filter: blur(4px);" onclick="if(event.target===this||event.target.classList.contains('lightbox-content'))window.closeActiveLightbox()">
+        <button type="button" class="lightbox-close" onclick="window.closeActiveLightbox()" aria-label="Tutup Tampilan" title="Tutup Tampilan (Esc)" style="position: fixed; top: 20px; right: 24px; color: #ffffff; font-size: 26px; font-weight: 800; cursor: pointer; background: rgba(15, 23, 42, 0.85); border: 2px solid rgba(255, 255, 255, 0.7); border-radius: 50%; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; z-index: 1000000; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6); transition: all 0.2s ease; outline: none;">✕</button>
+        <div class="lightbox-content" style="max-width: 92vw; max-height: 88vh; border-radius: 12px; overflow: hidden; position: relative; background: #000000; box-shadow: 0 10px 40px rgba(0,0,0,0.8); display: flex; flex-direction: column; align-items: center;">
+            <img src="" alt="Perbesar Foto" style="max-width: 100%; max-height: 80vh; object-fit: contain; display: block;" decoding="async" loading="lazy">
+            <div id="lightboxCaptionBox" style="width: 100%; background: #0f172a; color: #f8fafc; font-size: 13.5px; padding: 12px 18px; text-align: center; border-top: 1px solid rgba(255,255,255,0.15); box-sizing: border-box;">
+                <span id="lightboxCaptionText">Dokumentasi Foto SDN Inpres Arso VIII</span>
+            </div>
+        </div>
+        <div style="position: absolute; bottom: 12px; left: 0; width: 100%; text-align: center; pointer-events: none;">
+            <span style="background: rgba(0,0,0,0.65); color: #cbd5e1; font-size: 12px; padding: 4px 14px; border-radius: 9999px;">✕ Klik tombol X di pojok atas atau tekan Esc untuk menutup</span>
+        </div>
+    </div>
+
+    <script src="js/admin.js?v=20261116_v51"></script>
+</body>
+</html>

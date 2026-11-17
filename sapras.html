@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="aagzvzG8FxG_yRXb6rrDtTEjMk7-ePR2ghRUQnz_Keo" />
+    <meta name="description" content="Data Inventaris Sarana dan Prasarana SD Negeri Inpres Arso VIII, Kabupaten Keerom Papua. Kondisi riil ruang kelas, TIK, Starlink, dan inventaris sekolah.">
+    <title>Sarana & Prasarana - SDN Inpres Arso VIII</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css?v=20261116_v51">
+    <!-- Open Graph / Media Sosial Preview -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Sarana & Prasarana - SDN Inpres Arso VIII">
+    <meta property="og:description" content="Inventaris 31 sarana dan prasarana SD Negeri Inpres Arso VIII, fasilitas internet Starlink, ruang TIK, dan ruang kelas.">
+    <meta property="og:image" content="images/gerbang-sekolah.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Sarana & Prasarana - SDN Inpres Arso VIII">
+    <meta name="twitter:description" content="Inventaris 31 sarana dan prasarana SD Negeri Inpres Arso VIII, fasilitas internet Starlink, ruang TIK, dan ruang kelas.">
+    <meta name="twitter:image" content="images/gerbang-sekolah.jpg">
+    <link rel="dns-prefetch" href="https://arso8-a2bcf-default-rtdb.firebaseio.com">
+    <!-- Favicon & Mobile Touch Icons Resmi SDN Inpres Arso VIII -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="images/logo-keerom-192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon-180.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0d5c3a">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="SDN Arso VIII">
+</head>
+<body>
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <div class="container">
+            <div class="top-bar-left">
+                <div class="top-bar-item">
+                    <span>📍 Jln. Sulawesi, Kampung Dukwia, Distrik Arso Barat, Kab. Keerom - Papua</span>
+                </div>
+                <div class="top-bar-item top-bar-contact-hide">
+                    <span>📞 0812-4821-9125</span>
+                </div>
+                <div class="top-bar-item top-bar-contact-hide">
+                    <span>✉️ sdninpresarso8@gmail.com</span>
+                </div>
+            </div>
+            <div class="top-bar-right">
+                <div class="top-bar-clock" id="topBarClock" title="Waktu Indonesia Timur">
+                    <span class="clock-icon">🕒</span> <span class="live-wit-clock">WIT</span>
+                </div>
+                <a href="login.html" class="top-bar-admin-btn" title="Masuk ke Portal Admin SDN Inpres Arso VIII">
+                    <svg class="admin-user-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <span>Admin</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- HEADER & NAVIGASI -->
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="index.html" class="brand-wrapper">
+                <img src="images/logo-keerom.png" alt="Lambang Kabupaten Keerom" class="brand-logo" decoding="async">
+                <div class="brand-text">
+                    <h1>SDN INPRES ARSO VIII</h1>
+                    <p>Dinas Pendidikan dan Pengajaran Kab. Keerom - Papua (NPSN: 60300868)</p>
+                </div>
+            </a>
+
+            <button class="mobile-toggle" aria-label="Buka Menu Navigasi">☰</button>
+
+            <nav class="main-nav">
+                <a href="index.html" class="nav-link">Beranda</a>
+                <div class="nav-item-dropdown">
+                    <a href="profil.html" class="nav-link nav-dropdown-toggle active">
+                        Profil Sekolah <span class="dropdown-chevron">▾</span>
+                    </a>
+                    <div class="nav-dropdown-menu">
+                        <a href="profil.html" class="nav-dropdown-item">
+                            <span class="dropdown-icon">🏛️</span>
+                            <div>
+                                <strong>Profil Sekolah</strong>
+                                <small>Sejarah, Visi Misi & Identitas</small>
+                            </div>
+                        </a>
+                        <a href="guru.html" class="nav-dropdown-item">
+                            <span class="dropdown-icon">👩‍🏫</span>
+                            <div>
+                                <strong>Dewan Guru & GTK</strong>
+                                <small>Struktur Organisasi & Tenaga Pendidik</small>
+                            </div>
+                        </a>
+                        <a href="siswa.html" class="nav-dropdown-item">
+                            <span class="dropdown-icon">👨‍🎓</span>
+                            <div>
+                                <strong>Kesiswaan</strong>
+                                <small>Data Siswa, Kelas & Rombel</small>
+                            </div>
+                        </a>
+                        <a href="sapras.html" class="nav-dropdown-item active">
+                            <span class="dropdown-icon">🏫</span>
+                            <div>
+                                <strong>Sarana & Prasarana</strong>
+                                <small>Kondisi Ruang Kelas, TIK & Fasilitas</small>
+                            </div>
+                        </a>
+                        <a href="sop.html" class="nav-dropdown-item">
+                            <span class="dropdown-icon">📋</span>
+                            <div>
+                                <strong>Dokumen SOP</strong>
+                                <small>Standar Operasional Prosedur Resmi</small>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <a href="kolaborasi.html" class="nav-link">Mitra & Kolaborasi</a>
+                <a href="pengembangan-guru.html" class="nav-link">Pengembangan Guru</a>
+                <a href="berita.html" class="nav-link">Berita</a>
+                <a href="pengumuman.html" class="nav-link">Pengumuman</a>
+                <a href="galeri.html" class="nav-link">Galeri</a>
+                <a href="kontak.html" class="nav-link">Kontak</a>
+                <a href="pengumuman.html#ppdb" class="btn-nav-action">PPDB</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- BANNER SUB-HALAMAN -->
+    <section style="background: linear-gradient(135deg, var(--primary-dark), var(--primary)); color: white; padding: 45px 0;">
+        <div class="container">
+            <span class="badge-tag" style="background: rgba(255,255,255,0.2); font-size: 12px; margin-bottom: 10px; display: inline-block;">FASILITAS & INFRASTRUKTUR</span>
+            <h1 style="font-size: 32px; font-weight: 800; margin-bottom: 8px;">Sarana & Prasarana Sekolah</h1>
+            <p style="color: #e2e8f0; font-size: 15px; max-width: 700px;">
+                Informasi transparan dan faktual mengenai kondisi 31 sarana prasarana fisik serta peralatan penunjang pendidikan di SDN Inpres Arso VIII.
+            </p>
+        </div>
+    </section>
+
+    <!-- KONTEN UTAMA -->
+    <section>
+        <div class="container">
+
+            <!-- CATATAN KONDISI REALITAS SEKOLAH -->
+            <div style="background: #fffbeb; border: 2px solid #fde68a; border-radius: var(--radius-md); padding: 25px; margin-bottom: 35px; display: flex; gap: 20px; align-items: flex-start;">
+                <div style="font-size: 32px;">📢</div>
+                <div>
+                    <h3 style="color: #92400e; font-size: 18px; font-weight: 800; margin-bottom: 6px;">
+                        Kondisi Nyata & Kebutuhan Prioritas Sekolah
+                    </h3>
+                    <p style="color: #78350f; font-size: 14px; line-height: 1.7;">
+                        Berdasarkan data periodik sekolah tahun 2026, sebagian besar gedung fisik (ruang kelas I-VI, ruang TIK, ruang keagamaan, dan ruang kantor) berstatus <strong>Rusak Sedang</strong>, rumah penjaga berstatus <strong>Rusak Berat</strong>, dan sekolah <strong>Belum Memiliki Ruang Guru Mandiri</strong> (guru saat ini masih berkumpul di ruang kantor). Kami terus berkoordinasi dengan Dinas Pendidikan Kabupaten Keerom dan para pemangku kepentingan untuk pemugaran bertahap demi keselamatan dan kenyamanan proses belajar mengajar.
+                    </p>
+                </div>
+            </div>
+
+            <!-- KARTU REKAP KONDISI -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 35px;">
+                <div class="card" style="padding: 22px; border-left: 5px solid #16a34a; text-align: center;">
+                    <div style="font-size: 12px; color: var(--dark-muted); font-weight: 700;">KONDISI BAIK</div>
+                    <div id="countSaprasBaik" style="font-size: 32px; font-weight: 800; color: #16a34a; margin: 4px 0;">10 Item</div>
+                    <div style="font-size: 12px; color: #64748b;">Komputer, Infocus, Audio, Starlink</div>
+                </div>
+
+                <div class="card" style="padding: 22px; border-left: 5px solid #d97706; text-align: center;">
+                    <div style="font-size: 12px; color: var(--dark-muted); font-weight: 700;">RUSAK SEDANG</div>
+                    <div id="countSaprasSedang" style="font-size: 32px; font-weight: 800; color: #d97706; margin: 4px 0;">19 Item</div>
+                    <div style="font-size: 12px; color: #64748b;">Ruang Kelas I-VI, Kantor, Meja Siswa</div>
+                </div>
+
+                <div class="card" style="padding: 22px; border-left: 5px solid #dc2626; text-align: center;">
+                    <div style="font-size: 12px; color: var(--dark-muted); font-weight: 700;">RUSAK BERAT</div>
+                    <div id="countSaprasBerat" style="font-size: 32px; font-weight: 800; color: #dc2626; margin: 4px 0;">1 Item</div>
+                    <div style="font-size: 12px; color: #64748b;">Rumah Penjaga Sekolah</div>
+                </div>
+
+                <div class="card" style="padding: 22px; border-left: 5px solid #64748b; text-align: center;">
+                    <div style="font-size: 12px; color: var(--dark-muted); font-weight: 700;">RUANG BELUM TERSEDIA</div>
+                    <div id="countSaprasTidakAda" style="font-size: 32px; font-weight: 800; color: #64748b; margin: 4px 0;">1 Ruang</div>
+                    <div style="font-size: 12px; color: #64748b;">Ruang Guru Mandiri</div>
+                </div>
+            </div>
+
+            <!-- FASILITAS TEKNOLOGI & DIGITAL -->
+            <div class="card" style="padding: 30px; margin-bottom: 40px; border-top: 4px solid #0284c7;">
+                <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 18px;">
+                    <div style="font-size: 30px;">🛰️</div>
+                    <div>
+                        <h3 style="font-size: 20px; color: #0369a1; font-weight: 800;">Fasilitas Jaringan Digital & TIK Sekolah</h3>
+                        <p style="font-size: 13.5px; color: var(--dark-muted);">Penunjang utama pembelajaran era digital dan Asesmen Nasional Berbasis Komputer (ANBK)</p>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                    <div style="background: #f0f9ff; padding: 18px; border-radius: 8px; border: 1px solid #bae6fd;">
+                        <h4 style="font-size: 15px; color: #0369a1; margin-bottom: 6px;">🌐 Internet Satelit Starlink & Orbit</h4>
+                        <p style="font-size: 13px; color: #334155;">Koneksi internet tanpa kabel berkecepatan tinggi yang dapat menjangkau seluruh area kantor dan ruang TIK meskipun di kawasan pedalaman perbatasan.</p>
+                    </div>
+
+                    <div style="background: #f0f9ff; padding: 18px; border-radius: 8px; border: 1px solid #bae6fd;">
+                        <h4 style="font-size: 15px; color: #0369a1; margin-bottom: 6px;">💻 Komputer & Laptop Guru</h4>
+                        <p style="font-size: 13px; color: #334155;">Tersedia perangkat komputer dan laptop penunjang operasional sekolah, manajemen Dapodik, dan pengenalan TIK bagi murid kelas tinggi.</p>
+                    </div>
+
+                    <div style="background: #f0f9ff; padding: 18px; border-radius: 8px; border: 1px solid #bae6fd;">
+                        <h4 style="font-size: 15px; color: #0369a1; margin-bottom: 6px;">📽️ Proyektor Infocus & Audio Wireless</h4>
+                        <p style="font-size: 13px; color: #334155;">Peralatan presentasi dan sound system (ampli power, spiker aktif, mic warles) dalam kondisi baik untuk upacara, senam, dan pembelajaran multimedia.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TABEL 31 DATA INVENTARIS SAPRAS -->
+            <div class="card" style="padding: 30px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; margin-bottom: 20px;">
+                    <div>
+                        <span class="section-pill">Inventaris 31 Sarpras</span>
+                        <h2 style="font-size: 22px; color: var(--primary-dark); font-weight: 800;">Daftar Lengkap Sarana & Prasarana</h2>
+                    </div>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+                        <button class="filter-btn filter-sapras-btn active" data-filter="all">Semua (31)</button>
+                        <button class="filter-btn filter-sapras-btn" data-filter="baik">Baik</button>
+                        <button class="filter-btn filter-sapras-btn" data-filter="rusak-sedang">Rusak Sedang</button>
+                        <button class="filter-btn filter-sapras-btn" data-filter="rusak-berat">Rusak Berat</button>
+                        <button onclick="window.print()" class="btn btn-primary" style="padding: 7px 14px; font-size: 13px;">🖨️ Cetak Rekap Sarpras</button>
+                    </div>
+                </div>
+
+                <div class="data-table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 50px; text-align: center;">NO</th>
+                                <th>NAMA SARANA / PRASARANA</th>
+                                <th>KONDISI RIIL</th>
+                                <th>STATUS KEPEMILIKAN</th>
+                                <th>KETERANGAN / TINDAK LANJUT</th>
+                            </tr>
+                        </thead>
+                        <tbody id="saprasPublicTableBody">
+                            <!-- 1-14 RUANG / BANGUNAN -->
+                            <tr class="sapras-row" data-condition="rusak-sedang">
+                                <td style="text-align: center;">1</td>
+                                <td><strong>Kantor Sekolah</strong></td>
+                                <td><span class="cond-badge cond-rusak-sedang">⚠️ Rusak Sedang</span></td>
+                                <td>Pemerintah</td>
+                                <td>Digunakan bersama oleh Kepala Sekolah dan Dewan Guru</td>
+                            </tr>
+                            <tr class="sapras-row" data-condition="tidak-ada">
+                                <td style="text-align: center;">2</td>
+                                <td><strong>Ruang Guru</strong></td>
+                                <td><span class="cond-badge cond-tidak-ada">❌ Tidak Ada</span></td>
+                                <td>-</td>
+                                <td><strong>Perlu Usulan Pembangunan Baru</strong></td>
+                            </tr>
+                            <tr class="sapras-row" data-condition="rusak-sedang">
+                                <td style="text-align: center;">3</td>
+                                <td><strong>Ruang Kelas I</strong></td>
+                                <td><span class="cond-badge cond-rusak-sedang">⚠️ Rusak Sedang</span></td>
+                                <td>Pemerintah</td>
+                                <td>Ditempati 26 siswa kelas 1</td>
+                            </tr>
+                            <tr class="sapras-row" data-condition="rusak-sedang">
+                                <td style="text-align: center;">4</td>
+                                <td><strong>Ruang Kelas II</strong></td>
+                                <td><span class="cond-badge cond-rusak-sedang">⚠️ Rusak Sedang</span></td>
+                                <td>Pemerintah</td>
+                                <td>Ditempati 25 siswa kelas 2</td>
+                            </tr>
+                            <tr class="sapras-row" data-condition="rusak-sedang">
+                                <td style="text-align: center;">5</td>
+                                <td><strong>Ruang Kelas III</strong></td>
+                                <td><span class="cond-badge cond-rusak-sedang">⚠️ Rusak Sedang</span></td>
+                                <td>Pemerintah</td>
+                                <td>Ditempati 27 siswa kelas 3</td>
+                            </tr>
+                            <tr class="sapras-row" data-condition="rusak-sedang">
+                                <td style="text-align: center;">6</td>
+                                <td><strong>Ruang Kelas IV</strong></td>
+                                <td><span class="cond-badge cond-rusak-sedang">⚠️ Rusak Sedang</span></td>
+                                <td>Pemerintah</td>
+                                <td>Ditempati 23 siswa kelas 4</td>
+                            </tr>
+                            <tr class="sapras-row" data-condition="rusak-sedang">
+                                <td style="text-align: center;">7</td>
+                                <td><strong>Ruang Kelas V</strong></td>
+                                <td><span class="cond-badge cond-rusak-sedang">⚠️ Rusak Sedang</span></td>
+                                <td>Pemerintah</td>
+                                <td>Ditempati 27 siswa kelas 5</td>
+                            </tr>
+                            <tr class="sapras-row" data-condition="rusak-sedang">
+                                <td style="text-align: center;">8</td>
+                                <td><strong>Ruang Kelas VI</strong></td>
+                                <td><span class="cond-badge cond-rusak-sedang">⚠️ Rusak Sedang</span></td>
+                                <td>Pemerintah</td>
+                                <td>Ditempati 29 siswa kelas 6</td>
+                            </tr>
+                            <tr class="sapras-row" data-condition="rusak-sedang">
+                                <td style="text-align: center;">9</td>
+                                <td><strong>Ruang TIK (Teknologi Informasi & Komunikasi)</strong></td>
+                                <td><span class="cond-badge cond-rusak-sedang">⚠️ Rusak Sedang</span></td>
+                                <td>Pemerintah</td>
+                                <td>Pusat perangkat Starlink & Komputer</td>
+                            </tr>
+                            <tr class="sapras-row" data-condition="rusak-sedang">
+                                <td style="text-align: center;">10</td>
+                                <td><strong>Ruang Agama Kristen</strong></td>
+                                <td><span class="cond-badge cond-rusak-sedang">⚠️ Rusak Sedang</span></td>
+                                <td>Pemerintah</td>
+                                <td>Bimbingan rohani Protestan</td>
+                            </tr>
+                            <tr class="sapras-row" data-condition="rusak-sedang">
+                                <td style="text-align: center;">11</td>
+                                <td><strong>Ruang Agama Katolik</strong></td>
+                                <td><span class="cond-badge cond-rusak-sedang">⚠️ Rusak Sedang</span></td>
+                                <td>Pemerintah</td>
+                                <td>Bimbingan rohani Katolik</td>
+                            </tr>
+                            <tr class="sapras-row" data-condition="rusak-sedang">
+                                <td style="text-align: center;">12</td>
+                                <td><strong>Ruang Perpustakaan</strong></td>
+                                <td><span class="cond-badge cond-rusak-sedang">⚠️ Rusak Sedang</span></td>
+                                <td>Pemerintah</td>
+                                <td>Perlu pengadaan rak buku dan perbaikan atap</td>
+                            </tr>
+                            <tr class="sapras-row" data-condition="rusak-berat">
+                                <td style="text-align: center;">13</td>
+                                <td><strong>Rumah Penjaga Sekolah</strong></td>
+                                <td><span class="cond-badge cond-rusak-berat">⛔ Rusak Berat</span></td>
+                                <td>Pemerintah</td>
+                                <td><strong>Perlu Rehabilitasi Menyeluruh</strong></td>
+                            </tr>
+                            <tr class="sapras-row" data-condition="rusak-sedang">
+                                <td style="text-align: center;">14</td>
+                                <td><strong>Rumah Kepala Sekolah</strong></td>
+                                <td><span class="cond-badge cond-rusak-sedang">⚠️ Rusak Sedang</span></td>
+                                <td>Pemerintah</td>
+                                <td>Rumah dinas di area sekolah</td>
+                            </tr>
+
+                            <!-- 15-31 MEBELEUR & PERALATAN -->
+                            <tr class="sapras-row" data-condition="baik">
+                                <td style="text-align: center;">15</td>
+                                <td>Meja Guru di Kantor</td>
+                                <td><span class="cond-badge cond-baik">✅ Baik</span></td>
+                                <td>Pemerintah</td>
+                                <td>Layak pakai untuk administrasi</td>
+                            </tr>
+                            <tr class="sapras-row" data-condition="rusak-sedang">
+                                <td style="text-align: center;">16</td>
+                                <td>Meja Guru di Kelas</td>
+                                <td><span class="cond-badge cond-rusak-sedang">⚠️ Rusak Sedang</span></td>
+                                <td>Pemerintah</td>
+                                <td>Perlu servis engsel / kayu</td>
+                            </tr>
+                            <tr class="sapras-row" data-condition="rusak-sedang">
+                                <td style="text-align: center;">17</td>
+                                <td>Kursi Guru</td>
+                                <td><span class="cond-badge cond-rusak-sedang">⚠️ Rusak Sedang</span></td>
+                                <td>Pemerintah</td>
+                                <td>Perlu penambahan dan perbaikan</td>
+                            </tr>
+                            <tr class="sapras-row" data-condition="rusak-sedang">
+                                <td style="text-align: center;">18</td>
+                                <td>Meja Siswa</td>
+                                <td><span class="cond-badge cond-rusak-sedang">⚠️ Rusak Sedang</span></td>
+                                <td>Pemerintah</td>
+                                <td>Sebagian perlu direparasi</td>
+                            </tr>
+                            <tr class="sapras-row" data-condition="rusak-sedang">
+                                <td style="text-align: center;">19</td>
+                                <td>Bangku Siswa</td>
+                                <td><span class="cond-badge cond-rusak-sedang">⚠️ Rusak Sedang</span></td>
+                                <td>Pemerintah</td>
+                                <td>Perlu perawatan berkala</td>
+                            </tr>
+                            <tr class="sapras-row" data-condition="rusak-sedang">
+                                <td style="text-align: center;">20</td>
+                                <td>Lemari di Kelas</td>
+                                <td><span class="cond-badge cond-rusak-sedang">⚠️ Rusak Sedang</span></td>
+                                <td>Pemerintah</td>
+                                <td>Tempat penyimpanan buku pegangan</td>
+                            </tr>
+                            <tr class="sapras-row" data-condition="baik">
+                                <td style="text-align: center;">21</td>
+                                <td>Proyektor Infocus</td>
+                                <td><span class="cond-badge cond-baik">✅ Baik</span></td>
+                                <td>Pemerintah</td>
+                                <td>Fungsi normal untuk presentasi</td>
+                            </tr>
+                            <tr class="sapras-row" data-condition="baik">
+                                <td style="text-align: center;">22</td>
+                                <td>Komputer</td>
+                                <td><span class="cond-badge cond-baik">✅ Baik</span></td>
+                                <td>Pemerintah</td>
+                                <td>Operasional ANBK & Guru</td>
+                            </tr>
+                            <tr class="sapras-row" data-condition="rusak-sedang">
+                                <td style="text-align: center;">23</td>
+                                <td>Laptop Guru</td>
+                                <td><div class="cond-badge-group"><span class="cond-badge cond-baik">✅ Baik</span><span class="cond-badge cond-rusak-sedang">⚠️ Rusak Sedang</span></div></td>
+                                <td>Pemerintah</td>
+                                <td>Sebagian baik, sebagian lambat/perlu servis</td>
+                            </tr>
+                            <tr class="sapras-row" data-condition="rusak-sedang">
+                                <td style="text-align: center;">24</td>
+                                <td>Layar Proyektor</td>
+                                <td><div class="cond-badge-group"><span class="cond-badge cond-baik">✅ Baik</span><span class="cond-badge cond-rusak-sedang">⚠️ Rusak</span></div></td>
+                                <td>Pemerintah</td>
+                                <td>Ada unit baik dan unit perlu ganti kain</td>
+                            </tr>
+                            <tr class="sapras-row" data-condition="baik">
+                                <td style="text-align: center;">25</td>
+                                <td>Printer</td>
+                                <td><span class="cond-badge cond-baik">✅ Baik</span></td>
+                                <td>Pemerintah</td>
+                                <td>Cetak soal dan laporan sekolah</td>
+                            </tr>
+                            <tr class="sapras-row" data-condition="baik">
+                                <td style="text-align: center;">26</td>
+                                <td>Kulkas</td>
+                                <td><span class="cond-badge cond-baik">✅ Baik</span></td>
+                                <td>Pemerintah</td>
+                                <td>Fasilitas ruang kantor</td>
+                            </tr>
+                            <tr class="sapras-row" data-condition="baik">
+                                <td style="text-align: center;">27</td>
+                                <td>Warles (Wireless Mic / Audio)</td>
+                                <td><span class="cond-badge cond-baik">✅ Baik</span></td>
+                                <td>Pemerintah</td>
+                                <td>Dipakai kegiatan upacara & senam</td>
+                            </tr>
+                            <tr class="sapras-row" data-condition="baik">
+                                <td style="text-align: center;">28</td>
+                                <td>Ampli Power</td>
+                                <td><span class="cond-badge cond-baik">✅ Baik</span></td>
+                                <td>Pemerintah</td>
+                                <td>Penguat suara pengeras sekolah</td>
+                            </tr>
+                            <tr class="sapras-row" data-condition="baik">
+                                <td style="text-align: center;">29</td>
+                                <td>Dispenser Air</td>
+                                <td><span class="cond-badge cond-baik">✅ Baik</span></td>
+                                <td>Pemerintah</td>
+                                <td>Penyedia air minum dewan guru</td>
+                            </tr>
+                            <tr class="sapras-row" data-condition="rusak-sedang">
+                                <td style="text-align: center;">30</td>
+                                <td>Spiker Aktif</td>
+                                <td><div class="cond-badge-group"><span class="cond-badge cond-baik">✅ Baik</span><span class="cond-badge cond-rusak-sedang">⚠️ Rusak</span></div></td>
+                                <td>Pemerintah</td>
+                                <td>Sebagian unit perlu perbaikan kabel/suara</td>
+                            </tr>
+                            <tr class="sapras-row" data-condition="rusak-sedang">
+                                <td style="text-align: center;">31</td>
+                                <td>Sofa Tamu Kantor</td>
+                                <td><span class="cond-badge cond-rusak-sedang">⚠️ Rusak Sedang</span></td>
+                                <td>Pemerintah</td>
+                                <td>Tempat duduk tamu & komite</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="margin-top: 20px; font-size: 13px; color: var(--dark-muted); text-align: right;">
+                    * Data bersumber dari Inventaris Sarpras Resmi SDN Inpres Arso VIII Tahun Ajaran 2026/2027.
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                        <img src="images/logo-keerom.png" alt="Logo Keerom" style="width: 44px; height: 44px; object-fit: contain;" decoding="async" loading="lazy">
+                        <div>
+                            <h4 style="margin: 0; padding: 0; font-size: 16px; border: none;">SDN INPRES ARSO VIII</h4>
+                            <span style="font-size: 12px; color: #94a3b8;">Kabupaten Keerom, Papua</span>
+                        </div>
+                    </div>
+                    <p>Lembaga pendidikan dasar negeri yang mendidik 157 putra-putri di Kampung Dukwia, Arso Barat. Berorientasi pada pembinaan iman, karakter mulia, dan kecakapan IPTEK.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Menu Utama</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">🏠 Beranda</a></li>
+                        <li><a href="profil.html">📖 Profil & Visi Misi</a></li>
+                        <li><a href="guru.html">👩‍🏫 Dewan Guru & GTK</a></li>
+                        <li><a href="siswa.html">👨‍🎓 Data Kesiswaan</a></li>
+                        <li><a href="sop.html">📜 SOP & Tata Tertib</a></li>
+                        <li><a href="sapras.html">🏫 Kondisi Sarpras</a></li>
+                        <li><a href="kolaborasi.html">🤝 Mitra & Kolaborasi</a></li>
+                        <li><a href="pengembangan-guru.html">📚 Pengembangan Guru (K3S/KKG)</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Layanan</h4>
+                    <ul class="footer-links">
+                        <li><a href="pengumuman.html#ppdb">📝 Pendaftaran PPDB</a></li>
+                        <li><a href="berita.html">📰 Berita & Kegiatan</a></li>
+                        <li><a href="galeri.html">📷 Galeri Foto</a></li>
+                        <li><a href="kontak.html">📍 Kontak & Lokasi</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Kontak Kami</h4>
+                    <ul class="footer-contact-list">
+                        <li><span>📍</span><span>Jln. Sulawesi, RT 05 / RW 03, Dukwia, Arso Barat, Keerom, Papua 99473</span></li>
+                        <li><span>📞</span><span>0812-4821-9125</span></li>
+                        <li><span>✉️</span><span>sdninpresarso8@gmail.com</span></li>
+                        <li><span>🕒</span><span>Senin - Jumat: 07.15 - 12.30 WIT</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div>&copy; 2026 SDN Inpres Arso VIII - Pemerintah Kabupaten Keerom.</div>
+                <div>Koordinat: Lat -2.822991º, Long 140.703999º</div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- FLOATING ACTIONS -->
+    <div class="floating-actions">
+        <a href="https://wa.me/6281248219125" target="_blank" class="fab fab-whatsapp" aria-label="WhatsApp">💬</a>
+        <button class="fab fab-scroll-top" aria-label="Kembali ke atas">▲</button>
+    </div>
+
+    <script src="js/data_sekolah.js?v=20261116_v51"></script>
+    <script src="js/main.js?v=20261116_v51"></script>
+</body>
+</html>

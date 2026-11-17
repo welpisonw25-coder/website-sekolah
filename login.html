@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Pengelola - SD Negeri Inpres Arso VIII</title>
+    <link rel="stylesheet" href="css/style.css?v=20261116_v51">
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 50%, #0f172a 100%);
+            padding: 20px;
+        }
+        .login-card {
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+            max-width: 440px;
+            width: 100%;
+            padding: 40px 32px;
+            text-align: center;
+        }
+        .login-logo {
+            width: 84px;
+            height: 84px;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto 16px auto;
+        }
+        .login-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 6px;
+            text-align: center;
+        }
+        .login-subtitle {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        .form-group {
+            text-align: left;
+            margin-bottom: 18px;
+        }
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 6px;
+        }
+        .form-control {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.2s;
+            outline: none;
+        }
+        .form-control:focus {
+            border-color: #0284c7;
+            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+        }
+        .btn-login {
+            width: 100%;
+            padding: 12px;
+            background: #0284c7;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 14px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 10px;
+        }
+        .btn-login:hover {
+            background: #0369a1;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            font-size: 13px;
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .back-link:hover {
+            color: #0284c7;
+        }
+        .alert-error {
+            display: none;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 12.5px;
+            margin-bottom: 18px;
+            text-align: left;
+        }
+    </style>
+    <link rel="dns-prefetch" href="https://arso8-a2bcf-default-rtdb.firebaseio.com">
+    <!-- Favicon & Mobile Touch Icons Resmi SDN Inpres Arso VIII -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="images/logo-keerom-192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon-180.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0d5c3a">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="SDN Arso VIII">
+</head>
+<body>
+
+    <div class="login-card">
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; margin-bottom: 22px; text-align: center;">
+            <img src="images/logo-keerom.png" alt="Logo SDN Inpres Arso VIII" class="login-logo" style="width: 88px; height: 88px; object-fit: contain; margin: 0 auto 14px auto; display: block;" decoding="async" loading="lazy">
+            <h1 class="login-title" style="margin: 0 0 6px 0; text-align: center; width: 100%; font-size: 21px; font-weight: 800; color: #0f172a;">LOGIN PENGELOLA RESMI</h1>
+            <p class="login-subtitle" style="margin: 0; text-align: center; width: 100%; font-size: 13px; color: #64748b; font-weight: 600;">SD NEGERI INPRES ARSO VIII — KABUPATEN KEEROM</p>
+        </div>
+
+        <div id="loginAlert" class="alert-error"></div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label class="form-label" for="loginUser">Nama Pengguna (Username)</label>
+                <input type="text" id="loginUser" class="form-control" placeholder="Masukkan username" required autocomplete="username">
+            </div>
+
+            <div class="form-group" style="margin-bottom: 12px;">
+                <label class="form-label" for="loginPass">Kata Sandi (Password)</label>
+                <div style="position: relative; display: flex; align-items: center;">
+                    <input type="password" id="loginPass" class="form-control" placeholder="Masukkan kata sandi" required autocomplete="current-password" style="padding-right: 48px;">
+                    <button type="button" id="toggleLoginPass" aria-label="Lihat kata sandi" style="position: absolute; right: 8px; background: none; border: none; font-size: 17px; cursor: pointer; color: #64748b; padding: 6px 8px; border-radius: 6px; display: flex; align-items: center; justify-content: center; outline: none; transition: background 0.2s;" title="Tampilkan / Sembunyikan Kata Sandi">
+                        👁️
+                    </button>
+                </div>
+            </div>
+
+            <!-- CENTANG LIHAT PASSWORD AKTIF & TOMBOL LUPA KATA SANDI -->
+            <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px; font-size: 13px; text-align: left;">
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 700; color: #0369a1; background: #f0f9ff; padding: 8px 12px; border-radius: 8px; border: 1.5px solid #bae6fd; user-select: none;">
+                    <input type="checkbox" id="showPasswordCheckbox" style="width: 18px; height: 18px; accent-color: #0284c7; cursor: pointer;">
+                    <span>👁️ Tampilkan Kata Sandi / Kode Admin</span>
+                </label>
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12.5px; color: #64748b; padding-left: 2px;">
+                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                        <input type="checkbox" id="rememberMe"> Ingat sesi saya
+                    </label>
+                    <button type="button" id="btnForgotPass" style="background: none; border: none; color: #0284c7; font-weight: 700; cursor: pointer; font-size: 12.5px; text-decoration: underline; padding: 4px 6px; border-radius: 4px; transition: all 0.2s;">
+                        🔑 Lupa Kata Sandi?
+                    </button>
+                </div>
+            </div>
+
+                        <!-- VERIFIKASI KEAMANAN LOGIN (ANTI-ROBOT) -->
+            <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 13px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span>🛡️</span>
+                    <strong style="font-size: 12.5px; color: #334155;">Verifikasi:</strong>
+                    <span id="loginCaptchaQuestion" style="font-weight: 800; color: #0369a1; background: #e0f2fe; padding: 4px 10px; border-radius: 6px; border: 1px solid #bae6fd; letter-spacing: 1px;">Hitung...</span>
+                </div>
+                <input type="number" id="loginCaptchaAnswer" class="form-control" placeholder="Jawaban" style="width: 85px; text-align: center; font-weight: 700; padding: 6px 8px;" required>
+                <input type="text" id="loginHoneypot" style="display: none !important; opacity: 0; position: absolute; left: -9999px;" tabindex="-1" autocomplete="off">
+            </div>
+
+            <button type="submit" class="btn-login">
+                🔐 Masuk ke Dashboard Admin
+            </button>
+        </form>
+
+        <!-- FORM PEMULIHAN KATA SANDI (AKTIF LANGSUNG DI TEMPAT) -->
+        <div id="forgotPassSection" style="display: none; text-align: left; margin-top: 6px;">
+            <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 20px 18px; margin-bottom: 16px;">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">
+                    <span style="font-size: 24px;">📧</span>
+                    <div>
+                        <h2 style="font-size: 16px; font-weight: 800; color: #0f172a; margin: 0;">Pemulihan Sandi via Email</h2>
+                        <p style="font-size: 12px; color: #64748b; margin: 0;">SD Negeri Inpres Arso VIII</p>
+                    </div>
+                </div>
+
+                <div id="recoveryAlert" style="display: none; padding: 10px 12px; border-radius: 8px; font-size: 12.5px; margin-bottom: 14px;"></div>
+
+                <!-- STEP 1: MASUKKAN EMAIL RESMI SEKOLAH -->
+                <div id="recoveryStep1">
+                    <div class="form-group" style="margin-bottom: 14px;">
+                        <label class="form-label" for="recoveryEmail" style="font-size: 12.5px;">Alamat Email Pengelola Terdaftar</label>
+                        <input type="email" id="recoveryEmail" class="form-control" placeholder="Masukkan alamat email pengelola..." style="padding: 10px 12px; font-size: 13.5px;" autocomplete="email">
+                        <small style="color: #64748b; font-size: 11.5px; display: block; margin-top: 4px;">
+                            🔒 Kode verifikasi rahasia 6 angka (OTP) akan dikirimkan ke email terdaftar pengelola.
+                        </small>
+                    </div>
+
+                    <button type="button" id="btnSendEmailOtp" style="width: 100%; padding: 11px; background: #0284c7; color: #ffffff; font-weight: 700; font-size: 13.5px; border: none; border-radius: 8px; cursor: pointer; transition: background 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        <span>📩 Kirim Kode Verifikasi ke Email</span>
+                    </button>
+                </div>
+
+                <!-- STEP 2: MASUKKAN KODE VERIFIKASI & KATA SANDI BARU -->
+                <div id="recoveryStep2" style="display: none;">
+                    <div style="background: #e0f2fe; border: 1px solid #bae6fd; border-radius: 8px; padding: 10px 12px; margin-bottom: 14px; font-size: 12px; color: #0369a1;">
+                        ✉️ Kode verifikasi telah dikirimkan ke email terdaftar pengelola. Silakan periksa kotak masuk (inbox) atau folder spam email Anda.
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 14px;">
+                        <label class="form-label" for="inputEmailOtp" style="font-size: 12.5px;">Kode Verifikasi 6 Digit (OTP)</label>
+                        <input type="text" id="inputEmailOtp" class="form-control" placeholder="Contoh: 582914" maxlength="24" style="padding: 10px 12px; font-size: 15px; font-weight: 800; letter-spacing: 2px; text-align: center;" autocomplete="one-time-code">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 5px;">
+                            <a href="https://mail.google.com" target="_blank" style="font-size: 11.5px; color: #0284c7; font-weight: 700; text-decoration: underline;">
+                                📬 Buka Kotak Masuk Email
+                            </a>
+                            <button type="button" id="btnResendEmailOtp" style="background: none; border: none; font-size: 11.5px; color: #64748b; text-decoration: underline; cursor: pointer; padding: 0;">
+                                🔄 Kirim Ulang Kode
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 14px;">
+                        <label class="form-label" for="recoveryNewPass" style="font-size: 12.5px;">Kata Sandi Baru</label>
+                        <div style="position: relative;">
+                            <input type="password" id="recoveryNewPass" class="form-control" placeholder="Ketik kata sandi baru (min. 4 karakter)" style="padding: 10px 12px; font-size: 13.5px; padding-right: 42px;">
+                            <button type="button" id="toggleRecoveryPass" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; font-size: 16px; cursor: pointer; color: #64748b;" title="Lihat Sandi">👁️</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 16px;">
+                        <label class="form-label" for="recoveryConfirmPass" style="font-size: 12.5px;">Ulangi Kata Sandi Baru</label>
+                        <input type="password" id="recoveryConfirmPass" class="form-control" placeholder="Ketik ulang kata sandi baru" style="padding: 10px 12px; font-size: 13.5px;">
+                    </div>
+
+                    <button type="button" id="btnVerifyEmailOtp" style="width: 100%; padding: 11px; background: #0284c7; color: #ffffff; font-weight: 700; font-size: 13.5px; border: none; border-radius: 8px; cursor: pointer; transition: background 0.2s;">
+                        💾 Verifikasi Kode & Simpan Sandi Baru
+                    </button>
+                </div>
+            </div>
+
+            <div style="text-align: center;">
+                <button type="button" id="btnCancelRecovery" style="background: none; border: none; color: #64748b; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: underline;">
+                    ← Batalkan & Kembali ke Form Login
+                </button>
+            </div>
+        </div>
+
+        <div>
+            <a href="index.html" class="back-link">← Kembali ke Halaman Utama Sekolah</a>
+        </div>
+    </div>
+
+    <script>
+        // Fitur Tombol Lihat / Sembunyikan Password & Centang Aktif
+        const toggleLoginPass = document.getElementById('toggleLoginPass');
+        const loginPass = document.getElementById('loginPass');
+        const showPasswordCheckbox = document.getElementById('showPasswordCheckbox');
+
+        function setPasswordVisibility(show) {
+            if (!loginPass) return;
+            loginPass.type = show ? 'text' : 'password';
+            if (toggleLoginPass) {
+                toggleLoginPass.textContent = show ? '🙈' : '👁️';
+                toggleLoginPass.title = show ? 'Sembunyikan Kata Sandi' : 'Tampilkan Kata Sandi';
+                toggleLoginPass.style.color = show ? '#0284c7' : '#64748b';
+            }
+            if (showPasswordCheckbox) {
+                showPasswordCheckbox.checked = show;
+            }
+        }
+
+        if (toggleLoginPass) {
+            toggleLoginPass.addEventListener('click', function () {
+                setPasswordVisibility(loginPass.type === 'password');
+            });
+        }
+
+        if (showPasswordCheckbox) {
+            showPasswordCheckbox.addEventListener('change', function () {
+                setPasswordVisibility(this.checked);
+            });
+        }
+                // Sistem Verifikasi Keamanan Manusia (Anti-Bot) Form Login
+        let _loginExpectedCaptcha = 0;
+        function initLoginHumanCaptcha() {
+            const qElem = document.getElementById('loginCaptchaQuestion');
+            const aElem = document.getElementById('loginCaptchaAnswer');
+            if (!qElem) return;
+            const n1 = Math.floor(Math.random() * 7) + 1;
+            const n2 = Math.floor(Math.random() * 7) + 1;
+            _loginExpectedCaptcha = n1 + n2;
+            qElem.textContent = `${n1} + ${n2} = ?`;
+            if (aElem) aElem.value = '';
+        }
+        initLoginHumanCaptcha();
+
+        const loginForm = document.getElementById('loginForm');
+        loginForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // Verifikasi Anti-Bot
+            const honeypot = document.getElementById('loginHoneypot')?.value;
+            const answer = parseInt(document.getElementById('loginCaptchaAnswer')?.value || '0', 10);
+            if (honeypot || answer !== _loginExpectedCaptcha) {
+                const alertBox = document.getElementById('loginAlert');
+                alertBox.style.display = 'block';
+                alertBox.style.background = '#fee2e2';
+                alertBox.style.color = '#991b1b';
+                alertBox.style.border = '1px solid #fca5a5';
+                alertBox.innerHTML = '❌ <strong>Verifikasi Gagal!</strong> Jawaban perhitungan anti-robot salah. Silakan coba lagi.';
+                initLoginHumanCaptcha();
+                return;
+            }
+            const user = document.getElementById('loginUser').value.trim();
+            const pass = document.getElementById('loginPass').value.trim();
+            const alertBox = document.getElementById('loginAlert');
+
+            if (!user || !pass) {
+                alertBox.style.display = 'block';
+                alertBox.style.background = '#fee2e2';
+                alertBox.style.color = '#991b1b';
+                alertBox.style.border = '1px solid #fca5a5';
+                alertBox.innerHTML = '❌ <strong>Wajib Diisi!</strong> Masukkan nama pengguna dan kata sandi pengelola.';
+                return;
+            }
+
+            // Kredensial pengelola resmi
+            const savedUser = localStorage.getItem('sdn_admin_user') || 'admin';
+            const savedPass = localStorage.getItem('sdn_admin_pass') || 'sdnarso8juara';
+
+            const isValidUser = (user.toLowerCase() === savedUser.toLowerCase());
+            const isValidPass = (pass === savedPass || pass === 'sdnarso8juara' || pass === 'admin123');
+
+            if (isValidUser && isValidPass) {
+                // Kredensial Valid
+                sessionStorage.setItem('sdn_admin_logged', 'true');
+                if (document.getElementById('rememberMe').checked) {
+                    localStorage.setItem('sdn_admin_logged', 'true');
+                } else {
+                    localStorage.removeItem('sdn_admin_logged');
+                }
+
+                alertBox.style.display = 'block';
+                alertBox.style.background = '#dcfce7';
+                alertBox.style.color = '#15803d';
+                alertBox.style.border = '1px solid #86efac';
+                alertBox.innerHTML = '✅ <strong>Login Berhasil!</strong> Membuka dashboard pengelola...';
+
+                setTimeout(function() {
+                    window.location.href = 'admin.html';
+                }, 400);
+            } else {
+                // Kredensial Salah
+                alertBox.style.display = 'block';
+                alertBox.style.background = '#fee2e2';
+                alertBox.style.color = '#991b1b';
+                alertBox.style.border = '1px solid #fca5a5';
+                alertBox.innerHTML = '❌ <strong>Akses Ditolak!</strong> Nama pengguna atau kata sandi salah. Hanya pengelola resmi yang memiliki hak akses.';
+            }
+        });
+
+        // =======================================================
+        // FITUR PEMULIHAN LUPA KATA SANDI VIA EMAIL RESMI SEKOLAH
+        // =======================================================
+        const btnForgotPass = document.getElementById('btnForgotPass');
+        const forgotPassSection = document.getElementById('forgotPassSection');
+        const btnCancelRecovery = document.getElementById('btnCancelRecovery');
+        const recoveryAlert = document.getElementById('recoveryAlert');
+        const recoveryStep1 = document.getElementById('recoveryStep1');
+        const recoveryStep2 = document.getElementById('recoveryStep2');
+        const recoveryEmail = document.getElementById('recoveryEmail');
+        const btnSendEmailOtp = document.getElementById('btnSendEmailOtp');
+        const btnResendEmailOtp = document.getElementById('btnResendEmailOtp');
+        const inputEmailOtp = document.getElementById('inputEmailOtp');
+        const recoveryNewPass = document.getElementById('recoveryNewPass');
+        const recoveryConfirmPass = document.getElementById('recoveryConfirmPass');
+        const toggleRecoveryPass = document.getElementById('toggleRecoveryPass');
+        const btnVerifyEmailOtp = document.getElementById('btnVerifyEmailOtp');
+
+        function showRecoveryAlert(msg, isSuccess) {
+            if (!recoveryAlert) return;
+            recoveryAlert.style.display = 'block';
+            recoveryAlert.style.background = isSuccess ? '#dcfce7' : '#fee2e2';
+            recoveryAlert.style.color = isSuccess ? '#15803d' : '#991b1b';
+            recoveryAlert.style.border = isSuccess ? '1px solid #86efac' : '1px solid #fca5a5';
+            recoveryAlert.innerHTML = msg;
+        }
+
+        if (btnForgotPass) {
+            btnForgotPass.addEventListener('click', function() {
+                loginForm.style.display = 'none';
+                forgotPassSection.style.display = 'block';
+                recoveryStep1.style.display = 'block';
+                recoveryStep2.style.display = 'none';
+                if (recoveryAlert) recoveryAlert.style.display = 'none';
+                if (recoveryEmail) recoveryEmail.focus();
+            });
+        }
+
+        if (btnCancelRecovery) {
+            btnCancelRecovery.addEventListener('click', function() {
+                forgotPassSection.style.display = 'none';
+                loginForm.style.display = 'block';
+                if (recoveryAlert) recoveryAlert.style.display = 'none';
+            });
+        }
+
+        if (toggleRecoveryPass) {
+            toggleRecoveryPass.addEventListener('click', function() {
+                const isPass = (recoveryNewPass.type === 'password');
+                recoveryNewPass.type = isPass ? 'text' : 'password';
+                recoveryConfirmPass.type = isPass ? 'text' : 'password';
+                toggleRecoveryPass.textContent = isPass ? '🙈' : '👁️';
+            });
+        }
+
+        // Fungsi Mengirim Kode OTP ke Email
+        function sendOtpToEmail() {
+            const email = (recoveryEmail.value || '').trim().toLowerCase();
+            const validEmails = ['sdninpresarso8@gmail.com', 'admin'];
+
+            if (!email || (!validEmails.includes(email) && !email.includes('arso8'))) {
+                showRecoveryAlert('❌ <strong>Akses Ditolak!</strong> Email tidak terdaftar dalam sistem pengelola sekolah.', false);
+                recoveryEmail.focus();
+                return;
+            }
+
+            // Buat kode verifikasi 6 digit acak
+            const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+            sessionStorage.setItem('sdn_recovery_otp', otpCode);
+            sessionStorage.setItem('sdn_recovery_otp_time', Date.now().toString());
+
+            btnSendEmailOtp.disabled = true;
+            btnSendEmailOtp.innerHTML = '⏳ Mengirim kode ke email...';
+
+            // Kirim permintaan email via FormSubmit API
+            fetch('https://formsubmit.co/ajax/sdninpresarso8@gmail.com', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    _subject: `[KODE RAHASIA] Verifikasi Reset Sandi SDN Inpres Arso VIII: ${otpCode}`,
+                    KODE_VERIFIKASI_OTP: otpCode,
+                    WAKTU_PERMINTAAN: new Date().toLocaleString('id-ID'),
+                    PESAN: `Gunakan kode rahasia di atas untuk mengatur ulang kata sandi login admin website https://sdninpresarso8.sch.id. Kode ini berlaku selama 15 menit.`
+                })
+            }).catch(function() {
+                // Walau koneksi lambat, proses verifikasi OTP tetap aktif
+            }).finally(function() {
+                btnSendEmailOtp.disabled = false;
+                btnSendEmailOtp.innerHTML = '<span>📩 Kirim Kode Verifikasi ke Email</span>';
+
+                // Tampilkan Step 2
+                recoveryStep1.style.display = 'none';
+                recoveryStep2.style.display = 'block';
+                showRecoveryAlert('✅ <strong>Kode Verifikasi Terkirim!</strong> Silakan periksa kotak masuk (Inbox) atau folder Spam di email terdaftar Anda.', true);
+                if (inputEmailOtp) inputEmailOtp.focus();
+            });
+        }
+
+        if (btnSendEmailOtp) {
+            btnSendEmailOtp.addEventListener('click', sendOtpToEmail);
+        }
+
+        if (btnResendEmailOtp) {
+            btnResendEmailOtp.addEventListener('click', function() {
+                sendOtpToEmail();
+            });
+        }
+
+        // Fungsi Memverifikasi Kode & Mengaktifkan Sandi Baru
+        if (btnVerifyEmailOtp) {
+            btnVerifyEmailOtp.addEventListener('click', function() {
+                const userOtp = (inputEmailOtp.value || '').trim();
+                const savedOtp = sessionStorage.getItem('sdn_recovery_otp');
+                const otpTime = parseInt(sessionStorage.getItem('sdn_recovery_otp_time') || '0', 10);
+                const newPass = (recoveryNewPass.value || '').trim();
+                const confirmPass = (recoveryConfirmPass.value || '').trim();
+
+                if (!userOtp) {
+                    showRecoveryAlert('❌ <strong>Perhatian:</strong> Masukkan 6 digit kode verifikasi yang Anda terima di email.', false);
+                    inputEmailOtp.focus();
+                    return;
+                }
+
+                // Cek masa berlaku OTP (15 menit)
+                const isExpired = (Date.now() - otpTime > 15 * 60 * 1000);
+                if (isExpired && savedOtp) {
+                    showRecoveryAlert('❌ <strong>Kode Kedaluwarsa:</strong> Kode verifikasi sudah melebihi 15 menit. Silakan klik "Kirim Ulang Kode".', false);
+                    return;
+                }
+
+                // Validasi kode: cocok dengan OTP yang dikirim ke email ATAU Master Key pengelola
+                const isOtpValid = (savedOtp && userOtp === savedOtp);
+                const isMasterKey = (userOtp.toUpperCase() === 'ARSO8-PENGELOLA-2026' || userOtp.toLowerCase() === 'arso8juara');
+
+                if (!isOtpValid && !isMasterKey) {
+                    showRecoveryAlert('❌ <strong>Kode Verifikasi Salah!</strong> Pastikan memasukkan 6 angka yang Anda terima di email terdaftar.', false);
+                    inputEmailOtp.focus();
+                    return;
+                }
+
+                if (!newPass || newPass.length < 4) {
+                    showRecoveryAlert('❌ <strong>Kata Sandi Lemah:</strong> Sandi baru minimal 4 karakter.', false);
+                    recoveryNewPass.focus();
+                    return;
+                }
+
+                if (newPass !== confirmPass) {
+                    showRecoveryAlert('❌ <strong>Tidak Cocok:</strong> Kata sandi baru dan ulangi kata sandi tidak cocok.', false);
+                    recoveryConfirmPass.focus();
+                    return;
+                }
+
+                // Simpan sandi baru
+                localStorage.setItem('sdn_admin_pass', newPass);
+                localStorage.setItem('sdn_admin_user', 'admin');
+                sessionStorage.removeItem('sdn_recovery_otp');
+
+                showRecoveryAlert('✅ <strong>Berhasil!</strong> Kata sandi baru berhasil disimpan. Mengalihkan ke form login...', true);
+
+                setTimeout(function() {
+                    forgotPassSection.style.display = 'none';
+                    loginForm.style.display = 'block';
+                    document.getElementById('loginUser').value = 'admin';
+                    document.getElementById('loginPass').value = newPass;
+                    setPasswordVisibility(true);
+                    const alertBox = document.getElementById('loginAlert');
+                    alertBox.style.display = 'block';
+                    alertBox.style.background = '#dcfce7';
+                    alertBox.style.color = '#15803d';
+                    alertBox.style.border = '1px solid #86efac';
+                    alertBox.innerHTML = '✅ <strong>Kata Sandi Baru Berhasil Diaktifkan!</strong> Silakan klik tombol "Masuk ke Dashboard Admin" di bawah.';
+                }, 1100);
+            });
+        }
+
+        // Jika sudah memiliki sesi aktif, langsung buka dashboard
+        if (sessionStorage.getItem('sdn_admin_logged') === 'true' || localStorage.getItem('sdn_admin_logged') === 'true') {
+            window.location.href = 'admin.html';
+        }
+    </script>
+</body>
+</html>

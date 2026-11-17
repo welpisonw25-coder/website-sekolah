@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="aagzvzG8FxG_yRXb6rrDtTEjMk7-ePR2ghRUQnz_Keo" />
+    <meta name="description" content="Kegiatan K3S dan KKG Gugus 1 Arso Barat Keerom. Pertemuan berkala bergilir 1 bulan sekali per sekolah untuk Kelompok Kelas 1, 2, 3 & Agama serta Kelompok Kelas 4, 5, 6, PJOK & Bahasa Inggris.">
+    <title>Pengembangan Guru (K3S & KKG) - SDN Inpres Arso VIII</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css?v=20261116_v51">
+
+    <!-- Open Graph Preview -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Pengembangan Guru (K3S & KKG) - SDN Inpres Arso VIII">
+    <meta property="og:description" content="Program pengembangan keprofesian pendidik K3S & KKG Gugus 1 Arso Barat bergilir per sekolah 1 bulan sekali.">
+    <meta property="og:image" content="images/dewan-guru.jpg">
+    <link rel="dns-prefetch" href="https://arso8-a2bcf-default-rtdb.firebaseio.com">
+    <!-- Favicon & Mobile Touch Icons Resmi SDN Inpres Arso VIII -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="images/logo-keerom-192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon-180.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0d5c3a">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="SDN Arso VIII">
+</head>
+<body>
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <div class="container">
+            <div class="top-bar-left">
+                <div class="top-bar-item">
+                    <span>📍 Jln. Sulawesi, Kampung Dukwia, Distrik Arso Barat, Kab. Keerom - Papua</span>
+                </div>
+                <div class="top-bar-item top-bar-contact-hide">
+                    <span>📞 0812-4821-9125</span>
+                </div>
+                <div class="top-bar-item top-bar-contact-hide">
+                    <span>✉️ sdninpresarso8@gmail.com</span>
+                </div>
+            </div>
+            <div class="top-bar-right">
+                <div class="top-bar-clock" id="topBarClock" title="Waktu Indonesia Timur">
+                    <span class="clock-icon">🕒</span> <span class="live-wit-clock">WIT</span>
+                </div>
+                <a href="login.html" class="top-bar-admin-btn" title="Masuk ke Portal Admin SDN Inpres Arso VIII">
+                    <svg class="admin-user-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <span>Admin</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- HEADER & NAVIGASI -->
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="index.html" class="brand-wrapper">
+                <img src="images/logo-keerom.png" alt="Lambang Kabupaten Keerom" class="brand-logo" decoding="async">
+                <div class="brand-text">
+                    <h1>SDN INPRES ARSO VIII</h1>
+                    <p>Dinas Pendidikan dan Pengajaran Kab. Keerom - Papua (NPSN: 60300868)</p>
+                </div>
+            </a>
+
+            <button class="mobile-toggle" aria-label="Buka Menu Navigasi">☰</button>
+
+            <nav class="main-nav">
+                <a href="index.html" class="nav-link">Beranda</a>
+                <div class="nav-item-dropdown">
+                    <a href="profil.html" class="nav-link nav-dropdown-toggle">
+                        Profil Sekolah <span class="dropdown-chevron">▾</span>
+                    </a>
+                    <div class="nav-dropdown-menu">
+                        <a href="profil.html" class="nav-dropdown-item">
+                            <span class="dropdown-icon">🏛️</span>
+                            <div>
+                                <strong>Profil Sekolah</strong>
+                                <small>Sejarah, Visi Misi & Identitas</small>
+                            </div>
+                        </a>
+                        <a href="guru.html" class="nav-dropdown-item">
+                            <span class="dropdown-icon">👩‍🏫</span>
+                            <div>
+                                <strong>Dewan Guru & GTK</strong>
+                                <small>Struktur Organisasi & Tenaga Pendidik</small>
+                            </div>
+                        </a>
+                        <a href="siswa.html" class="nav-dropdown-item">
+                            <span class="dropdown-icon">👨‍🎓</span>
+                            <div>
+                                <strong>Kesiswaan</strong>
+                                <small>Data Siswa, Kelas & Rombel</small>
+                            </div>
+                        </a>
+                        <a href="sapras.html" class="nav-dropdown-item">
+                            <span class="dropdown-icon">🏫</span>
+                            <div>
+                                <strong>Sarana & Prasarana</strong>
+                                <small>Kondisi Ruang Kelas, TIK & Fasilitas</small>
+                            </div>
+                        </a>
+                        <a href="sop.html" class="nav-dropdown-item">
+                            <span class="dropdown-icon">📋</span>
+                            <div>
+                                <strong>Dokumen SOP</strong>
+                                <small>Standar Operasional Prosedur Resmi</small>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <a href="kolaborasi.html" class="nav-link">Mitra & Kolaborasi</a>
+                <a href="pengembangan-guru.html" class="nav-link active">Pengembangan Guru</a>
+                <a href="berita.html" class="nav-link">Berita</a>
+                <a href="pengumuman.html" class="nav-link">Pengumuman</a>
+                <a href="galeri.html" class="nav-link">Galeri</a>
+                <a href="kontak.html" class="nav-link">Kontak</a>
+                <a href="pengumuman.html#ppdb" class="btn-nav-action">PPDB</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- BANNER SUB-HALAMAN -->
+    <section style="background: linear-gradient(135deg, #0f172a 0%, #0369a1 50%, #0284c7 100%); color: white; padding: 50px 0;">
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+            <div>
+                <span class="badge-tag" style="background: rgba(255,255,255,0.22); font-size: 12px; margin-bottom: 12px; display: inline-block; letter-spacing: 0.5px;">PENGEMBANGAN KEPROFESIAN BERKELANJUTAN (PKB)</span>
+                <h1 style="font-size: 32px; font-weight: 800; margin-bottom: 10px; line-height: 1.25;">
+                    Pengembangan Guru: K3S & KKG Gugus 1 Arso Barat
+                </h1>
+                <p style="color: #e0f2fe; font-size: 15px; max-width: 750px; line-height: 1.6; margin: 0;">
+                    Forum resmi koordinasi Kepala Sekolah (K3S) dan Kelompok Kerja Guru (KKG) tingkat Gugus Sekolah 1 (Gusek 1) Arso Barat dengan agenda pertemuan bergilir setiap sekolah 1 bulan sekali.
+                </p>
+            </div>
+            <div class="btn-print-action">
+                <button onclick="window.print()" class="btn" style="background: white; color: #0284c7; font-weight: 700; padding: 10px 18px; border-radius: 8px; box-shadow: var(--shadow-md);">
+                    🖨️ Cetak / Simpan PDF
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- IDENTITAS GUGUS 1 -->
+    <section style="background-color: #f8fafc; padding: 35px 0;">
+        <div class="container">
+            <div style="background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 14px; padding: 26px; box-shadow: 0 4px 12px rgba(0,0,0,0.04);">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; margin-bottom: 16px;">
+                    <div>
+                        <span class="badge-tag" style="background: #e0f2fe; color: #0369a1; font-size: 11.5px; font-weight: 700;">GUGUS SEKOLAH RESMI</span>
+                        <h2 style="font-size: 22px; font-weight: 800; color: #0f172a; margin: 4px 0 0 0;">Kelompok Kerja Kepala Sekolah (KKKS) & KKG Gusek 1 Arso Barat</h2>
+                    </div>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <span style="background: #dcfce7; color: #166534; font-size: 12px; font-weight: 700; padding: 6px 14px; border-radius: 999px;">
+                            🔄 Siklus Pertemuan: 1 Bulan Sekali Bergilir
+                        </span>
+                    </div>
+                </div>
+
+                <p id="pgGusekDeskripsi" style="font-size: 14px; color: #475569; line-height: 1.7; margin-bottom: 18px;">
+                    Gugus Sekolah 1 (Gusek 1) Arso Barat merupakan wadah kemitraan profesional antar-satuan pendidikan dasar negeri dan swasta di Distrik Arso Barat, Kabupaten Keerom. Pertemuan rutin diadakan secara bergilir dari sekolah ke sekolah setiap bulan guna membedah kurikulum, menyusun modul ajar, mengkaji soal ANBK, dan berbagi metode pembelajaran inovatif.
+                </p>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; font-size: 13px; color: #334155; background: #f8fafc; padding: 18px; border-radius: 10px; border: 1px solid #e2e8f0;">
+                    <div>📍 <strong>Sekretariat:</strong> <span id="pgGusekSekretariat">Jalan Melati Barat Arso I, Kampung Sanggaria, Distrik Arso Barat 99473</span></div>
+                    <div>👤 <strong>Ketua Pengelola:</strong> <span id="pgGusekKetua">Robi Ulludin, S.Pd.SD. (NIP 196906201992031018)</span></div>
+                    <div>⏱️ <strong>Waktu Pertemuan:</strong> <span id="pgGusekWaktu">Hari Rabu Bergilir (Semester Gasal TP 2026/2027)</span></div>
+                    <div>📜 <strong>Dasar Penetapan:</strong> <span id="pgGusekDasarSK">SK Resmi Gusek 1 Arso Barat, 23 Juli 2026</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BAGIAN 1: K3S (KELOMPOK KERJA KEPALA SEKOLAH) -->
+    <section style="padding: 20px 0 35px;">
+        <div class="container">
+            <div class="card" style="padding: 30px; border-left: 6px solid #0284c7; box-shadow: 0 4px 14px rgba(0,0,0,0.05); margin-bottom: 35px;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 14px; margin-bottom: 14px;">
+                    <div style="display: flex; align-items: center; gap: 14px;">
+                        <span style="font-size: 36px; background: #f0f9ff; width: 58px; height: 58px; display: flex; align-items: center; justify-content: center; border-radius: 14px; border: 1.5px solid #bae6fd;">🎙️</span>
+                        <div>
+                            <span class="badge-tag" style="background: #e0f2fe; color: #0369a1; font-size: 11.5px; font-weight: 700;">MANAJEMEN KEPALA SEKOLAH</span>
+                            <h2 style="font-size: 22px; font-weight: 800; color: #0f172a; margin: 4px 0 0 0;">K3S (Kelompok Kerja Kepala Sekolah) Tingkat Gusek 1</h2>
+                        </div>
+                    </div>
+                    <span style="background: #dbeafe; color: #1e40af; font-size: 12px; font-weight: 700; padding: 5px 14px; border-radius: 999px;">
+                        Hari Rabu Bergilir (Semester Gasal 2026/2027)
+                    </span>
+                </div>
+
+                <p style="font-size: 14px; color: #475569; line-height: 1.6; margin-bottom: 16px;">
+                    Wadah musyawarah pimpinan sekolah se-Gugus 1 Arso Barat dalam mengawal kebijakan mutu pendidikan, standarisasi manajerial, pelaporan BOS, dan kesiapan infrastruktur digital sekolah perbatasan.
+                </p>
+
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 20px; margin-bottom: 14px;">
+                    <h4 style="font-size: 14.5px; font-weight: 800; color: #0369a1; margin: 0 0 10px 0; display: flex; align-items: center; gap: 6px;">
+                        <span>📋</span> <span>Uraian Kerja & Program Strategis K3S:</span>
+                    </h4>
+                    <ul id="pgK3SProgramsList" style="margin: 0; padding-left: 20px; font-size: 13.5px; color: #334155; line-height: 1.8;">
+                        <li>Harmonisasi kalender pendidikan, penetapan jadwal asesmen sumatif akhir semester, dan sinkronisasi agenda dinas pendidikan.</li>
+                        <li>Musyawarah evaluasi kesiapan sarana Asesmen Nasional Berbasis Komputer (ANBK) serta peminjaman/sharing fasilitas chromebook antar-sekolah.</li>
+                        <li>Supervisi manajerial pengelolaan dan pelaporan dana Bantuan Operasional Sekolah (BOS) agar tepat sasaran, akuntabel, dan transparan.</li>
+                        <li>Peningkatan kapasitas kepemimpinan instruksional Kepala Sekolah dalam membina etos kerja dewan guru di wilayah perbatasan Papua.</li>
+                        <li>Perumusan usulan kolektif kebutuhan formasi guru PNS/P3K dan sarpras prioritas kepada Dinas Pendidikan Kabupaten Keerom.</li>
+                    </ul>
+                </div>
+
+                <div id="pgK3SKetuaBox" style="font-size: 13px; color: #64748b;">
+                    👤 Ketua Pengelola KKKS Gusek 1: <strong style="color: #0f172a;">Robi Ulludin, S.Pd.SD. (NIP 196906201992031018)</strong> bersama Forum Kepala Sekolah se-Gusek 1 Arso Barat (termasuk SDN Inpres Arso VIII)
+                </div>
+            </div>
+
+            <!-- BAGIAN 2: PEMBAGIAN 2 KELOMPOK KERJA GURU (KKG) -->
+            <div style="text-align: center; max-width: 720px; margin: 0 auto 30px;">
+                <span class="section-pill">Pengelompokan Kerja</span>
+                <h2 style="font-size: 24px; font-weight: 800; color: #0f172a; margin-bottom: 8px;">2 Kelompok KKG Gusek 1 Arso Barat</h2>
+                <p style="font-size: 14px; color: #64748b;">Pengelompokan kerja pendidik yang fokus pada fase tumbuh kembang siswa dan rumpun mata pelajaran khusus.</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 24px; margin-bottom: 45px;">
+
+                <!-- KELOMPOK A -->
+                <div class="card" style="padding: 26px; border-top: 5px solid #10b981; box-shadow: 0 4px 14px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 12px;">
+                            <span class="badge-tag" style="background: #d1fae5; color: #065f46; font-size: 11px; font-weight: 700;">KELOMPOK A (KELAS RENDAH & AGAMA)</span>
+                            <span style="background: #f1f5f9; color: #475569; font-size: 11.5px; font-weight: 700; padding: 3px 10px; border-radius: 999px;">1 Bulan Sekali</span>
+                        </div>
+                        <h3 id="pgKelompokAJudul" style="font-size: 19px; font-weight: 800; color: #0f172a; margin-bottom: 8px;">
+                            Guru Kelas I, II, III & Guru Bidang Keagamaan
+                        </h3>
+                        <p style="font-size: 13.5px; color: #475569; line-height: 1.6; margin-bottom: 16px;">
+                            <strong>Cakupan Anggota:</strong> <span id="pgKelompokACakupan">Guru Kelas 1, Guru Kelas 2, Guru Kelas 3, serta Guru Pendidikan Agama Islam (PAI), Kristen Protestan, dan Katolik se-Gugus 1.</span>
+                        </p>
+
+                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; margin-bottom: 16px;">
+                            <h4 style="font-size: 13.5px; font-weight: 800; color: #047857; margin: 0 0 8px 0;">
+                                📋 Uraian Kerja & Program Nyata:
+                            </h4>
+                            <ul id="pgKelompokAProgramsList" style="margin: 0; padding-left: 18px; font-size: 13px; color: #334155; line-height: 1.7;">
+                                <li>Bedah modul ajar Kurikulum Merdeka Fase A (Kelas 1-2) dan Fase B (Kelas 3).</li>
+                                <li>Pengembangan metode Calistung permulaan (Literasi & Numerasi Dasar) dengan media konkret dan kartu kata.</li>
+                                <li>Penyusunan Asesmen Diagnostik Awal untuk memetakan kesiapan membaca siswa baru.</li>
+                                <li>Integrasi nilai-nilai moderasi beragama, toleransi kerukunan, dan budi pekerti luhur dalam pembelajaran lintas iman di Papua.</li>
+                                <li>Workshop pembuatan alat peraga edukatif (APE) berbasis bahan daur ulang alam Keerom.</li>
+                                <li>Evaluasi kendala belajar siswa kelas rendah dan penyusunan program remedial terpadu.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div style="font-size: 12.5px; color: #64748b; border-top: 1px dashed #cbd5e1; padding-top: 10px;">
+                        ⏱️ Jadwal: <strong id="pgKelompokAJadwal">Hari Rabu Bergilir di Sekolah Anggota Gugus</strong>
+                    </div>
+                </div>
+
+                <!-- KELOMPOK B -->
+                <div class="card" style="padding: 26px; border-top: 5px solid #0284c7; box-shadow: 0 4px 14px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 12px;">
+                            <span class="badge-tag" style="background: #e0f2fe; color: #0369a1; font-size: 11px; font-weight: 700;">KELOMPOK B (KELAS TINGGI & MAPEL)</span>
+                            <span style="background: #f1f5f9; color: #475569; font-size: 11.5px; font-weight: 700; padding: 3px 10px; border-radius: 999px;">1 Bulan Sekali</span>
+                        </div>
+                        <h3 id="pgKelompokBJudul" style="font-size: 19px; font-weight: 800; color: #0f172a; margin-bottom: 8px;">
+                            Guru Kelas IV, V, VI, Guru Penjas (PJOK) & Bahasa Inggris
+                        </h3>
+                        <p style="font-size: 13.5px; color: #475569; line-height: 1.6; margin-bottom: 16px;">
+                            <strong>Cakupan Anggota:</strong> <span id="pgKelompokBCakupan">Guru Kelas 4, Guru Kelas 5, Guru Kelas 6, Guru PJOK (Penjasorkes), dan Guru Bahasa Inggris se-Gugus 1.</span>
+                        </p>
+
+                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; margin-bottom: 16px;">
+                            <h4 style="font-size: 13.5px; font-weight: 800; color: #0284c7; margin: 0 0 8px 0;">
+                                📋 Uraian Kerja & Program Nyata:
+                            </h4>
+                            <ul id="pgKelompokBProgramsList" style="margin: 0; padding-left: 18px; font-size: 13px; color: #334155; line-height: 1.7;">
+                                <li>Pemantapan bimbingan dan simulasi Asesmen Nasional Berbasis Komputer (ANBK) untuk Literasi & Numerasi Sains.</li>
+                                <li>Penyusunan Modul Projek P5 bertema Kearifan Lokal Budaya Papua dan Gaya Hidup Berkelanjutan.</li>
+                                <li>Pemanfaatan Platform Merdeka Mengajar (PMM), pembuatan bahan ajar digital Canva, dan riset ajar online via Starlink.</li>
+                                <li>Penyelarasan kurikulum PJOK: standarisasi tes kesegaran jasmani murid, senam SKJ, dan atletik lapangan.</li>
+                                <li>Pengembangan teknik pengajaran Bahasa Inggris dasar komunikatif melalui nyanyian dan dialog interaktif.</li>
+                                <li>Penyusunan kisi-kisi dan naskah Asesmen Sumatif Akhir Jenjang Kelas VI se-Gugus 1.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div style="font-size: 12.5px; color: #64748b; border-top: 1px dashed #cbd5e1; padding-top: 10px;">
+                        ⏱️ Jadwal: <strong id="pgKelompokAJadwal">Hari Rabu Bergilir di Sekolah Anggota Gugus</strong>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- BAGIAN 3: TABEL JADWAL PERTEMUAN BERGILIR BULANAN -->
+            <div style="margin-top: 10px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 18px;">
+                    <div>
+                        <span class="badge-tag" style="background: #e0f2fe; color: #0369a1; font-weight: 700; font-size: 12px;">AGENDA RESMI GUGUS 1</span>
+                        <h2 style="font-size: 22px; font-weight: 800; color: #0f172a; margin-top: 4px;">Jadwal Kegiatan Kelompok Kerja Guru (KKG) & KKKS Gusek 1 Arso Barat</h2>
+                        <p style="font-size: 13.5px; color: #64748b; margin: 2px 0 0;">Semester Gasal Tahun Pelajaran 2026/2027 • Sekretariat: Jl. Melati Barat Arso I, Sanggaria</p>
+                    </div>
+                    <span style="font-size: 12.5px; color: #475569; background: #f1f5f9; padding: 6px 14px; border-radius: 8px; border: 1px solid #cbd5e1;">
+                        📅 Tahun Ajaran 2026/2027
+                    </span>
+                </div>
+
+                                <!-- PENCARIAN & FILTER JADWAL KKG -->
+                <div class="table-filter-bar" style="background: #ffffff; box-shadow: 0 2px 8px rgba(0,0,0,0.04); margin-bottom: 16px;">
+                    <div class="table-filter-search" style="min-width: 280px;">
+                        <span style="font-size: 16px;">🔍</span>
+                        <input type="text" id="publicKKGSearchInput" placeholder="Ketik pencarian: materi, pemateri (Turut, S.Pd), atau sekolah..." oninput="window.filterPublicKKG()">
+                    </div>
+                    <div class="table-filter-actions">
+                        <select id="publicKKGFilterKelompok" class="table-filter-select" onchange="window.filterPublicKKG()">
+                            <option value="ALL">Semua Sasaran Kelompok</option>
+                            <option value="Kelas Awal">Kelas 1, 2, 3 & Agama (Kelas Awal)</option>
+                            <option value="Kelas Tinggi">Kelas 4, 5, 6, PJOK, Seni, Inggris (Kelas Tinggi)</option>
+                        </select>
+                        <select id="publicKKGFilterStatus" class="table-filter-select" onchange="window.filterPublicKKG()">
+                            <option value="ALL">Semua Status</option>
+                            <option value="Terlaksana">Terlaksana</option>
+                            <option value="Dijadwalkan">Dijadwalkan</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="data-table-wrapper"  style="overflow-x: auto; background: #ffffff; border-radius: 12px; border: 1px solid #cbd5e1; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+                    <table class="data-table" style="width: 100%; border-collapse: collapse; font-size: 13.5px;">
+                        <thead>
+                            <tr style="background: #0284c7; color: #ffffff; text-align: left;">
+                                <th style="padding: 12px 14px; width: 50px;">No</th>
+                                <th style="padding: 12px 14px; width: 140px;">Bulan & Tanggal</th>
+                                <th style="padding: 12px 14px; width: 220px;">Tuan Rumah (Sekolah)</th>
+                                <th style="padding: 12px 14px; width: 220px;">Sasaran Kelompok</th>
+                                <th style="padding: 12px 14px;">Agenda / Topik Bahasan</th>
+                                <th style="padding: 12px 14px; width: 100px; text-align: center;">Dokumentasi</th>
+                                <th style="padding: 12px 14px; width: 120px; text-align: center;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="kkgJadwalTableBody">
+                            <tr style="border-bottom: 1px solid #e2e8f0;">
+                                <td style="padding: 12px 14px; font-weight: 700; text-align: center;">1</td>
+                                <td style="padding: 12px 14px; font-weight: 600;">Rabu, 5 Agustus 2026</td>
+                                <td style="padding: 12px 14px; font-weight: 700; color: #0284c7;">SD Inpres 1 Arso I</td>
+                                <td style="padding: 12px 14px;"><span class="badge-tag" style="background: #d1fae5; color: #065f46; font-size: 11px;">Kelas 1, 2, 3 & Agama (Kelas Awal)</span></td>
+                                <td style="padding: 12px 14px;">
+                                    <div style="font-weight: 700; color: #0f172a;">Penyusunan Modul Ajar Pembelajaran Mendalam Kelas 1, 2, 3, dan Agama</div>
+                                    <div style="font-size: 12px; color: #0284c7; margin-top: 4px; font-weight: 600;">🎙️ <strong>Pemateri:</strong> Ketua KKG, Ketua KKKS, Guru Kelas Awal</div>
+                                    <div style="font-size: 11.5px; color: #64748b; margin-top: 3px; font-style: italic;">📝 <strong>Notulen:</strong> Musyawarah penyusunan Modul Ajar Pembelajaran Mendalam Fase A dan Fase B se-Gusek 1 Arso Barat.</div>
+                                </td>
+                                <td style="padding: 12px 14px; text-align: center;">
+                                    <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                                        <img src="images/kegiatan-rapat-dewan-guru.jpg" alt="Rapat Dewan Guru" style="width: 52px; height: 38px; object-fit: cover; border-radius: 6px; cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,0.15);" onclick="if(window.openLightboxWith) window.openLightboxWith('images/kegiatan-rapat-dewan-guru.jpg', 'Penyusunan Modul Ajar - SD Inpres 1 Arso I')">
+                                        <button type="button" onclick="if(window.openLightboxWith) window.openLightboxWith('images/kegiatan-rapat-dewan-guru.jpg', 'Penyusunan Modul Ajar - SD Inpres 1 Arso I')" style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; cursor: pointer;">🔍 Perbesar</button>
+                                    </div>
+                                </td>
+                                <td style="padding: 12px 14px; text-align: center;"><span style="background: #dcfce7; color: #166534; font-size: 11.5px; font-weight: 700; padding: 4px 10px; border-radius: 6px;">Terlaksana</span></td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e2e8f0; background: #f8fafc;">
+                                <td style="padding: 12px 14px; font-weight: 700; text-align: center;">2</td>
+                                <td style="padding: 12px 14px; font-weight: 600;">Rabu, 19 Agustus 2026</td>
+                                <td style="padding: 12px 14px; font-weight: 700; color: #0284c7;">SD Inpres 2 Arso I</td>
+                                <td style="padding: 12px 14px;"><span class="badge-tag" style="background: #e0f2fe; color: #0369a1; font-size: 11px;">Kelas 4, 5, 6, PJOK, Seni, Inggris (Kelas Tinggi)</span></td>
+                                <td style="padding: 12px 14px;">
+                                    <div style="font-weight: 700; color: #0f172a;">Penyusunan Modul Ajar Pembelajaran Mendalam Kelas 4, 5, 6, PJOK, Kesenian, dan Bahasa Inggris</div>
+                                    <div style="font-size: 12px; color: #0284c7; margin-top: 4px; font-weight: 600;">🎙️ <strong>Pemateri:</strong> Ketua KKG, Ketua KKKS, Guru Kelas Tinggi</div>
+                                    <div style="font-size: 11.5px; color: #64748b; margin-top: 3px; font-style: italic;">📝 <strong>Notulen:</strong> Penyelarasan Modul Ajar Mendalam Fase B dan C, PJOK, Seni Budaya, dan Bahasa Inggris.</div>
+                                </td>
+                                <td style="padding: 12px 14px; text-align: center;">
+                                    <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                                        <img src="images/kegiatan-evaluasi-guru.jpg" alt="Evaluasi Guru" style="width: 52px; height: 38px; object-fit: cover; border-radius: 6px; cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,0.15);" onclick="if(window.openLightboxWith) window.openLightboxWith('images/kegiatan-evaluasi-guru.jpg', 'Modul Ajar Kelas Tinggi - SD Inpres 2 Arso I')">
+                                        <button type="button" onclick="if(window.openLightboxWith) window.openLightboxWith('images/kegiatan-evaluasi-guru.jpg', 'Modul Ajar Kelas Tinggi - SD Inpres 2 Arso I')" style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; cursor: pointer;">🔍 Perbesar</button>
+                                    </div>
+                                </td>
+                                <td style="padding: 12px 14px; text-align: center;"><span style="background: #dcfce7; color: #166534; font-size: 11.5px; font-weight: 700; padding: 4px 10px; border-radius: 6px;">Terlaksana</span></td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e2e8f0;">
+                                <td style="padding: 12px 14px; font-weight: 700; text-align: center;">3</td>
+                                <td style="padding: 12px 14px; font-weight: 600;">Rabu, 2 September 2026</td>
+                                <td style="padding: 12px 14px; font-weight: 700; color: #0284c7;">SD Inpres Arso VI</td>
+                                <td style="padding: 12px 14px;"><span class="badge-tag" style="background: #d1fae5; color: #065f46; font-size: 11px;">Kelas 1, 2, 3 & Agama (Kelas Awal)</span></td>
+                                <td style="padding: 12px 14px;">
+                                    <div style="font-weight: 700; color: #0f172a;">Penyusunan Kisi Kisi dan Soal ATS Kelas 1, 2, 3, dan Agama</div>
+                                    <div style="font-size: 12px; color: #0284c7; margin-top: 4px; font-weight: 600;">🎙️ <strong>Pemateri:</strong> Ketua KKG, Ketua KKKS, Turut, S.Pd</div>
+                                    <div style="font-size: 11.5px; color: #64748b; margin-top: 3px; font-style: italic;">📝 <strong>Notulen:</strong> Penyusunan master kisi-kisi dan butir soal Asesmen Tengah Semester (ATS) kelas rendah.</div>
+                                </td>
+                                <td style="padding: 12px 14px; text-align: center;">
+                                    <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                                        <img src="images/kegiatan-keagamaan-rohani.jpg" alt="Kegiatan KKG" style="width: 52px; height: 38px; object-fit: cover; border-radius: 6px; cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,0.15);" onclick="if(window.openLightboxWith) window.openLightboxWith('images/kegiatan-keagamaan-rohani.jpg', 'Kisi-kisi ATS Kelas Awal - SD Inpres Arso VI')">
+                                        <button type="button" onclick="if(window.openLightboxWith) window.openLightboxWith('images/kegiatan-keagamaan-rohani.jpg', 'Kisi-kisi ATS Kelas Awal - SD Inpres Arso VI')" style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; cursor: pointer;">🔍 Perbesar</button>
+                                    </div>
+                                </td>
+                                <td style="padding: 12px 14px; text-align: center;"><span style="background: #dcfce7; color: #166534; font-size: 11.5px; font-weight: 700; padding: 4px 10px; border-radius: 6px;">Terlaksana</span></td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e2e8f0; background: #f8fafc;">
+                                <td style="padding: 12px 14px; font-weight: 700; text-align: center;">4</td>
+                                <td style="padding: 12px 14px; font-weight: 600;">Rabu, 16 September 2026</td>
+                                <td style="padding: 12px 14px; font-weight: 700; color: #0284c7;">SD Inpres SKP F 3 Arso</td>
+                                <td style="padding: 12px 14px;"><span class="badge-tag" style="background: #e0f2fe; color: #0369a1; font-size: 11px;">Kelas 4, 5, 6, PJOK, Seni, Inggris (Kelas Tinggi)</span></td>
+                                <td style="padding: 12px 14px;">
+                                    <div style="font-weight: 700; color: #0f172a;">Penyusunan Kisi Kisi dan Soal ATS Kelas 4, 5, 6, PJOK, Kesenian, dan Bahasa Inggris</div>
+                                    <div style="font-size: 12px; color: #0284c7; margin-top: 4px; font-weight: 600;">🎙️ <strong>Pemateri:</strong> Ketua KKG, Ketua KKKS, Turut, S.Pd</div>
+                                    <div style="font-size: 11.5px; color: #64748b; margin-top: 3px; font-style: italic;">📝 <strong>Notulen:</strong> Pemantapan instrumen Asesmen Tengah Semester (ATS) kelas tinggi se-Gusek 1.</div>
+                                </td>
+                                <td style="padding: 12px 14px; text-align: center;">
+                                    <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                                        <img src="images/kegiatan-anbk-komputer.jpg" alt="Kegiatan TIK" style="width: 52px; height: 38px; object-fit: cover; border-radius: 6px; cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,0.15);" onclick="if(window.openLightboxWith) window.openLightboxWith('images/kegiatan-anbk-komputer.jpg', 'Kisi-kisi ATS Kelas Tinggi - SD Inpres SKP F 3 Arso')">
+                                        <button type="button" onclick="if(window.openLightboxWith) window.openLightboxWith('images/kegiatan-anbk-komputer.jpg', 'Kisi-kisi ATS Kelas Tinggi - SD Inpres SKP F 3 Arso')" style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; cursor: pointer;">🔍 Perbesar</button>
+                                    </div>
+                                </td>
+                                <td style="padding: 12px 14px; text-align: center;"><span style="background: #dcfce7; color: #166534; font-size: 11.5px; font-weight: 700; padding: 4px 10px; border-radius: 6px;">Terlaksana</span></td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e2e8f0;">
+                                <td style="padding: 12px 14px; font-weight: 700; text-align: center;">5</td>
+                                <td style="padding: 12px 14px; font-weight: 600;">Rabu, 7 Oktober 2026</td>
+                                <td style="padding: 12px 14px; font-weight: 700; color: #0284c7;">SD Inpres Arso X</td>
+                                <td style="padding: 12px 14px;"><span class="badge-tag" style="background: #d1fae5; color: #065f46; font-size: 11px;">Kelas 1, 2, 3 & Agama (Kelas Awal)</span></td>
+                                <td style="padding: 12px 14px;">
+                                    <div style="font-weight: 700; color: #0f172a;">Simulasi Pembelajaran Mendalam Kelas 1, 2, 3, dan Agama</div>
+                                    <div style="font-size: 12px; color: #0284c7; margin-top: 4px; font-weight: 600;">🎙️ <strong>Pemateri:</strong> Ketua KKG, Ketua KKKS, Guru Kelas 1, 2, dan 3</div>
+                                    <div style="font-size: 11.5px; color: #64748b; margin-top: 3px; font-style: italic;">📝 <strong>Notulen:</strong> Simulasi mikro-teaching implementasi deep learning berbantuan alat peraga manipulatif.</div>
+                                </td>
+                                <td style="padding: 12px 14px; text-align: center;">
+                                    <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                                        <img src="images/kegiatan-senam-bersama.jpg" alt="Simulasi Pembelajaran" style="width: 52px; height: 38px; object-fit: cover; border-radius: 6px; cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,0.15);" onclick="if(window.openLightboxWith) window.openLightboxWith('images/kegiatan-senam-bersama.jpg', 'Simulasi Pembelajaran Mendalam - SD Inpres Arso X')">
+                                        <button type="button" onclick="if(window.openLightboxWith) window.openLightboxWith('images/kegiatan-senam-bersama.jpg', 'Simulasi Pembelajaran Mendalam - SD Inpres Arso X')" style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; cursor: pointer;">🔍 Perbesar</button>
+                                    </div>
+                                </td>
+                                <td style="padding: 12px 14px; text-align: center;"><span style="background: #dcfce7; color: #166534; font-size: 11.5px; font-weight: 700; padding: 4px 10px; border-radius: 6px;">Terlaksana</span></td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e2e8f0; background: #f8fafc;">
+                                <td style="padding: 12px 14px; font-weight: 700; text-align: center;">6</td>
+                                <td style="padding: 12px 14px; font-weight: 600;">Rabu, 28 Oktober 2026</td>
+                                <td style="padding: 12px 14px; font-weight: 700; color: #0284c7;">SD Inpres Arso XI</td>
+                                <td style="padding: 12px 14px;"><span class="badge-tag" style="background: #e0f2fe; color: #0369a1; font-size: 11px;">Kelas 4, 5, 6, PJOK, Seni, Inggris (Kelas Tinggi)</span></td>
+                                <td style="padding: 12px 14px;">
+                                    <div style="font-weight: 700; color: #0f172a;">Simulasi Pembelajaran Mendalam Kelas 4, 5, 6, PJOK, Kesenian, dan Bahasa Inggris</div>
+                                    <div style="font-size: 12px; color: #0284c7; margin-top: 4px; font-weight: 600;">🎙️ <strong>Pemateri:</strong> Ketua KKG, Ketua KKKS, Guru Kelas 4, 5, dan 6</div>
+                                    <div style="font-size: 11.5px; color: #64748b; margin-top: 3px; font-style: italic;">📝 <strong>Notulen:</strong> Peer-teaching pembelajaran kontekstual berbasis proyek dan kebugaran jasmani PJOK.</div>
+                                </td>
+                                <td style="padding: 12px 14px; text-align: center;">
+                                    <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                                        <img src="images/kegiatan-pramuka-budaya.jpg" alt="Simulasi Kelas Tinggi" style="width: 52px; height: 38px; object-fit: cover; border-radius: 6px; cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,0.15);" onclick="if(window.openLightboxWith) window.openLightboxWith('images/kegiatan-pramuka-budaya.jpg', 'Simulasi Kelas Tinggi - SD Inpres Arso XI')">
+                                        <button type="button" onclick="if(window.openLightboxWith) window.openLightboxWith('images/kegiatan-pramuka-budaya.jpg', 'Simulasi Kelas Tinggi - SD Inpres Arso XI')" style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; cursor: pointer;">🔍 Perbesar</button>
+                                    </div>
+                                </td>
+                                <td style="padding: 12px 14px; text-align: center;"><span style="background: #dcfce7; color: #166534; font-size: 11.5px; font-weight: 700; padding: 4px 10px; border-radius: 6px;">Terlaksana</span></td>
+                            </tr>
+                            <tr style="border-bottom: 2px solid #0284c7; background: #f0fdf4;">
+                                <td style="padding: 12px 14px; font-weight: 800; text-align: center; color: #166534;">7</td>
+                                <td style="padding: 12px 14px; font-weight: 700; color: #166534;">Rabu, 11 November 2026</td>
+                                <td style="padding: 12px 14px;">
+                                    <div style="font-weight: 800; color: #0284c7;">🏫 SDN Inpres Arso VIII</div>
+                                    <span style="background: #0284c7; color: #ffffff; font-size: 10.5px; font-weight: 700; padding: 2px 7px; border-radius: 4px; display: inline-block; margin-top: 3px;">Tuan Rumah Gusek 1</span>
+                                </td>
+                                <td style="padding: 12px 14px;"><span class="badge-tag" style="background: #d1fae5; color: #065f46; font-size: 11px; font-weight: 700;">Kelas 1, 2, 3 & Agama (Kelas Awal)</span></td>
+                                <td style="padding: 12px 14px;">
+                                    <div style="font-weight: 800; color: #0f172a;">Penyusunan Kisi Kisi dan Soal AAS Kelas 1, 2, 3, dan Agama</div>
+                                    <div style="font-size: 12px; color: #0284c7; margin-top: 4px; font-weight: 700;">🎙️ <strong>Pemateri:</strong> Ketua KKG, Ketua KKKS, Turut, S.Pd</div>
+                                    <div style="font-size: 11.5px; color: #166534; margin-top: 3px; font-style: italic;">📝 <strong>Notulen:</strong> SDN Inpres Arso VIII bertindak sebagai tuan rumah. Seluruh guru kelas awal se-Gusek 1 berhasil menyusun master soal Asesmen Akhir Semester (AAS) Gasal 2026/2027.</div>
+                                </td>
+                                <td style="padding: 12px 14px; text-align: center;">
+                                    <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                                        <img src="images/kegiatan-literasi-komputer.jpg" alt="Kegiatan di Arso VIII" style="width: 52px; height: 38px; object-fit: cover; border-radius: 6px; cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,0.15);" onclick="if(window.openLightboxWith) window.openLightboxWith('images/kegiatan-literasi-komputer.jpg', 'Penyusunan Soal AAS - Tuan Rumah SDN Inpres Arso VIII')">
+                                        <button type="button" onclick="if(window.openLightboxWith) window.openLightboxWith('images/kegiatan-literasi-komputer.jpg', 'Penyusunan Soal AAS - Tuan Rumah SDN Inpres Arso VIII')" style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; cursor: pointer;">🔍 Perbesar</button>
+                                    </div>
+                                </td>
+                                <td style="padding: 12px 14px; text-align: center;"><span style="background: #dcfce7; color: #166534; font-size: 11.5px; font-weight: 700; padding: 4px 10px; border-radius: 6px;">Terlaksana</span></td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e2e8f0; background: #fffbeb;">
+                                <td style="padding: 12px 14px; font-weight: 700; text-align: center; color: #b45309;">8</td>
+                                <td style="padding: 12px 14px; font-weight: 700; color: #b45309;">Rabu, 25 November 2026</td>
+                                <td style="padding: 12px 14px; font-weight: 700; color: #0284c7;">SD Inpres 2 Arso I</td>
+                                <td style="padding: 12px 14px;"><span class="badge-tag" style="background: #e0f2fe; color: #0369a1; font-size: 11px;">Kelas 4, 5, 6, PJOK, Seni, Inggris (Kelas Tinggi)</span></td>
+                                <td style="padding: 12px 14px;">
+                                    <div style="font-weight: 700; color: #0f172a;">Penyusunan Kisi Kisi dan Soal AAS Kelas 4, 5, 6, PJOK, Kesenian, dan Bahasa Inggris</div>
+                                    <div style="font-size: 12px; color: #0284c7; margin-top: 4px; font-weight: 600;">🎙️ <strong>Pemateri:</strong> Ketua KKG, Ketua KKKS, Turut, S.Pd</div>
+                                    <div style="font-size: 11.5px; color: #64748b; margin-top: 3px; font-style: italic;">📝 <strong>Notulen:</strong> Finalisasi naskah soal Asesmen Akhir Semester (AAS) Gasal jenjang kelas tinggi se-Gugus 1 Arso Barat.</div>
+                                </td>
+                                <td style="padding: 12px 14px; text-align: center;"><span style="color: #94a3b8; font-size: 11px;">Menunggu Pelaksanaan</span></td>
+                                <td style="padding: 12px 14px; text-align: center;"><span style="background: #dbeafe; color: #1e40af; font-size: 11.5px; font-weight: 700; padding: 4px 10px; border-radius: 6px;">Dijadwalkan</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- PAGINASI JADWAL KKG PUBLIK (ARSIP AMAN TANPA HAPUS) -->
+                <div id="publicKKGPagination" class="pagination-container" style="margin-top: 18px;"></div>  </div>
+
+                    <!-- LEMBAR PENGESAHAN RESMI JADWAL KKG GUSEK 1 ARSO BARAT -->
+                    <div style="margin-top: 24px; padding: 20px 24px; background: #f8fafc; border-radius: 10px; border: 1px solid #cbd5e1; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+                        <div style="font-size: 13px; color: #334155; line-height: 1.6;">
+                            <strong style="color: #0369a1;">PEMERINTAH KABUPATEN KEEROM</strong><br>
+                            <strong>KELOMPOK KERJA KEPALA SEKOLAH (KKKS) & KKG GUSEK 1 ARSO BARAT</strong><br>
+                            <span>Jalan Melati Barat Arso I, Kampung Sanggaria, Distrik Arso Barat 99473</span>
+                        </div>
+                        <div style="text-align: right; font-size: 13px; color: #0f172a;">
+                            <div>Arso Barat, 23 Juli 2026</div>
+                            <div style="font-weight: 700; margin-top: 2px;">Ketua Pengelola KKKS Gusek 1,</div>
+                            <div style="font-weight: 800; color: #0284c7; margin-top: 28px; font-size: 14px;">ROBI ULLUDIN, S.Pd.SD.</div>
+                            <div style="font-size: 12px; color: #64748b;">NIP. 196906201992031018</div>
+                        </div>
+                    </div>
+
+            </div>
+
+            <!-- BAGIAN 4: GALERI DOKUMENTASI FOTO KEGIATAN K3S & KKG -->
+            <div style="margin-top: 55px;">
+                <div style="text-align: center; max-width: 720px; margin: 0 auto 28px;">
+                    <span class="section-pill">Dokumentasi Nyata Gugus</span>
+                    <h2 style="font-size: 24px; font-weight: 800; color: #0f172a; margin-bottom: 8px;">📸 Galeri Foto Kegiatan & Pertemuan K3S / KKG</h2>
+                    <p style="font-size: 14px; color: #64748b;">Dokumentasi foto kegiatan musyawarah kepala sekolah dan pertemuan bulanan kelompok kerja guru se-Gugus 1 Arso Barat.</p>
+                </div>
+
+                <!-- SHOWCASE CAROUSEL OTOMATIS DOKUMENTASI K3S & KKG -->
+<div class="showcase-slider-wrapper" id="kkgShowcaseSliderWrapper" style="margin-bottom: 20px;">
+    <!-- Tag Sorotan KKG Otomatis -->
+    <div class="showcase-live-badge">
+        <span class="showcase-pulse-dot"></span>
+        <span>DOKUMENTASI RESMI K3S & KKG GUGUS 1</span>
+    </div>
+
+    <!-- Tombol Navigasi Kiri & Kanan -->
+    <button type="button" class="showcase-arrow-btn showcase-prev-btn" id="kkgShowcasePrevBtn" aria-label="Slide Sebelumnya" title="Lihat kegiatan sebelumnya">‹</button>
+    <button type="button" class="showcase-arrow-btn showcase-next-btn" id="kkgShowcaseNextBtn" aria-label="Slide Selanjutnya" title="Lihat kegiatan berikutnya">›</button>
+
+    <!-- Track Slide Kegiatan KKG -->
+    <div class="showcase-slider-track" id="kkgShowcaseSliderTrack">
+        <!-- SLIDE 1: Penyusunan Modul Ajar Pembelajaran Menda -->
+        <div class="showcase-slide active" data-index="0">
+            <div class="showcase-slide-image-wrapper">
+                <img src="images/kegiatan-rapat-dewan-guru.jpg" alt="Penyusunan Modul Ajar Pembelajaran Mendalam Kelas 1, 2, 3, dan Agama" class="showcase-slide-img" onclick="if(window.openLightboxWith){ window.openLightboxWith(this.src, 'Penyusunan Modul Ajar Pembelajaran Mendalam Kelas 1, 2, 3, dan Agama - Tuan Rumah: SD Inpres 1 Arso I (Rabu, 5 Agustus 2026)'); }" title="Klik untuk memperbesar foto dokumentasi" decoding="async" loading="lazy">
+                <div class="school-photo-caption">
+                    <div>
+                        <span class="showcase-category-pill" style="background: #0284c7; color: #ffffff;">KELAS 1, 2, 3 & AGAMA (KELAS AWAL) • Rabu, 5 Agustus 2026</span>
+                        <h3 class="showcase-slide-title">Penyusunan Modul Ajar Pembelajaran Mendalam Kelas 1, 2, 3, dan Agama</h3>
+                        <p class="showcase-slide-desc">📍 Tuan Rumah: <strong>SD Inpres 1 Arso I</strong> • Status: <strong>Terlaksana</strong> • Kegiatan Resmi Gugus 1 Arso Barat.</p>
+                    </div>
+                    <div class="showcase-btn-group">
+                        <button type="button" class="btn-showcase-zoom" onclick="if(window.openLightboxWith){ window.openLightboxWith('images/kegiatan-rapat-dewan-guru.jpg', 'Penyusunan Modul Ajar Pembelajaran Mendalam Kelas 1, 2, 3, dan Agama - Tuan Rumah: SD Inpres 1 Arso I (Rabu, 5 Agustus 2026)'); }">
+                            🔍 Perbesar Foto
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- SLIDE 2: Penyusunan Modul Ajar Pembelajaran Menda -->
+        <div class="showcase-slide" data-index="1">
+            <div class="showcase-slide-image-wrapper">
+                <img src="images/kegiatan-evaluasi-guru.jpg" alt="Penyusunan Modul Ajar Pembelajaran Mendalam Kelas 4, 5, 6, PJOK, Kesenian, dan Bahasa Inggris" class="showcase-slide-img" onclick="if(window.openLightboxWith){ window.openLightboxWith(this.src, 'Penyusunan Modul Ajar Pembelajaran Mendalam Kelas 4, 5, 6, PJOK, Kesenian, dan Bahasa Inggris - Tuan Rumah: SD Inpres 2 Arso I (Rabu, 19 Agustus 2026)'); }" title="Klik untuk memperbesar foto dokumentasi" decoding="async" loading="lazy">
+                <div class="school-photo-caption">
+                    <div>
+                        <span class="showcase-category-pill" style="background: #10b981; color: #ffffff;">KELAS 4, 5, 6, PJOK, KESENIAN & B.INGGRIS (KELAS TINGGI) • Rabu, 19 Agustus 2026</span>
+                        <h3 class="showcase-slide-title">Penyusunan Modul Ajar Pembelajaran Mendalam Kelas 4, 5, 6, PJOK, Kesenian, dan Bahasa Inggris</h3>
+                        <p class="showcase-slide-desc">📍 Tuan Rumah: <strong>SD Inpres 2 Arso I</strong> • Status: <strong>Terlaksana</strong> • Kegiatan Resmi Gugus 1 Arso Barat.</p>
+                    </div>
+                    <div class="showcase-btn-group">
+                        <button type="button" class="btn-showcase-zoom" onclick="if(window.openLightboxWith){ window.openLightboxWith('images/kegiatan-evaluasi-guru.jpg', 'Penyusunan Modul Ajar Pembelajaran Mendalam Kelas 4, 5, 6, PJOK, Kesenian, dan Bahasa Inggris - Tuan Rumah: SD Inpres 2 Arso I (Rabu, 19 Agustus 2026)'); }">
+                            🔍 Perbesar Foto
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- SLIDE 3: Penyusunan Kisi Kisi dan Soal ATS Kelas  -->
+        <div class="showcase-slide" data-index="2">
+            <div class="showcase-slide-image-wrapper">
+                <img src="images/kegiatan-keagamaan-rohani.jpg" alt="Penyusunan Kisi Kisi dan Soal ATS Kelas 1, 2, 3, dan Agama" class="showcase-slide-img" onclick="if(window.openLightboxWith){ window.openLightboxWith(this.src, 'Penyusunan Kisi Kisi dan Soal ATS Kelas 1, 2, 3, dan Agama - Tuan Rumah: SD Inpres Arso VI (Rabu, 2 September 2026)'); }" title="Klik untuk memperbesar foto dokumentasi" decoding="async" loading="lazy">
+                <div class="school-photo-caption">
+                    <div>
+                        <span class="showcase-category-pill" style="background: #8b5cf6; color: #ffffff;">KELAS 1, 2, 3 & AGAMA (KELAS AWAL) • Rabu, 2 September 2026</span>
+                        <h3 class="showcase-slide-title">Penyusunan Kisi Kisi dan Soal ATS Kelas 1, 2, 3, dan Agama</h3>
+                        <p class="showcase-slide-desc">📍 Tuan Rumah: <strong>SD Inpres Arso VI</strong> • Status: <strong>Terlaksana</strong> • Kegiatan Resmi Gugus 1 Arso Barat.</p>
+                    </div>
+                    <div class="showcase-btn-group">
+                        <button type="button" class="btn-showcase-zoom" onclick="if(window.openLightboxWith){ window.openLightboxWith('images/kegiatan-keagamaan-rohani.jpg', 'Penyusunan Kisi Kisi dan Soal ATS Kelas 1, 2, 3, dan Agama - Tuan Rumah: SD Inpres Arso VI (Rabu, 2 September 2026)'); }">
+                            🔍 Perbesar Foto
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- SLIDE 4: Penyusunan Kisi Kisi dan Soal ATS Kelas  -->
+        <div class="showcase-slide" data-index="3">
+            <div class="showcase-slide-image-wrapper">
+                <img src="images/kegiatan-anbk-komputer.jpg" alt="Penyusunan Kisi Kisi dan Soal ATS Kelas 4, 5, 6, PJOK, Kesenian, dan Bahasa Inggris" class="showcase-slide-img" onclick="if(window.openLightboxWith){ window.openLightboxWith(this.src, 'Penyusunan Kisi Kisi dan Soal ATS Kelas 4, 5, 6, PJOK, Kesenian, dan Bahasa Inggris - Tuan Rumah: SD Inpres SKP F 3 Arso (Rabu, 16 September 2026)'); }" title="Klik untuk memperbesar foto dokumentasi" decoding="async" loading="lazy">
+                <div class="school-photo-caption">
+                    <div>
+                        <span class="showcase-category-pill" style="background: #f59e0b; color: #ffffff;">KELAS 4, 5, 6, PJOK, KESENIAN & B.INGGRIS (KELAS TINGGI) • Rabu, 16 September 2026</span>
+                        <h3 class="showcase-slide-title">Penyusunan Kisi Kisi dan Soal ATS Kelas 4, 5, 6, PJOK, Kesenian, dan Bahasa Inggris</h3>
+                        <p class="showcase-slide-desc">📍 Tuan Rumah: <strong>SD Inpres SKP F 3 Arso</strong> • Status: <strong>Terlaksana</strong> • Kegiatan Resmi Gugus 1 Arso Barat.</p>
+                    </div>
+                    <div class="showcase-btn-group">
+                        <button type="button" class="btn-showcase-zoom" onclick="if(window.openLightboxWith){ window.openLightboxWith('images/kegiatan-anbk-komputer.jpg', 'Penyusunan Kisi Kisi dan Soal ATS Kelas 4, 5, 6, PJOK, Kesenian, dan Bahasa Inggris - Tuan Rumah: SD Inpres SKP F 3 Arso (Rabu, 16 September 2026)'); }">
+                            🔍 Perbesar Foto
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- SLIDE 5: Simulasi Pembelajaran Mendalam Kelas 1,  -->
+        <div class="showcase-slide" data-index="4">
+            <div class="showcase-slide-image-wrapper">
+                <img src="images/kegiatan-senam-bersama.jpg" alt="Simulasi Pembelajaran Mendalam Kelas 1, 2, 3, dan Agama" class="showcase-slide-img" onclick="if(window.openLightboxWith){ window.openLightboxWith(this.src, 'Simulasi Pembelajaran Mendalam Kelas 1, 2, 3, dan Agama - Tuan Rumah: SD Inpres Arso X (Rabu, 7 Oktober 2026)'); }" title="Klik untuk memperbesar foto dokumentasi" decoding="async" loading="lazy">
+                <div class="school-photo-caption">
+                    <div>
+                        <span class="showcase-category-pill" style="background: #06b6d4; color: #ffffff;">KELAS 1, 2, 3 & AGAMA (KELAS AWAL) • Rabu, 7 Oktober 2026</span>
+                        <h3 class="showcase-slide-title">Simulasi Pembelajaran Mendalam Kelas 1, 2, 3, dan Agama</h3>
+                        <p class="showcase-slide-desc">📍 Tuan Rumah: <strong>SD Inpres Arso X</strong> • Status: <strong>Terlaksana</strong> • Kegiatan Resmi Gugus 1 Arso Barat.</p>
+                    </div>
+                    <div class="showcase-btn-group">
+                        <button type="button" class="btn-showcase-zoom" onclick="if(window.openLightboxWith){ window.openLightboxWith('images/kegiatan-senam-bersama.jpg', 'Simulasi Pembelajaran Mendalam Kelas 1, 2, 3, dan Agama - Tuan Rumah: SD Inpres Arso X (Rabu, 7 Oktober 2026)'); }">
+                            🔍 Perbesar Foto
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- SLIDE 6: Simulasi Pembelajaran Mendalam Kelas 4,  -->
+        <div class="showcase-slide" data-index="5">
+            <div class="showcase-slide-image-wrapper">
+                <img src="images/kegiatan-pramuka-budaya.jpg" alt="Simulasi Pembelajaran Mendalam Kelas 4, 5, 6, PJOK, Kesenian, dan Bahasa Inggris" class="showcase-slide-img" onclick="if(window.openLightboxWith){ window.openLightboxWith(this.src, 'Simulasi Pembelajaran Mendalam Kelas 4, 5, 6, PJOK, Kesenian, dan Bahasa Inggris - Tuan Rumah: SD Inpres Arso XI (Rabu, 28 Oktober 2026)'); }" title="Klik untuk memperbesar foto dokumentasi" decoding="async" loading="lazy">
+                <div class="school-photo-caption">
+                    <div>
+                        <span class="showcase-category-pill" style="background: #ec4899; color: #ffffff;">KELAS 4, 5, 6, PJOK, KESENIAN & B.INGGRIS (KELAS TINGGI) • Rabu, 28 Oktober 2026</span>
+                        <h3 class="showcase-slide-title">Simulasi Pembelajaran Mendalam Kelas 4, 5, 6, PJOK, Kesenian, dan Bahasa Inggris</h3>
+                        <p class="showcase-slide-desc">📍 Tuan Rumah: <strong>SD Inpres Arso XI</strong> • Status: <strong>Terlaksana</strong> • Kegiatan Resmi Gugus 1 Arso Barat.</p>
+                    </div>
+                    <div class="showcase-btn-group">
+                        <button type="button" class="btn-showcase-zoom" onclick="if(window.openLightboxWith){ window.openLightboxWith('images/kegiatan-pramuka-budaya.jpg', 'Simulasi Pembelajaran Mendalam Kelas 4, 5, 6, PJOK, Kesenian, dan Bahasa Inggris - Tuan Rumah: SD Inpres Arso XI (Rabu, 28 Oktober 2026)'); }">
+                            🔍 Perbesar Foto
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Indikator Titik (Dots) Navigasi Bawah -->
+    <div class="showcase-dots-bar" id="kkgShowcaseDotsBar">
+        <button type="button" class="showcase-dot active" data-index="0" aria-label="Slide 1"></button>
+        <button type="button" class="showcase-dot" data-index="1" aria-label="Slide 2"></button>
+        <button type="button" class="showcase-dot" data-index="2" aria-label="Slide 3"></button>
+        <button type="button" class="showcase-dot" data-index="3" aria-label="Slide 4"></button>
+        <button type="button" class="showcase-dot" data-index="4" aria-label="Slide 5"></button>
+        <button type="button" class="showcase-dot" data-index="5" aria-label="Slide 6"></button>
+    </div>
+</div>
+                <div id="kkgDokumentasiGrid" style="display: none;"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                        <img src="images/logo-keerom.png" alt="Logo Keerom" style="width: 44px; height: 44px; object-fit: contain;" decoding="async" loading="lazy">
+                        <div>
+                            <h3 style="font-size: 16px; font-weight: 800; color: #ffffff; margin: 0;">SDN INPRES ARSO VIII</h3>
+                            <p style="font-size: 12px; color: #94a3b8; margin: 2px 0 0;">Kabupaten Keerom, Papua</p>
+                        </div>
+                    </div>
+                    <p style="font-size: 13px; color: #94a3b8; line-height: 1.6;">
+                        Mewujudkan generasi penerus Papua yang cerdas, beriman, berbudi pekerti luhur, dan menguasai teknologi informasi di beranda timur Indonesia.
+                    </p>
+                </div>
+                <div class="footer-col">
+                    <h4>Navigasi</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Beranda</a></li>
+                        <li><a href="profil.html">Profil Sekolah</a></li>
+                        <li><a href="guru.html">Dewan Guru & GTK</a></li>
+                        <li><a href="siswa.html">Data Kesiswaan</a></li>
+                        <li><a href="sapras.html">Sarana & Prasarana</a></li>
+                        <li><a href="kolaborasi.html">Mitra & Kolaborasi</a></li>
+                        <li><a href="pengembangan-guru.html">Pengembangan Guru (K3S/KKG)</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Layanan & Info</h4>
+                    <ul class="footer-links">
+                        <li><a href="pengumuman.html#ppdb">📝 Pendaftaran PPDB</a></li>
+                        <li><a href="berita.html">📰 Berita Sekolah</a></li>
+                        <li><a href="pengumuman.html">📢 Pengumuman</a></li>
+                        <li><a href="galeri.html">📷 Galeri Foto</a></li>
+                        <li><a href="kontak.html">📍 Kontak & Lokasi</a></li>
+                        <li><a href="login.html">🔐 Login Admin</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Kontak Kami</h4>
+                    <ul class="footer-contact-list">
+                        <li><span>📍</span><span>Jln. Sulawesi, RT 05 / RW 03, Dukwia, Arso Barat, Keerom, Papua 99473</span></li>
+                        <li><span>📞</span><span>0812-4821-9125</span></li>
+                        <li><span>✉️</span><span>sdninpresarso8@gmail.com</span></li>
+                        <li><span>🕒</span><span>Senin - Jumat: 07.15 - 12.30 WIT</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div>&copy; 2026 SDN Inpres Arso VIII - Pemerintah Kabupaten Keerom.</div>
+                <div>NPSN: 60300868 | Terakreditasi A (BAN-SM)</div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- FLOATING ACTIONS -->
+    <div class="floating-actions">
+        <a href="https://wa.me/6281248219125" target="_blank" class="fab fab-whatsapp" aria-label="WhatsApp">💬</a>
+        <button class="fab fab-scroll-top" aria-label="Kembali ke atas">▲</button>
+    </div>
+
+    <script src="js/data_sekolah.js?v=20261116_v51"></script>
+        <!-- MODAL LIGHTBOX GLOBAL (ZOOM FOTO DOKUMENTASI & PREVIEW) -->
+    <div class="lightbox-modal" id="globalLightbox" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.92); z-index: 999999; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; backdrop-filter: blur(4px);" onclick="if(event.target===this||event.target.classList.contains('lightbox-content'))window.closeActiveLightbox()">
+        <button type="button" class="lightbox-close" onclick="window.closeActiveLightbox()" aria-label="Tutup Tampilan" title="Tutup Tampilan (Esc)" style="position: fixed; top: 20px; right: 24px; color: #ffffff; font-size: 26px; font-weight: 800; cursor: pointer; background: rgba(15, 23, 42, 0.85); border: 2px solid rgba(255, 255, 255, 0.7); border-radius: 50%; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; z-index: 1000000; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6); transition: all 0.2s ease; outline: none;">✕</button>
+        <div class="lightbox-content" style="max-width: 92vw; max-height: 88vh; border-radius: 12px; overflow: hidden; position: relative; background: #000000; box-shadow: 0 10px 40px rgba(0,0,0,0.8); display: flex; flex-direction: column; align-items: center;">
+            <img src="" alt="Perbesar Foto" style="max-width: 100%; max-height: 80vh; object-fit: contain; display: block;" decoding="async" loading="lazy">
+            <div id="lightboxCaptionBox" style="width: 100%; background: #0f172a; color: #f8fafc; font-size: 13.5px; padding: 12px 18px; text-align: center; border-top: 1px solid rgba(255,255,255,0.15); box-sizing: border-box;">
+                <span id="lightboxCaptionText">Dokumentasi Foto SDN Inpres Arso VIII</span>
+            </div>
+        </div>
+        <div style="position: absolute; bottom: 12px; left: 0; width: 100%; text-align: center; pointer-events: none;">
+            <span style="background: rgba(0,0,0,0.65); color: #cbd5e1; font-size: 12px; padding: 4px 14px; border-radius: 9999px;">✕ Klik tombol X di pojok atas atau tekan Esc untuk menutup</span>
+        </div>
+    </div>
+
+    <script src="js/main.js?v=20261116_v51"></script>
+</body>
+</html>

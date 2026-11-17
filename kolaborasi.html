@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="aagzvzG8FxG_yRXb6rrDtTEjMk7-ePR2ghRUQnz_Keo" />
+    <meta name="description" content="Mitra dan Kolaborasi Strategis SD Negeri Inpres Arso VIII bersama Dewan Guru, Siswa, Komite, Orang Tua, Puskesmas Arso Barat, dan Pemerintah Kampung Dukwia.">
+    <title>Mitra & Kolaborasi - SDN Inpres Arso VIII</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css?v=20261116_v51">
+
+    <!-- Open Graph Preview -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Mitra & Kolaborasi - SDN Inpres Arso VIII">
+    <meta property="og:description" content="Sinergi 6 pilar kemitraan sekolah dengan guru, siswa, komite, masyarakat, Puskesmas Arso Barat, dan Pemerintah Kampung Dukwia.">
+    <meta property="og:image" content="images/gerbang-sekolah.jpg">
+    <link rel="dns-prefetch" href="https://arso8-a2bcf-default-rtdb.firebaseio.com">
+    <!-- Favicon & Mobile Touch Icons Resmi SDN Inpres Arso VIII -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="images/logo-keerom-192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon-180.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0d5c3a">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="SDN Arso VIII">
+</head>
+<body>
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <div class="container">
+            <div class="top-bar-left">
+                <div class="top-bar-item">
+                    <span>📍 Jln. Sulawesi, Kampung Dukwia, Distrik Arso Barat, Kab. Keerom - Papua</span>
+                </div>
+                <div class="top-bar-item top-bar-contact-hide">
+                    <span>📞 0812-4821-9125</span>
+                </div>
+                <div class="top-bar-item top-bar-contact-hide">
+                    <span>✉️ sdninpresarso8@gmail.com</span>
+                </div>
+            </div>
+            <div class="top-bar-right">
+                <div class="top-bar-clock" id="topBarClock" title="Waktu Indonesia Timur">
+                    <span class="clock-icon">🕒</span> <span class="live-wit-clock">WIT</span>
+                </div>
+                <a href="login.html" class="top-bar-admin-btn" title="Masuk ke Portal Admin SDN Inpres Arso VIII">
+                    <svg class="admin-user-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <span>Admin</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- HEADER & NAVIGASI -->
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="index.html" class="brand-wrapper">
+                <img src="images/logo-keerom.png" alt="Lambang Kabupaten Keerom" class="brand-logo" decoding="async">
+                <div class="brand-text">
+                    <h1>SDN INPRES ARSO VIII</h1>
+                    <p>Dinas Pendidikan dan Pengajaran Kab. Keerom - Papua (NPSN: 60300868)</p>
+                </div>
+            </a>
+
+            <button class="mobile-toggle" aria-label="Buka Menu Navigasi">☰</button>
+
+            <nav class="main-nav">
+                <a href="index.html" class="nav-link">Beranda</a>
+                <div class="nav-item-dropdown">
+                    <a href="profil.html" class="nav-link nav-dropdown-toggle">
+                        Profil Sekolah <span class="dropdown-chevron">▾</span>
+                    </a>
+                    <div class="nav-dropdown-menu">
+                        <a href="profil.html" class="nav-dropdown-item">
+                            <span class="dropdown-icon">🏛️</span>
+                            <div>
+                                <strong>Profil Sekolah</strong>
+                                <small>Sejarah, Visi Misi & Identitas</small>
+                            </div>
+                        </a>
+                        <a href="guru.html" class="nav-dropdown-item">
+                            <span class="dropdown-icon">👩‍🏫</span>
+                            <div>
+                                <strong>Dewan Guru & GTK</strong>
+                                <small>Struktur Organisasi & Tenaga Pendidik</small>
+                            </div>
+                        </a>
+                        <a href="siswa.html" class="nav-dropdown-item">
+                            <span class="dropdown-icon">👨‍🎓</span>
+                            <div>
+                                <strong>Kesiswaan</strong>
+                                <small>Data Siswa, Kelas & Rombel</small>
+                            </div>
+                        </a>
+                        <a href="sapras.html" class="nav-dropdown-item">
+                            <span class="dropdown-icon">🏫</span>
+                            <div>
+                                <strong>Sarana & Prasarana</strong>
+                                <small>Kondisi Ruang Kelas, TIK & Fasilitas</small>
+                            </div>
+                        </a>
+                        <a href="sop.html" class="nav-dropdown-item">
+                            <span class="dropdown-icon">📋</span>
+                            <div>
+                                <strong>Dokumen SOP</strong>
+                                <small>Standar Operasional Prosedur Resmi</small>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <a href="kolaborasi.html" class="nav-link active">Mitra & Kolaborasi</a>
+                <a href="pengembangan-guru.html" class="nav-link">Pengembangan Guru</a>
+                <a href="berita.html" class="nav-link">Berita</a>
+                <a href="pengumuman.html" class="nav-link">Pengumuman</a>
+                <a href="galeri.html" class="nav-link">Galeri</a>
+                <a href="kontak.html" class="nav-link">Kontak</a>
+                <a href="pengumuman.html#ppdb" class="btn-nav-action">PPDB</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- BANNER SUB-HALAMAN -->
+    <section style="background: linear-gradient(135deg, #0369a1 0%, #0284c7 60%, #0f172a 100%); color: white; padding: 50px 0;">
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+            <div>
+                <span class="badge-tag" style="background: rgba(255,255,255,0.22); font-size: 12px; margin-bottom: 12px; display: inline-block; letter-spacing: 0.5px;">KEMITRAAN STRATEGIS SEKOLAH</span>
+                <h1 style="font-size: 32px; font-weight: 800; margin-bottom: 10px; line-height: 1.25;">
+                    Mitra & Kolaborasi Komprehensif
+                </h1>
+                <p style="color: #e0f2fe; font-size: 15px; max-width: 750px; line-height: 1.6; margin: 0;">
+                    Membangun ekosistem pendidikan berkualitas, inklusif, dan berkarakter di Kampung Dukwia melalui sinergi nyata 6 pilar kemitraan: antar-guru, guru-siswa, komite, orang tua, Puskesmas Arso Barat, dan Lembaga Kampung.
+                </p>
+            </div>
+            <div class="btn-print-action">
+                <button onclick="window.print()" class="btn" style="background: white; color: #0284c7; font-weight: 700; padding: 10px 18px; border-radius: 8px; box-shadow: var(--shadow-md);">
+                    🖨️ Cetak / Simpan PDF
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- HIGHLIGHT 6 PILAR KOLABORASI -->
+    <section style="background-color: #f8fafc; padding: 40px 0 20px;">
+        <div class="container">
+            <div style="text-align: center; max-width: 700px; margin: 0 auto 35px;">
+                <span class="section-pill">6 Pilar Ekosistem</span>
+                <h2 style="font-size: 26px; font-weight: 800; color: #0f172a; margin-bottom: 8px;">Jejaring Kemitraan SDN Inpres Arso VIII</h2>
+                <p style="font-size: 14px; color: #64748b;">Kolaborasi terarah demi mencetak generasi penerus bangsa yang cerdas, beriman, sehat, dan berakhlak mulia di Kabupaten Keerom.</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 30px;">
+                <div class="card" style="padding: 18px 14px; text-align: center; border-top: 4px solid #0284c7; background: #ffffff;">
+                    <div style="font-size: 32px; margin-bottom: 8px;">👩‍🏫</div>
+                    <strong style="font-size: 13.5px; color: #0f172a; display: block; margin-bottom: 4px;">1. Guru dgn Guru</strong>
+                    <span style="font-size: 12px; color: #64748b;">Teman Sejawat & Supervisi</span>
+                </div>
+                <div class="card" style="padding: 18px 14px; text-align: center; border-top: 4px solid #10b981; background: #ffffff;">
+                    <div style="font-size: 32px; margin-bottom: 8px;">🎒</div>
+                    <strong style="font-size: 13.5px; color: #0f172a; display: block; margin-bottom: 4px;">2. Guru dgn Siswa</strong>
+                    <span style="font-size: 12px; color: #64748b;">Pendampingan & Karakter</span>
+                </div>
+                <div class="card" style="padding: 18px 14px; text-align: center; border-top: 4px solid #f59e0b; background: #ffffff;">
+                    <div style="font-size: 32px; margin-bottom: 8px;">🏛️</div>
+                    <strong style="font-size: 13.5px; color: #0f172a; display: block; margin-bottom: 4px;">3. Sekolah dgn Komite</strong>
+                    <span style="font-size: 12px; color: #64748b;">RKAS & Fasilitas</span>
+                </div>
+                <div class="card" style="padding: 18px 14px; text-align: center; border-top: 4px solid #8b5cf6; background: #ffffff;">
+                    <div style="font-size: 32px; margin-bottom: 8px;">👨‍👩‍👧‍👦</div>
+                    <strong style="font-size: 13.5px; color: #0f172a; display: block; margin-bottom: 4px;">4. Sekolah dgn Warga</strong>
+                    <span style="font-size: 12px; color: #64748b;">Paguyuban & Masyarakat</span>
+                </div>
+                <div class="card" style="padding: 18px 14px; text-align: center; border-top: 4px solid #ef4444; background: #ffffff;">
+                    <div style="font-size: 32px; margin-bottom: 8px;">🏥</div>
+                    <strong style="font-size: 13.5px; color: #0f172a; display: block; margin-bottom: 4px;">5. Sekolah dgn Puskesmas</strong>
+                    <span style="font-size: 12px; color: #64748b;">UKS, BIAS & Gizi</span>
+                </div>
+                <div class="card" style="padding: 18px 14px; text-align: center; border-top: 4px solid #14b8a6; background: #ffffff;">
+                    <div style="font-size: 32px; margin-bottom: 8px;">🏡</div>
+                    <strong style="font-size: 13.5px; color: #0f172a; display: block; margin-bottom: 4px;">6. Sekolah dgn Kampung</strong>
+                    <span style="font-size: 12px; color: #64748b;">Pemerintah Dukwia & Adat</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- RINCIAN URAIAN KERJA KEMITRAAN & KOLABORASI -->
+    <section style="padding: 30px 0 60px;">
+        <div class="container">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 25px;">
+                <div>
+                    <span class="badge-tag" style="background: #e0f2fe; color: #0369a1; font-weight: 700; font-size: 12px;">DOKUMEN PROGRAM KERJA RESMI</span>
+                    <h2 style="font-size: 24px; font-weight: 800; color: #0f172a; margin-top: 6px;">Uraian Kerja & Program Nyata 6 Kemitraan</h2>
+                </div>
+                <div style="font-size: 13px; color: #64748b;">
+                    Terakhir diperbarui: <strong>Tahun Ajaran 2026/2027</strong>
+                </div>
+            </div>
+
+            <!-- CONTAINER DINAMIS KOLABORASI -->
+                        <!-- PENCARIAN MITRA KOLABORASI -->
+            <div class="table-filter-bar" style="background: #ffffff; box-shadow: 0 2px 8px rgba(0,0,0,0.04); margin-bottom: 24px;">
+                <div class="table-filter-search">
+                    <span style="font-size: 16px;">🔍</span>
+                    <input type="text" id="publicMitraSearchInput" placeholder="Cari nama instansi mitra, pilar kerjasama, atau program kemitraan..." oninput="window.filterPublicMitra()">
+                </div>
+            </div>
+
+            <div id="kolaborasiListContainer">
+<!-- INTERACTIVE SLIDER KEMITRAAN & KOLABORASI -->
+<div class="mitra-slider-container" id="mitraSliderWrapper">
+    <div class="mitra-slider-topbar">
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <span style="background: #0284c7; color: #ffffff; font-size: 11px; font-weight: 800; padding: 4px 12px; border-radius: 999px; letter-spacing: 0.5px;">🤝 SHOWCASE PROGRAM KEMITRAAN</span>
+            <span id="mitraSlideCounter" style="font-size: 13px; font-weight: 700; color: #475569;">Pilar 1 dari 6</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <button type="button" class="mitra-nav-btn" id="mitraPrevBtn" title="Pilar Sebelumnya" aria-label="Sebelumnya">❮</button>
+            <button type="button" class="mitra-nav-btn" id="mitraNextBtn" title="Pilar Berikutnya" aria-label="Berikutnya">❯</button>
+        </div>
+    </div>
+    <div class="mitra-tabs-nav" id="mitraTabsNav">
+        <button type="button" class="mitra-tab-btn active" data-index="0" onclick="window.goToMitraSlide(0)">
+            <span>👩‍🏫</span> <span>1. Guru-Guru</span>
+        </button>
+        <button type="button" class="mitra-tab-btn" data-index="1" onclick="window.goToMitraSlide(1)">
+            <span>🎒</span> <span>2. Guru-Siswa</span>
+        </button>
+        <button type="button" class="mitra-tab-btn" data-index="2" onclick="window.goToMitraSlide(2)">
+            <span>🏛️</span> <span>3. Komite</span>
+        </button>
+        <button type="button" class="mitra-tab-btn" data-index="3" onclick="window.goToMitraSlide(3)">
+            <span>👨‍👩‍👧‍👦</span> <span>4. Paguyuban</span>
+        </button>
+        <button type="button" class="mitra-tab-btn" data-index="4" onclick="window.goToMitraSlide(4)">
+            <span>🏥</span> <span>5. Puskesmas</span>
+        </button>
+        <button type="button" class="mitra-tab-btn" data-index="5" onclick="window.goToMitraSlide(5)">
+            <span>🏡</span> <span>6. Kampung Adat</span>
+        </button>
+    </div>
+    <div class="mitra-slider-viewport" id="mitraSliderViewport">
+        <!-- SLIDE 1: 1. Kolaborasi Guru dengan Guru (Teman Sejawat) -->
+        <div class="mitra-slide active" data-index="0" style="border-left: 6px solid #0284c7;">
+            <div class="mitra-slide-grid">
+                <div class="mitra-media-col">
+                    <div class="mitra-photo-card">
+                        <div class="mitra-photo-wrapper">
+                            <img src="images/kegiatan-rapat-dewan-guru.jpg" alt="1. Kolaborasi Guru dengan Guru (Teman Sejawat)" class="mitra-photo-img" onclick="if(window.openLightboxWith) window.openLightboxWith(this.src, '1. Kolaborasi Guru dengan Guru (Teman Sejawat) - Dokumentasi musyawarah mingguan dewan guru SDN Inpres Arso VIII dalam penyelarasan Modul Ajar Kurikulum Merdeka.')" title="Klik untuk memperbesar foto (Tampilan Penuh)" decoding="async" loading="lazy">
+                            <span class="mitra-photo-badge">📸 Dokumentasi Kegiatan</span>
+                            <button type="button" class="mitra-photo-zoom-btn" onclick="if(window.openLightboxWith) window.openLightboxWith('images/kegiatan-rapat-dewan-guru.jpg', '1. Kolaborasi Guru dengan Guru (Teman Sejawat) - Dokumentasi musyawarah mingguan dewan guru SDN Inpres Arso VIII dalam penyelarasan Modul Ajar Kurikulum Merdeka.')">🔍 Perbesar Foto</button>
+                        </div>
+                        <div class="mitra-caption-box">
+                            <span style="font-size: 15px;">📌</span>
+                            <span style="font-size: 12.5px; color: #475569; line-height: 1.5;">Dokumentasi musyawarah mingguan dewan guru SDN Inpres Arso VIII dalam penyelarasan Modul Ajar Kurikulum Merdeka.</span>
+                        </div>
+                    </div>
+                    <div style="margin-top: 14px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+                        <span style="background: #dcfce7; color: #166534; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 999px;">🟢 Aktif Berjalan Rutin</span>
+                        <span style="font-size: 12px; color: #64748b;">Pilar Ke-1 dari 6</span>
+                    </div>
+                </div>
+                <div class="mitra-details-col">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                        <span style="font-size: 32px; background: #f8fafc; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 12px; border: 1px solid #e2e8f0; flex-shrink: 0;">👩‍🏫</span>
+                        <div>
+                            <span class="badge-tag" style="background: #e0f2fe; color: #0369a1; font-size: 11px; margin-bottom: 4px; display: inline-block;">PENDIDIK & TENAGA KEPENDIDIKAN</span>
+                            <h3 style="font-size: 19px; font-weight: 800; color: #0f172a; margin: 0; line-height: 1.3;">1. Kolaborasi Guru dengan Guru (Teman Sejawat)</h3>
+                        </div>
+                    </div>
+                    <p style="font-size: 14px; color: #475569; line-height: 1.6; margin-bottom: 16px;">Sinergi profesional antar-guru dalam penyusunan modul ajar, observasi kelas sejawat (peer teaching), serta berbagi praktik baik pembelajaran digital Starlink.</p>
+                    <div class="mitra-checklist-box">
+                        <h4 style="font-size: 13.5px; font-weight: 800; color: #0284c7; margin: 0 0 10px 0; display: flex; align-items: center; gap: 6px;">
+                            <span>📋</span> <span>Uraian Kerja & Program Nyata:</span>
+                        </h4>
+                        <ul class="mitra-checklist-list">
+                            <li>Mengadakan musyawarah mingguan dewan guru untuk menyelaraskan Capaian Pembelajaran (CP) dan Alur Tujuan Pembelajaran (ATP) Kurikulum Merdeka.</li>
+                            <li>Melaksanakan supervisi klinis dan observasi kelas sejawat (peer observation) untuk saling memberikan masukan konstruktif terkait metode mengajar.</li>
+                            <li>Kolaborasi guru kelas tinggi dan rendah dalam merancang asesmen diagnostik awal bagi siswa baru.</li>
+                            <li>Pendampingan intensif dari guru senior (PNS) kepada guru pemula dan honorer dalam pengelolaan administrasi kelas dan pemanfaatan media digital.</li>
+                            <li>Pemanfaatan bersama fasilitas laboratorium TIK, proyektor, dan jaringan internet satelit Starlink untuk penyusunan materi ajar interaktif.</li>
+                        </ul>
+                    </div>
+                    <div class="mitra-meta-footer">
+                        <span>👤 Penanggung Jawab: <strong style="color: #0f172a;">Warno, S.Pd.SD & Tim Kurikulum Sekolah</strong></span>
+                        <span>⏱️ Periode: <strong>Setiap Pekan & Pertemuan Berkala</strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- SLIDE 2: 2. Kolaborasi Guru dengan Siswa (Pendampingan & Karakter) -->
+        <div class="mitra-slide" data-index="1" style="border-left: 6px solid #10b981;">
+            <div class="mitra-slide-grid">
+                <div class="mitra-media-col">
+                    <div class="mitra-photo-card">
+                        <div class="mitra-photo-wrapper">
+                            <img src="images/kegiatan-belajar-kelas.jpg" alt="2. Kolaborasi Guru dengan Siswa (Pendampingan & Karakter)" class="mitra-photo-img" onclick="if(window.openLightboxWith) window.openLightboxWith(this.src, '2. Kolaborasi Guru dengan Siswa (Pendampingan & Karakter) - Dokumentasi pendampingan belajar ramah anak, literasi Calistung, dan penguatan budi pekerti di ruang kelas.')" title="Klik untuk memperbesar foto (Tampilan Penuh)" decoding="async" loading="lazy">
+                            <span class="mitra-photo-badge">📸 Dokumentasi Kegiatan</span>
+                            <button type="button" class="mitra-photo-zoom-btn" onclick="if(window.openLightboxWith) window.openLightboxWith('images/kegiatan-belajar-kelas.jpg', '2. Kolaborasi Guru dengan Siswa (Pendampingan & Karakter) - Dokumentasi pendampingan belajar ramah anak, literasi Calistung, dan penguatan budi pekerti di ruang kelas.')">🔍 Perbesar Foto</button>
+                        </div>
+                        <div class="mitra-caption-box">
+                            <span style="font-size: 15px;">📌</span>
+                            <span style="font-size: 12.5px; color: #475569; line-height: 1.5;">Dokumentasi pendampingan belajar ramah anak, literasi Calistung, dan penguatan budi pekerti di ruang kelas.</span>
+                        </div>
+                    </div>
+                    <div style="margin-top: 14px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+                        <span style="background: #dcfce7; color: #166534; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 999px;">🟢 Aktif Setiap Hari Sekolah</span>
+                        <span style="font-size: 12px; color: #64748b;">Pilar Ke-2 dari 6</span>
+                    </div>
+                </div>
+                <div class="mitra-details-col">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                        <span style="font-size: 32px; background: #f8fafc; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 12px; border: 1px solid #e2e8f0; flex-shrink: 0;">🎒</span>
+                        <div>
+                            <span class="badge-tag" style="background: #d1fae5; color: #065f46; font-size: 11px; margin-bottom: 4px; display: inline-block;">KESISWAAN & PEMBINAAN</span>
+                            <h3 style="font-size: 19px; font-weight: 800; color: #0f172a; margin: 0; line-height: 1.3;">2. Kolaborasi Guru dengan Siswa (Pendampingan & Karakter)</h3>
+                        </div>
+                    </div>
+                    <p style="font-size: 14px; color: #475569; line-height: 1.6; margin-bottom: 16px;">Hubungan pedagogis yang hangat, humanis, dan suportif demi menumbuhkan motivasi belajar, budi pekerti luhur, dan disiplin tanpa kekerasan.</p>
+                    <div class="mitra-checklist-box">
+                        <h4 style="font-size: 13.5px; font-weight: 800; color: #10b981; margin: 0 0 10px 0; display: flex; align-items: center; gap: 6px;">
+                            <span>📋</span> <span>Uraian Kerja & Program Nyata:</span>
+                        </h4>
+                        <ul class="mitra-checklist-list">
+                            <li>Pendampingan personal (tutoring) setiap pagi bagi anak-anak yang memerlukan bimbingan khusus dalam membaca, menulis, dan berhitung (Calistung).</li>
+                            <li>Pembimbingan minat dan bakat siswa melalui kegiatan ekstrakurikuler wajib Pramuka Gudep 08-013, latihan kesenian tari adat Papua, dan olahraga atletik.</li>
+                            <li>Penyelenggaraan sesi konseling sahabat anak untuk mendengarkan keluh kesah, kendala belajar, serta mengatasi potensi perundungan (anti-bullying) di lingkungan sekolah.</li>
+                            <li>Pembiasaan literasi 15 menit sebelum pelajaran dimulai di pojok baca kelas dan perpustakaan sekolah.</li>
+                            <li>Pembiasaan salam, senyum, sapa, sopan, santun (5S), doa bersama lintas agama, serta pembinaan disiplin upacara bendera dan senam pagi ceria.</li>
+                        </ul>
+                    </div>
+                    <div class="mitra-meta-footer">
+                        <span>👤 Penanggung Jawab: <strong style="color: #0f172a;">Ferdinand, S.Pd & Seluruh Wali Kelas I - VI</strong></span>
+                        <span>⏱️ Periode: <strong>Harian & Mingguan</strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- SLIDE 3: 3. Kemitraan Sekolah dengan Komite Sekolah -->
+        <div class="mitra-slide" data-index="2" style="border-left: 6px solid #f59e0b;">
+            <div class="mitra-slide-grid">
+                <div class="mitra-media-col">
+                    <div class="mitra-photo-card">
+                        <div class="mitra-photo-wrapper">
+                            <img src="images/kegiatan-evaluasi-guru.jpg" alt="3. Kemitraan Sekolah dengan Komite Sekolah" class="mitra-photo-img" onclick="if(window.openLightboxWith) window.openLightboxWith(this.src, '3. Kemitraan Sekolah dengan Komite Sekolah - Dokumentasi musyawarah pleno bersama pengurus Komite Sekolah terkait RKAS dan rencana penataan sarpras.')" title="Klik untuk memperbesar foto (Tampilan Penuh)" decoding="async" loading="lazy">
+                            <span class="mitra-photo-badge">📸 Dokumentasi Kegiatan</span>
+                            <button type="button" class="mitra-photo-zoom-btn" onclick="if(window.openLightboxWith) window.openLightboxWith('images/kegiatan-evaluasi-guru.jpg', '3. Kemitraan Sekolah dengan Komite Sekolah - Dokumentasi musyawarah pleno bersama pengurus Komite Sekolah terkait RKAS dan rencana penataan sarpras.')">🔍 Perbesar Foto</button>
+                        </div>
+                        <div class="mitra-caption-box">
+                            <span style="font-size: 15px;">📌</span>
+                            <span style="font-size: 12.5px; color: #475569; line-height: 1.5;">Dokumentasi musyawarah pleno bersama pengurus Komite Sekolah terkait RKAS dan rencana penataan sarpras.</span>
+                        </div>
+                    </div>
+                    <div style="margin-top: 14px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+                        <span style="background: #dcfce7; color: #166534; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 999px;">🟢 Mitra Resmi Terakreditasi</span>
+                        <span style="font-size: 12px; color: #64748b;">Pilar Ke-3 dari 6</span>
+                    </div>
+                </div>
+                <div class="mitra-details-col">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                        <span style="font-size: 32px; background: #f8fafc; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 12px; border: 1px solid #e2e8f0; flex-shrink: 0;">🏛️</span>
+                        <div>
+                            <span class="badge-tag" style="background: #fef3c7; color: #92400e; font-size: 11px; margin-bottom: 4px; display: inline-block;">KOMITE & TATA KELOLA</span>
+                            <h3 style="font-size: 19px; font-weight: 800; color: #0f172a; margin: 0; line-height: 1.3;">3. Kemitraan Sekolah dengan Komite Sekolah</h3>
+                        </div>
+                    </div>
+                    <p style="font-size: 14px; color: #475569; line-height: 1.6; margin-bottom: 16px;">Kerja sama strategis dalam penyusunan RKAS, pengawasan transparansi bantuan dana pendidikan, serta percepatan perbaikan fasilitas sarpras.</p>
+                    <div class="mitra-checklist-box">
+                        <h4 style="font-size: 13.5px; font-weight: 800; color: #f59e0b; margin: 0 0 10px 0; display: flex; align-items: center; gap: 6px;">
+                            <span>📋</span> <span>Uraian Kerja & Program Nyata:</span>
+                        </h4>
+                        <ul class="mitra-checklist-list">
+                            <li>Menggelar musyawarah triwulan penetapan dan evaluasi Rencana Kegiatan dan Anggaran Sekolah (RKAS) bersama Kepala Sekolah dan bendahara.</li>
+                            <li>Memberikan pertimbangan, masukan, dan rekomendasi terkait kebijakan operasional sekolah, jam belajar, dan tata tertib siswa.</li>
+                            <li>Mengawasi akuntabilitas dan transparansi pemanfaatan dana Bantuan Operasional Sekolah (BOS) demi pemerataan hak belajar anak.</li>
+                            <li>Penggalangan partisipasi swadaya komite dalam pemeliharaan sarana prasarana darurat (seperti perbaikan pagar, saluran air, dan perindangan halaman sekolah).</li>
+                            <li>Menjadi jembatan komunikasi resmi antara sekolah dengan instansi kedinasan serta donatur program peningkatan mutu pendidikan.</li>
+                        </ul>
+                    </div>
+                    <div class="mitra-meta-footer">
+                        <span>👤 Penanggung Jawab: <strong style="color: #0f172a;">Ketua Komite Sekolah & Kepala Sekolah (Adi Puspito, S.Pd)</strong></span>
+                        <span>⏱️ Periode: <strong>Triwulanan & Rapat Insidental</strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- SLIDE 4: 4. Kemitraan Sekolah dengan Orang Tua & Masyarakat -->
+        <div class="mitra-slide" data-index="3" style="border-left: 6px solid #8b5cf6;">
+            <div class="mitra-slide-grid">
+                <div class="mitra-media-col">
+                    <div class="mitra-photo-card">
+                        <div class="mitra-photo-wrapper">
+                            <img src="images/kegiatan-kebersamaan-guru.jpg" alt="4. Kemitraan Sekolah dengan Orang Tua & Masyarakat" class="mitra-photo-img" onclick="if(window.openLightboxWith) window.openLightboxWith(this.src, '4. Kemitraan Sekolah dengan Orang Tua & Masyarakat - Dokumentasi silaturahmi berkala dan pembinaan jam belajar malam mandiri bersama Paguyuban Orang Tua Kampung Dukwia.')" title="Klik untuk memperbesar foto (Tampilan Penuh)" decoding="async" loading="lazy">
+                            <span class="mitra-photo-badge">📸 Dokumentasi Kegiatan</span>
+                            <button type="button" class="mitra-photo-zoom-btn" onclick="if(window.openLightboxWith) window.openLightboxWith('images/kegiatan-kebersamaan-guru.jpg', '4. Kemitraan Sekolah dengan Orang Tua & Masyarakat - Dokumentasi silaturahmi berkala dan pembinaan jam belajar malam mandiri bersama Paguyuban Orang Tua Kampung Dukwia.')">🔍 Perbesar Foto</button>
+                        </div>
+                        <div class="mitra-caption-box">
+                            <span style="font-size: 15px;">📌</span>
+                            <span style="font-size: 12.5px; color: #475569; line-height: 1.5;">Dokumentasi silaturahmi berkala dan pembinaan jam belajar malam mandiri bersama Paguyuban Orang Tua Kampung Dukwia.</span>
+                        </div>
+                    </div>
+                    <div style="margin-top: 14px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+                        <span style="background: #dcfce7; color: #166534; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 999px;">🟢 Aktif Berkelanjutan</span>
+                        <span style="font-size: 12px; color: #64748b;">Pilar Ke-4 dari 6</span>
+                    </div>
+                </div>
+                <div class="mitra-details-col">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                        <span style="font-size: 32px; background: #f8fafc; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 12px; border: 1px solid #e2e8f0; flex-shrink: 0;">👨‍👩‍👧‍👦</span>
+                        <div>
+                            <span class="badge-tag" style="background: #ede9fe; color: #5b21b6; font-size: 11px; margin-bottom: 4px; display: inline-block;">PAGUYUBAN & WARGA</span>
+                            <h3 style="font-size: 19px; font-weight: 800; color: #0f172a; margin: 0; line-height: 1.3;">4. Kemitraan Sekolah dengan Orang Tua & Masyarakat</h3>
+                        </div>
+                    </div>
+                    <p style="font-size: 14px; color: #475569; line-height: 1.6; margin-bottom: 16px;">Pemberdayaan paguyuban kelas untuk mendukung pembelajaran anak di rumah, kehadiran pelaporan hasil belajar, serta keamanan lingkungan sekolah.</p>
+                    <div class="mitra-checklist-box">
+                        <h4 style="font-size: 13.5px; font-weight: 800; color: #8b5cf6; margin: 0 0 10px 0; display: flex; align-items: center; gap: 6px;">
+                            <span>📋</span> <span>Uraian Kerja & Program Nyata:</span>
+                        </h4>
+                        <ul class="mitra-checklist-list">
+                            <li>Pembentukan Paguyuban Orang Tua Murid pada masing-masing kelas (Kelas I sampai VI) dengan grup komunikasi koordinasi guru-wali murid.</li>
+                            <li>Penyelenggaraan kelas parenting berkala tentang pembatasan gadget di rumah dan pentingnya pendampingan jam belajar malam anak.</li>
+                            <li>Pertemuan tatap muka pembagian buku laporan pendidikan (Rapor) setiap akhir semester ganjil dan genap untuk evaluasi kemajuan belajar anak.</li>
+                            <li>Keterlibatan aktif orang tua dalam gotong royong kerja bakti kebersihan massal menyambut tahun ajaran baru dan peringatan HUT RI.</li>
+                            <li>Partisipasi masyarakat sekitar sekolah dalam menjaga keamanan lingkungan, fasilitas sekolah, dan ketertiban jalan raya saat jam masuk/pulang sekolah.</li>
+                        </ul>
+                    </div>
+                    <div class="mitra-meta-footer">
+                        <span>👤 Penanggung Jawab: <strong style="color: #0f172a;">Koordinator Paguyuban Kelas & Humas Sekolah</strong></span>
+                        <span>⏱️ Periode: <strong>Semesteran & Bulanan</strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- SLIDE 5: 5. Kemitraan Sekolah dengan Puskesmas Arso Barat -->
+        <div class="mitra-slide" data-index="4" style="border-left: 6px solid #ef4444;">
+            <div class="mitra-slide-grid">
+                <div class="mitra-media-col">
+                    <div class="mitra-photo-card">
+                        <div class="mitra-photo-wrapper">
+                            <img src="images/kegiatan-senam-bersama.jpg" alt="5. Kemitraan Sekolah dengan Puskesmas Arso Barat" class="mitra-photo-img" onclick="if(window.openLightboxWith) window.openLightboxWith(this.src, '5. Kemitraan Sekolah dengan Puskesmas Arso Barat - Dokumentasi pemeriksaan kesehatan berkala, imunisasi BIAS, dan senam kebugaran jasmani bersama tim medis Puskesmas Arso Barat.')" title="Klik untuk memperbesar foto (Tampilan Penuh)" decoding="async" loading="lazy">
+                            <span class="mitra-photo-badge">📸 Dokumentasi Kegiatan</span>
+                            <button type="button" class="mitra-photo-zoom-btn" onclick="if(window.openLightboxWith) window.openLightboxWith('images/kegiatan-senam-bersama.jpg', '5. Kemitraan Sekolah dengan Puskesmas Arso Barat - Dokumentasi pemeriksaan kesehatan berkala, imunisasi BIAS, dan senam kebugaran jasmani bersama tim medis Puskesmas Arso Barat.')">🔍 Perbesar Foto</button>
+                        </div>
+                        <div class="mitra-caption-box">
+                            <span style="font-size: 15px;">📌</span>
+                            <span style="font-size: 12.5px; color: #475569; line-height: 1.5;">Dokumentasi pemeriksaan kesehatan berkala, imunisasi BIAS, dan senam kebugaran jasmani bersama tim medis Puskesmas Arso Barat.</span>
+                        </div>
+                    </div>
+                    <div style="margin-top: 14px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+                        <span style="background: #dcfce7; color: #166534; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 999px;">🟢 MoU Resmi Aktif</span>
+                        <span style="font-size: 12px; color: #64748b;">Pilar Ke-5 dari 6</span>
+                    </div>
+                </div>
+                <div class="mitra-details-col">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                        <span style="font-size: 32px; background: #f8fafc; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 12px; border: 1px solid #e2e8f0; flex-shrink: 0;">🏥</span>
+                        <div>
+                            <span class="badge-tag" style="background: #fee2e2; color: #991b1b; font-size: 11px; margin-bottom: 4px; display: inline-block;">KESEHATAN & UKS</span>
+                            <h3 style="font-size: 19px; font-weight: 800; color: #0f172a; margin: 0; line-height: 1.3;">5. Kemitraan Sekolah dengan Puskesmas Arso Barat</h3>
+                        </div>
+                    </div>
+                    <p style="font-size: 14px; color: #475569; line-height: 1.6; margin-bottom: 16px;">Layanan kesehatan anak sekolah, imunisasi BIAS lengkap, pemeriksaan fisik berkala, penyuluhan gizi seimbang, serta pembinaan sanitasi UKS.</p>
+                    <div class="mitra-checklist-box">
+                        <h4 style="font-size: 13.5px; font-weight: 800; color: #ef4444; margin: 0 0 10px 0; display: flex; align-items: center; gap: 6px;">
+                            <span>📋</span> <span>Uraian Kerja & Program Nyata:</span>
+                        </h4>
+                        <ul class="mitra-checklist-list">
+                            <li>Pelaksanaan program rutin Bulan Imunisasi Anak Sekolah (BIAS) berupa pemberian vaksin campak, rubela, DT, dan Td bagi murid kelas 1, 2, dan 5.</li>
+                            <li>Pemeriksaan berkala status gizi anak (penimbangan berat badan dan pengukuran tinggi badan) untuk deteksi dini dan pencegahan stunting.</li>
+                            <li>Pemeriksaan kesehatan berkala indra penglihatan, pendengaran, kebersihan kuku, serta kesehatan gigi dan mulut oleh dokter gigi Puskesmas.</li>
+                            <li>Pemberian tablet obat cacing gratis setiap 6 bulan sekali untuk seluruh murid SDN Inpres Arso VIII.</li>
+                            <li>Penyuluhan Perilaku Hidup Bersih dan Sehat (PHBS), cara mencuci tangan pakai sabun dengan air mengalir, dan pembinaan kantin sekolah sehat.</li>
+                            <li>Pelatihan dan pembinaan Kader Tiwisada (Dokter Kecil) dari perwakilan siswa kelas IV dan V untuk mengelola ruang UKS sekolah.</li>
+                        </ul>
+                    </div>
+                    <div class="mitra-meta-footer">
+                        <span>👤 Penanggung Jawab: <strong style="color: #0f172a;">Tim UKS SDN Inpres Arso VIII & Tim Promkes Puskesmas Arso Barat</strong></span>
+                        <span>⏱️ Periode: <strong>Berkala per Semester & Tahunan</strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- SLIDE 6: 6. Kemitraan Sekolah dengan Lembaga Kampung -->
+        <div class="mitra-slide" data-index="5" style="border-left: 6px solid #14b8a6;">
+            <div class="mitra-slide-grid">
+                <div class="mitra-media-col">
+                    <div class="mitra-photo-card">
+                        <div class="mitra-photo-wrapper">
+                            <img src="images/kegiatan-pramuka-budaya.jpg" alt="6. Kemitraan Sekolah dengan Lembaga Kampung" class="mitra-photo-img" onclick="if(window.openLightboxWith) window.openLightboxWith(this.src, '6. Kemitraan Sekolah dengan Lembaga Kampung - Dokumentasi kegiatan ekstrakurikuler Pramuka dan latihan tari adat Papua berkolaborasi dengan Pemerintah Kampung Dukwia.')" title="Klik untuk memperbesar foto (Tampilan Penuh)" decoding="async" loading="lazy">
+                            <span class="mitra-photo-badge">📸 Dokumentasi Kegiatan</span>
+                            <button type="button" class="mitra-photo-zoom-btn" onclick="if(window.openLightboxWith) window.openLightboxWith('images/kegiatan-pramuka-budaya.jpg', '6. Kemitraan Sekolah dengan Lembaga Kampung - Dokumentasi kegiatan ekstrakurikuler Pramuka dan latihan tari adat Papua berkolaborasi dengan Pemerintah Kampung Dukwia.')">🔍 Perbesar Foto</button>
+                        </div>
+                        <div class="mitra-caption-box">
+                            <span style="font-size: 15px;">📌</span>
+                            <span style="font-size: 12.5px; color: #475569; line-height: 1.5;">Dokumentasi kegiatan ekstrakurikuler Pramuka dan latihan tari adat Papua berkolaborasi dengan Pemerintah Kampung Dukwia.</span>
+                        </div>
+                    </div>
+                    <div style="margin-top: 14px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+                        <span style="background: #dcfce7; color: #166534; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 999px;">🟢 Mitra Wilayah Resmi</span>
+                        <span style="font-size: 12px; color: #64748b;">Pilar Ke-6 dari 6</span>
+                    </div>
+                </div>
+                <div class="mitra-details-col">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                        <span style="font-size: 32px; background: #f8fafc; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 12px; border: 1px solid #e2e8f0; flex-shrink: 0;">🏡</span>
+                        <div>
+                            <span class="badge-tag" style="background: #ccfbf1; color: #115e59; font-size: 11px; margin-bottom: 4px; display: inline-block;">PEMERINTAHAN KAMPUNG DUKWIA</span>
+                            <h3 style="font-size: 19px; font-weight: 800; color: #0f172a; margin: 0; line-height: 1.3;">6. Kemitraan Sekolah dengan Lembaga Kampung</h3>
+                        </div>
+                    </div>
+                    <p style="font-size: 14px; color: #475569; line-height: 1.6; margin-bottom: 16px;">Kerja sama strategis dengan Kepala Kampung, Bamuskam, aparat kampung, dan Babinsa/Bhabinkamtibmas dalam perlindungan anak, sarana, dan kearifan lokal.</p>
+                    <div class="mitra-checklist-box">
+                        <h4 style="font-size: 13.5px; font-weight: 800; color: #14b8a6; margin: 0 0 10px 0; display: flex; align-items: center; gap: 6px;">
+                            <span>📋</span> <span>Uraian Kerja & Program Nyata:</span>
+                        </h4>
+                        <ul class="mitra-checklist-list">
+                            <li>Koordinasi rutin bersama Kepala Kampung Dukwia dan Bamuskam terkait pendataan anak usia sekolah (7-12 tahun) agar tidak ada anak putus sekolah (zero drop-out).</li>
+                            <li>Dukungan fasilitasi dari alokasi dana kampung untuk bantuan seragam dan alat tulis bagi anak-anak keluarga kurang mampu / yatim piatu di Dukwia.</li>
+                            <li>Patroli keamanan bersama Linmas Kampung, Babinsa Koramil, dan Bhabinkamtibmas Polsek Arso pada jam-jam rawan di sekitar lingkungan sekolah.</li>
+                            <li>Sinergi peringatan Hari Besar Nasional dan Keagamaan (HUT RI, 17 Agustus, Hari Pendidikan Nasional) di tingkat Kampung Dukwia.</li>
+                            <li>Pengenalan seni budaya, bahasa daerah, dan sejarah kearifan lokal Keerom melalui kolaborasi dengan tokoh adat dan sesepuh Kampung Dukwia dalam materi Projek P5.</li>
+                        </ul>
+                    </div>
+                    <div class="mitra-meta-footer">
+                        <span>👤 Penanggung Jawab: <strong style="color: #0f172a;">Kepala Sekolah & Kepala Kampung Dukwia</strong></span>
+                        <span>⏱️ Periode: <strong>Berkelanjutan Sepanjang Tahun</strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mitra-dots-bar" id="mitraDotsBar">
+        <button type="button" class="mitra-dot active" data-index="0" onclick="window.goToMitraSlide(0)" aria-label="Slide 1"></button>
+        <button type="button" class="mitra-dot" data-index="1" onclick="window.goToMitraSlide(1)" aria-label="Slide 2"></button>
+        <button type="button" class="mitra-dot" data-index="2" onclick="window.goToMitraSlide(2)" aria-label="Slide 3"></button>
+        <button type="button" class="mitra-dot" data-index="3" onclick="window.goToMitraSlide(3)" aria-label="Slide 4"></button>
+        <button type="button" class="mitra-dot" data-index="4" onclick="window.goToMitraSlide(4)" aria-label="Slide 5"></button>
+        <button type="button" class="mitra-dot" data-index="5" onclick="window.goToMitraSlide(5)" aria-label="Slide 6"></button>
+    </div>
+</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                        <img src="images/logo-keerom.png" alt="Logo Keerom" style="cursor: pointer; width: 44px; height: 44px; object-fit: contain;" onclick="if(window.openLightboxWith) window.openLightboxWith(this.src, this.alt)" title="Klik untuk perbesar foto" decoding="async" loading="lazy">
+                        <div>
+                            <h3 style="font-size: 16px; font-weight: 800; color: #ffffff; margin: 0;">SDN INPRES ARSO VIII</h3>
+                            <p style="font-size: 12px; color: #94a3b8; margin: 2px 0 0;">Kabupaten Keerom, Papua</p>
+                        </div>
+                    </div>
+                    <p style="font-size: 13px; color: #94a3b8; line-height: 1.6;">
+                        Mewujudkan generasi penerus Papua yang cerdas, beriman, berbudi pekerti luhur, dan menguasai teknologi informasi di beranda timur Indonesia.
+                    </p>
+                </div>
+                <div class="footer-col">
+                    <h4>Navigasi</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Beranda</a></li>
+                        <li><a href="profil.html">Profil Sekolah</a></li>
+                        <li><a href="guru.html">Dewan Guru & GTK</a></li>
+                        <li><a href="siswa.html">Data Kesiswaan</a></li>
+                        <li><a href="sapras.html">Sarana & Prasarana</a></li>
+                        <li><a href="kolaborasi.html">Mitra & Kolaborasi</a></li>
+                        <li><a href="pengembangan-guru.html">Pengembangan Guru (K3S/KKG)</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Layanan & Info</h4>
+                    <ul class="footer-links">
+                        <li><a href="pengumuman.html#ppdb">📝 Pendaftaran PPDB</a></li>
+                        <li><a href="berita.html">📰 Berita Sekolah</a></li>
+                        <li><a href="pengumuman.html">📢 Pengumuman</a></li>
+                        <li><a href="galeri.html">📷 Galeri Foto</a></li>
+                        <li><a href="kontak.html">📍 Kontak & Lokasi</a></li>
+                        <li><a href="login.html">🔐 Login Admin</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Kontak Kami</h4>
+                    <ul class="footer-contact-list">
+                        <li><span>📍</span><span>Jln. Sulawesi, RT 05 / RW 03, Dukwia, Arso Barat, Keerom, Papua 99473</span></li>
+                        <li><span>📞</span><span>0812-4821-9125</span></li>
+                        <li><span>✉️</span><span>sdninpresarso8@gmail.com</span></li>
+                        <li><span>🕒</span><span>Senin - Jumat: 07.15 - 12.30 WIT</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div>&copy; 2026 SDN Inpres Arso VIII - Pemerintah Kabupaten Keerom.</div>
+                <div>NPSN: 60300868 | Terakreditasi A (BAN-SM)</div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- FLOATING ACTIONS -->
+    <div class="floating-actions">
+        <a href="https://wa.me/6281248219125" target="_blank" class="fab fab-whatsapp" aria-label="WhatsApp">💬</a>
+        <button class="fab fab-scroll-top" aria-label="Kembali ke atas">▲</button>
+    </div>
+
+    <script src="js/data_sekolah.js?v=20261116_v51"></script>
+        <!-- MODAL LIGHTBOX GLOBAL (ZOOM FOTO DOKUMENTASI & PREVIEW) -->
+    <div class="lightbox-modal" id="globalLightbox" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.92); z-index: 999999; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; backdrop-filter: blur(4px);" onclick="if(event.target===this||event.target.classList.contains('lightbox-content'))window.closeActiveLightbox()">
+        <button type="button" class="lightbox-close" onclick="window.closeActiveLightbox()" aria-label="Tutup Tampilan" title="Tutup Tampilan (Esc)" style="position: fixed; top: 20px; right: 24px; color: #ffffff; font-size: 26px; font-weight: 800; cursor: pointer; background: rgba(15, 23, 42, 0.85); border: 2px solid rgba(255, 255, 255, 0.7); border-radius: 50%; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; z-index: 1000000; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6); transition: all 0.2s ease; outline: none;">✕</button>
+        <div class="lightbox-content" style="max-width: 92vw; max-height: 88vh; border-radius: 12px; overflow: hidden; position: relative; background: #000000; box-shadow: 0 10px 40px rgba(0,0,0,0.8); display: flex; flex-direction: column; align-items: center;">
+            <img src="" alt="Perbesar Foto" style="max-width: 100%; max-height: 80vh; object-fit: contain; display: block;" decoding="async" loading="lazy">
+            <div id="lightboxCaptionBox" style="width: 100%; background: #0f172a; color: #f8fafc; font-size: 13.5px; padding: 12px 18px; text-align: center; border-top: 1px solid rgba(255,255,255,0.15); box-sizing: border-box;">
+                <span id="lightboxCaptionText">Dokumentasi Foto SDN Inpres Arso VIII</span>
+            </div>
+        </div>
+        <div style="position: absolute; bottom: 12px; left: 0; width: 100%; text-align: center; pointer-events: none;">
+            <span style="background: rgba(0,0,0,0.65); color: #cbd5e1; font-size: 12px; padding: 4px 14px; border-radius: 9999px;">✕ Klik tombol X di pojok atas atau tekan Esc untuk menutup</span>
+        </div>
+    </div>
+
+    <script src="js/main.js?v=20261116_v51"></script>
+</body>
+</html>

@@ -1,0 +1,192 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 710" width="100%" height="auto" style="font-family: 'Outfit', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; display: block; margin: 0 auto; max-width: 1040px; background: #ffffff;">
+  <defs>
+    <!-- Arrowhead markers -->
+    <marker id="arrowDown" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#0284c7"/>
+    </marker>
+    <marker id="arrowLeft" viewBox="0 0 10 10" refX="2" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 10 0 L 0 5 L 10 10 z" fill="#0284c7"/>
+    </marker>
+    <marker id="arrowRight" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#0284c7"/>
+    </marker>
+
+    <!-- Soft box shadow for premium elevation -->
+    <filter id="boxShadow" x="-5%" y="-10%" width="110%" height="130%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#0f172a" flood-opacity="0.08"/>
+    </filter>
+    <filter id="kepsekShadow" x="-5%" y="-10%" width="110%" height="130%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#1e40af" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect id="canvasBg" width="1060" height="710" fill="#ffffff" rx="10"/>
+
+  <!-- ========================================== -->
+  <!-- JUDUL STRUKTUR ORGANISASI                 -->
+  <!-- ========================================== -->
+  <text x="530" y="36" text-anchor="middle" font-size="20" font-weight="800" fill="#0f172a" letter-spacing="0.5">STRUKTUR ORGANISASI SEKOLAH DASAR NEGERI INPRES ARSO VIII</text>
+  <line x1="200" y1="48" x2="860" y2="48" stroke="#e2e8f0" stroke-width="2"/>
+
+  <!-- ========================================== -->
+  <!-- KEPALA SEKOLAH (LEVEL 0)                   -->
+  <!-- ========================================== -->
+  <g transform="translate(400, 65)" filter="url(#kepsekShadow)">
+    <rect width="260" height="76" rx="8" fill="#f8fafc" stroke="#1d4ed8" stroke-width="2.5"/>
+    <rect width="260" height="6" rx="3" fill="#1d4ed8"/>
+    <text x="130" y="32" text-anchor="middle" font-size="14.5" font-weight="800" fill="#0f172a">ADI PUSPITO,S.Pd.SD</text>
+    <text x="130" y="58" text-anchor="middle" font-size="13" font-weight="800" fill="#1d4ed8" letter-spacing="1">KEPALA SEKOLAH</text>
+  </g>
+
+  <!-- Garis Utama dari Kepala Sekolah ke Baris 1 -->
+  <line x1="530" y1="141" x2="530" y2="175" stroke="#0284c7" stroke-width="2.2" marker-end="url(#arrowDown)"/>
+
+  <!-- ========================================== -->
+  <!-- CONNECTING TREE LINES                      -->
+  <!-- ========================================== -->
+  <!-- Horizontal Bar 1 (atas Row 1) -->
+  <line x1="190" y1="180" x2="870" y2="180" stroke="#0284c7" stroke-width="2.2"/>
+  
+  <!-- Panah turun ke tiap kotak Baris 1 -->
+  <line x1="190" y1="180" x2="190" y2="204" stroke="#0284c7" stroke-width="2.2" marker-end="url(#arrowDown)"/>
+  <line x1="530" y1="180" x2="530" y2="204" stroke="#0284c7" stroke-width="2.2" marker-end="url(#arrowDown)"/>
+  <line x1="870" y1="180" x2="870" y2="204" stroke="#0284c7" stroke-width="2.2" marker-end="url(#arrowDown)"/>
+
+  <!-- Garis cabang vertikal yang tembus turun ke Baris 2 & 3 -->
+  <!-- Cabang kiri di celah 1-2 (x=360) -->
+  <line x1="360" y1="180" x2="360" y2="350" stroke="#0284c7" stroke-width="2.2"/>
+  <!-- Cabang kanan di celah 2-3 (x=700) -->
+  <line x1="700" y1="180" x2="700" y2="350" stroke="#0284c7" stroke-width="2.2"/>
+
+  <!-- Horizontal Bar 2 (atas Row 2) -->
+  <line x1="190" y1="350" x2="870" y2="350" stroke="#0284c7" stroke-width="2.2"/>
+
+  <!-- Panah turun ke tiap kotak Baris 2 -->
+  <line x1="190" y1="350" x2="190" y2="374" stroke="#0284c7" stroke-width="2.2" marker-end="url(#arrowDown)"/>
+  <line x1="530" y1="350" x2="530" y2="374" stroke="#0284c7" stroke-width="2.2" marker-end="url(#arrowDown)"/>
+  <line x1="870" y1="350" x2="870" y2="374" stroke="#0284c7" stroke-width="2.2" marker-end="url(#arrowDown)"/>
+
+  <!-- Garis vertikal tembus turun ke Baris 3 -->
+  <line x1="360" y1="350" x2="360" y2="520" stroke="#0284c7" stroke-width="2.2"/>
+  <line x1="700" y1="350" x2="700" y2="520" stroke="#0284c7" stroke-width="2.2"/>
+
+  <!-- Horizontal Bar 3 (atas Row 3) -->
+  <line x1="141.5" y1="520" x2="918.5" y2="520" stroke="#0284c7" stroke-width="2.2"/>
+
+  <!-- Panah turun ke tiap kotak Baris 3 -->
+  <line x1="141.5" y1="520" x2="141.5" y2="544" stroke="#0284c7" stroke-width="2.2" marker-end="url(#arrowDown)"/>
+  <line x1="400.5" y1="520" x2="400.5" y2="544" stroke="#0284c7" stroke-width="2.2" marker-end="url(#arrowDown)"/>
+  <line x1="659.5" y1="520" x2="659.5" y2="544" stroke="#0284c7" stroke-width="2.2" marker-end="url(#arrowDown)"/>
+  <line x1="918.5" y1="520" x2="918.5" y2="544" stroke="#0284c7" stroke-width="2.2" marker-end="url(#arrowDown)"/>
+
+
+  <!-- ========================================== -->
+  <!-- BARIS 1: GURU KELAS BAWAH (I, II, III)     -->
+  <!-- ========================================== -->
+  <!-- Kotak 1: Yuli Syetia Sari (Guru Kls I) -->
+  <g transform="translate(65, 208)" filter="url(#boxShadow)">
+    <rect width="250" height="74" rx="8" fill="#ffffff" stroke="#0284c7" stroke-width="1.8"/>
+    <text x="125" y="32" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0f172a">YULI SYETIA SARI,S.Pd</text>
+    <text x="125" y="56" text-anchor="middle" font-size="12" font-weight="800" fill="#0284c7" letter-spacing="0.5">GURU KLS I</text>
+  </g>
+
+  <!-- Panah 2 Arah Horizontal: Yuli <-> Elias -->
+  <line x1="323" y1="245" x2="397" y2="245" stroke="#0284c7" stroke-width="2" marker-start="url(#arrowLeft)" marker-end="url(#arrowRight)"/>
+
+  <!-- Kotak 2: Elias Tabuni (Guru Kls II) -->
+  <g transform="translate(405, 208)" filter="url(#boxShadow)">
+    <rect width="250" height="74" rx="8" fill="#ffffff" stroke="#0284c7" stroke-width="1.8"/>
+    <text x="125" y="32" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0f172a">ELIAS TABUNI,S.Pd</text>
+    <text x="125" y="56" text-anchor="middle" font-size="12" font-weight="800" fill="#0284c7" letter-spacing="0.5">GURU KLS II</text>
+  </g>
+
+  <!-- Panah 2 Arah Horizontal: Elias <-> Rita -->
+  <line x1="663" y1="245" x2="737" y2="245" stroke="#0284c7" stroke-width="2" marker-start="url(#arrowLeft)" marker-end="url(#arrowRight)"/>
+
+  <!-- Kotak 3: Rita Paulina Wabiser (Guru Kls III) -->
+  <g transform="translate(745, 208)" filter="url(#boxShadow)">
+    <rect width="250" height="74" rx="8" fill="#ffffff" stroke="#0284c7" stroke-width="1.8"/>
+    <text x="125" y="27" text-anchor="middle" font-size="13" font-weight="700" fill="#0f172a">RITA PAULINA</text>
+    <text x="125" y="43" text-anchor="middle" font-size="13" font-weight="700" fill="#0f172a">WABISER,S.Pd</text>
+    <text x="125" y="62" text-anchor="middle" font-size="12" font-weight="800" fill="#0284c7" letter-spacing="0.5">GURU KLS III</text>
+  </g>
+
+
+  <!-- ========================================== -->
+  <!-- BARIS 2: GURU KELAS ATAS (IV, V, VI)       -->
+  <!-- ========================================== -->
+  <!-- Kotak 1: Warno (Guru Kls IV) -->
+  <g transform="translate(65, 378)" filter="url(#boxShadow)">
+    <rect width="250" height="74" rx="8" fill="#ffffff" stroke="#0284c7" stroke-width="1.8"/>
+    <text x="125" y="32" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0f172a">WARNO,S.Pd.SD</text>
+    <text x="125" y="56" text-anchor="middle" font-size="12" font-weight="800" fill="#0284c7" letter-spacing="0.5">GURU KLS IV</text>
+  </g>
+
+  <!-- Panah 2 Arah Horizontal: Warno <-> Rini -->
+  <line x1="323" y1="415" x2="397" y2="415" stroke="#0284c7" stroke-width="2" marker-start="url(#arrowLeft)" marker-end="url(#arrowRight)"/>
+
+  <!-- Kotak 2: Rini Handayani (Guru Kls V) -->
+  <g transform="translate(405, 378)" filter="url(#boxShadow)">
+    <rect width="250" height="74" rx="8" fill="#ffffff" stroke="#0284c7" stroke-width="1.8"/>
+    <text x="125" y="32" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0f172a">RINI HANDAYANI,S.Pd</text>
+    <text x="125" y="56" text-anchor="middle" font-size="12" font-weight="800" fill="#0284c7" letter-spacing="0.5">GURU KLS V</text>
+  </g>
+
+  <!-- Panah 2 Arah Horizontal: Rini <-> Cicik -->
+  <line x1="663" y1="415" x2="737" y2="415" stroke="#0284c7" stroke-width="2" marker-start="url(#arrowLeft)" marker-end="url(#arrowRight)"/>
+
+  <!-- Kotak 3: Cicik Mursidah (Guru Kls VI) -->
+  <g transform="translate(745, 378)" filter="url(#boxShadow)">
+    <rect width="250" height="74" rx="8" fill="#ffffff" stroke="#0284c7" stroke-width="1.8"/>
+    <text x="125" y="32" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0f172a">CICIK MURSIDAH,S.Pd</text>
+    <text x="125" y="56" text-anchor="middle" font-size="12" font-weight="800" fill="#0284c7" letter-spacing="0.5">GURU KLS VI</text>
+  </g>
+
+
+  <!-- ========================================== -->
+  <!-- BARIS 3: GURU MAPEL & AGAMA                -->
+  <!-- ========================================== -->
+  <!-- Kotak 1: Ferdinand (Guru Penjaskes) -->
+  <g transform="translate(34, 548)" filter="url(#boxShadow)">
+    <rect width="215" height="76" rx="8" fill="#ffffff" stroke="#0284c7" stroke-width="1.8"/>
+    <text x="107.5" y="33" text-anchor="middle" font-size="13" font-weight="700" fill="#0f172a">FERDINAND,S.Pd</text>
+    <text x="107.5" y="57" text-anchor="middle" font-size="11.5" font-weight="800" fill="#0284c7" letter-spacing="0.5">GURU PENJASKES</text>
+  </g>
+
+  <!-- Panah 2 Arah Horizontal: Ferdinand <-> Zainal -->
+  <line x1="257" y1="586" x2="285" y2="586" stroke="#0284c7" stroke-width="2" marker-start="url(#arrowLeft)" marker-end="url(#arrowRight)"/>
+
+  <!-- Kotak 2: Zainal Habib Al Arif (Guru Ag.Islam) -->
+  <g transform="translate(293, 548)" filter="url(#boxShadow)">
+    <rect width="215" height="76" rx="8" fill="#ffffff" stroke="#0284c7" stroke-width="1.8"/>
+    <text x="107.5" y="27" text-anchor="middle" font-size="12" font-weight="700" fill="#0f172a">Zainal Habib Al</text>
+    <text x="107.5" y="43" text-anchor="middle" font-size="12" font-weight="700" fill="#0f172a">Arif,S.Pd</text>
+    <text x="107.5" y="63" text-anchor="middle" font-size="11.5" font-weight="800" fill="#0284c7" letter-spacing="0.5">Guru Ag.Islam</text>
+  </g>
+
+  <!-- Panah 2 Arah Horizontal: Zainal <-> Ester -->
+  <line x1="516" y1="586" x2="544" y2="586" stroke="#0284c7" stroke-width="2" marker-start="url(#arrowLeft)" marker-end="url(#arrowRight)"/>
+
+  <!-- Kotak 3: Ester Tina Maria Panjaitan (Guru Ag.Protestan) -->
+  <g transform="translate(552, 548)" filter="url(#boxShadow)">
+    <rect width="215" height="76" rx="8" fill="#ffffff" stroke="#0284c7" stroke-width="1.8"/>
+    <text x="107.5" y="27" text-anchor="middle" font-size="11.5" font-weight="700" fill="#0f172a">Ester Tina Maria</text>
+    <text x="107.5" y="43" text-anchor="middle" font-size="11.5" font-weight="700" fill="#0f172a">Panjaitan,S.Pd</text>
+    <text x="107.5" y="63" text-anchor="middle" font-size="11.5" font-weight="800" fill="#0284c7" letter-spacing="0.5">Guru Ag.Protestan</text>
+  </g>
+
+  <!-- Panah 2 Arah Horizontal: Ester <-> Flavianus -->
+  <line x1="775" y1="586" x2="803" y2="586" stroke="#0284c7" stroke-width="2" marker-start="url(#arrowLeft)" marker-end="url(#arrowRight)"/>
+
+  <!-- Kotak 4: Flavianus Renaldus (Guru Ag.Katolik) -->
+  <g transform="translate(811, 548)" filter="url(#boxShadow)">
+    <rect width="215" height="76" rx="8" fill="#ffffff" stroke="#0284c7" stroke-width="1.8"/>
+    <text x="107.5" y="27" text-anchor="middle" font-size="12" font-weight="700" fill="#0f172a">Flavianus</text>
+    <text x="107.5" y="43" text-anchor="middle" font-size="12" font-weight="700" fill="#0f172a">Renaldus,S.Ag</text>
+    <text x="107.5" y="63" text-anchor="middle" font-size="11.5" font-weight="800" fill="#0284c7" letter-spacing="0.5">Guru Ag.Katolik</text>
+  </g>
+
+  <!-- Keterangan Alur Hubungan Kerja -->
+  <text x="530" y="685" text-anchor="middle" font-size="12" fill="#64748b" font-weight="600">Ket: Garis vertikal (▼) Garis Instruksi / Pembinaan Kepala Sekolah  &#8226;  Garis horizontal (◄►) Hubungan Koordinasi Antar Guru</text>
+</svg>

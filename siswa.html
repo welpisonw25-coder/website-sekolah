@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="aagzvzG8FxG_yRXb6rrDtTEjMk7-ePR2ghRUQnz_Keo" />
+    <meta name="description" content="Data Statistik Siswa, Rombel, dan Kegiatan Ekstrakurikuler SD Negeri Inpres Arso VIII Tahun Ajaran 2026/2027.">
+    <title>Data Kesiswaan & Rombel - SDN Inpres Arso VIII</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css?v=20261116_v51">
+    <!-- Open Graph / Media Sosial Preview -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Data Siswa & Kesiswaan - SDN Inpres Arso VIII">
+    <meta property="og:description" content="Statistik kesiswaan 161 siswa, rasio kelas 1 s.d. 6, dan tata tertib peserta didik SD Negeri Inpres Arso VIII.">
+    <meta property="og:image" content="images/gerbang-sekolah.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Data Siswa & Kesiswaan - SDN Inpres Arso VIII">
+    <meta name="twitter:description" content="Statistik kesiswaan 161 siswa, rasio kelas 1 s.d. 6, dan tata tertib peserta didik SD Negeri Inpres Arso VIII.">
+    <meta name="twitter:image" content="images/gerbang-sekolah.jpg">
+    <link rel="dns-prefetch" href="https://arso8-a2bcf-default-rtdb.firebaseio.com">
+    <!-- Favicon & Mobile Touch Icons Resmi SDN Inpres Arso VIII -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="images/logo-keerom-192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon-180.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0d5c3a">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="SDN Arso VIII">
+</head>
+<body>
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <div class="container">
+            <div class="top-bar-left">
+                <div class="top-bar-item">
+                    <span>📍 Jln. Sulawesi, Kampung Dukwia, Distrik Arso Barat, Kab. Keerom - Papua</span>
+                </div>
+                <div class="top-bar-item top-bar-contact-hide">
+                    <span>📞 0812-4821-9125</span>
+                </div>
+                <div class="top-bar-item top-bar-contact-hide">
+                    <span>✉️ sdninpresarso8@gmail.com</span>
+                </div>
+            </div>
+            <div class="top-bar-right">
+                <div class="top-bar-clock" id="topBarClock" title="Waktu Indonesia Timur">
+                    <span class="clock-icon">🕒</span> <span class="live-wit-clock">WIT</span>
+                </div>
+                <a href="login.html" class="top-bar-admin-btn" title="Masuk ke Portal Admin SDN Inpres Arso VIII">
+                    <svg class="admin-user-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <span>Admin</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- HEADER & NAVIGASI -->
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="index.html" class="brand-wrapper">
+                <img src="images/logo-keerom.png" alt="Lambang Kabupaten Keerom" class="brand-logo" decoding="async">
+                <div class="brand-text">
+                    <h1>SDN INPRES ARSO VIII</h1>
+                    <p>Dinas Pendidikan dan Pengajaran Kab. Keerom - Papua (NPSN: 60300868)</p>
+                </div>
+            </a>
+
+            <button class="mobile-toggle" aria-label="Buka Menu Navigasi">☰</button>
+
+            <nav class="main-nav">
+                <a href="index.html" class="nav-link">Beranda</a>
+                <div class="nav-item-dropdown">
+                    <a href="profil.html" class="nav-link nav-dropdown-toggle active">
+                        Profil Sekolah <span class="dropdown-chevron">▾</span>
+                    </a>
+                    <div class="nav-dropdown-menu">
+                        <a href="profil.html" class="nav-dropdown-item">
+                            <span class="dropdown-icon">🏛️</span>
+                            <div>
+                                <strong>Profil Sekolah</strong>
+                                <small>Sejarah, Visi Misi & Identitas</small>
+                            </div>
+                        </a>
+                        <a href="guru.html" class="nav-dropdown-item">
+                            <span class="dropdown-icon">👩‍🏫</span>
+                            <div>
+                                <strong>Dewan Guru & GTK</strong>
+                                <small>Struktur Organisasi & Tenaga Pendidik</small>
+                            </div>
+                        </a>
+                        <a href="siswa.html" class="nav-dropdown-item active">
+                            <span class="dropdown-icon">👨‍🎓</span>
+                            <div>
+                                <strong>Kesiswaan</strong>
+                                <small>Data Siswa, Kelas & Rombel</small>
+                            </div>
+                        </a>
+                        <a href="sapras.html" class="nav-dropdown-item">
+                            <span class="dropdown-icon">🏫</span>
+                            <div>
+                                <strong>Sarana & Prasarana</strong>
+                                <small>Kondisi Ruang Kelas, TIK & Fasilitas</small>
+                            </div>
+                        </a>
+                        <a href="sop.html" class="nav-dropdown-item">
+                            <span class="dropdown-icon">📋</span>
+                            <div>
+                                <strong>Dokumen SOP</strong>
+                                <small>Standar Operasional Prosedur Resmi</small>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <a href="kolaborasi.html" class="nav-link">Mitra & Kolaborasi</a>
+                <a href="pengembangan-guru.html" class="nav-link">Pengembangan Guru</a>
+                <a href="berita.html" class="nav-link">Berita</a>
+                <a href="pengumuman.html" class="nav-link">Pengumuman</a>
+                <a href="galeri.html" class="nav-link">Galeri</a>
+                <a href="kontak.html" class="nav-link">Kontak</a>
+                <a href="pengumuman.html#ppdb" class="btn-nav-action">PPDB</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- BANNER SUB-HALAMAN -->
+    <section style="background: linear-gradient(135deg, var(--primary-dark), var(--primary)); color: white; padding: 45px 0;">
+        <div class="container">
+            <span class="badge-tag" style="background: rgba(255,255,255,0.2); font-size: 12px; margin-bottom: 10px; display: inline-block;">DATA KESISWAAN</span>
+            <h1 style="font-size: 32px; font-weight: 800; margin-bottom: 8px;">Statistik Siswa & Rombel Belajar</h1>
+            <p style="color: #e2e8f0; font-size: 15px; max-width: 700px;">
+                Informasi persebaran 157 peserta didik pada 6 rombongan belajar aktif Tahun Ajaran 2026/2027 serta program pengembangan karakter siswa.
+            </p>
+        </div>
+    </section>
+
+    <!-- KONTEN UTAMA -->
+    <section>
+        <div class="container">
+
+            <!-- KARTU REKAP CEPAT -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 35px;">
+                <div class="card" style="padding: 24px; border-left: 5px solid var(--primary); text-align: center;">
+                    <div style="font-size: 13px; color: var(--dark-muted); font-weight: 700; text-transform: uppercase;">Total Peserta Didik</div>
+                    <div id="countTotalSiswa" style="font-size: 36px; font-weight: 800; color: var(--primary); margin: 6px 0;">157</div>
+                    <div style="font-size: 12.5px; color: #64748b;">Siswa Aktif T.A. 2026/2027</div>
+                </div>
+
+                <div class="card" style="padding: 24px; border-left: 5px solid #2563eb; text-align: center;">
+                    <div style="font-size: 13px; color: var(--dark-muted); font-weight: 700; text-transform: uppercase;">Siswa Laki-Laki</div>
+                    <div id="countSiswaL" style="font-size: 36px; font-weight: 800; color: #2563eb; margin: 6px 0;">76</div>
+                    <div id="propSiswaL" style="font-size: 12.5px; color: #64748b;">Proporsi 48.4%</div>
+                </div>
+
+                <div class="card" style="padding: 24px; border-left: 5px solid #db2777; text-align: center;">
+                    <div style="font-size: 13px; color: var(--dark-muted); font-weight: 700; text-transform: uppercase;">Siswa Perempuan</div>
+                    <div id="countSiswaP" style="font-size: 36px; font-weight: 800; color: #db2777; margin: 6px 0;">79</div>
+                    <div id="propSiswaP" style="font-size: 12.5px; color: #64748b;">Proporsi 51.6%</div>
+                </div>
+
+                <div class="card" style="padding: 24px; border-left: 5px solid var(--secondary); text-align: center;">
+                    <div style="font-size: 13px; color: var(--dark-muted); font-weight: 700; text-transform: uppercase;">Rombongan Belajar</div>
+                    <div id="countSiswaRombel" style="font-size: 36px; font-weight: 800; color: var(--secondary); margin: 6px 0;">6</div>
+                    <div style="font-size: 12.5px; color: #64748b;">Kelas I sampai Kelas VI</div>
+                </div>
+            </div>
+
+            <!-- TABEL DATA SISWA RESMI -->
+            <div class="card" style="padding: 30px; margin-bottom: 40px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; margin-bottom: 20px;">
+                    <div>
+                        <span class="section-pill">Data Periodik</span>
+                        <h2 style="font-size: 22px; color: var(--primary-dark); font-weight: 800;">Tabel Data Siswa Tahun Ajaran 2026/2027</h2>
+                    </div>
+                    <button onclick="window.print()" class="btn btn-primary" style="padding: 8px 16px; font-size: 13px;">🖨️ Cetak Rekap Siswa</button>
+                </div>
+
+                <div class="data-table-wrapper" style="margin-bottom: 10px;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 60px; text-align: center;">NO</th>
+                                <th>TINGKAT KELAS</th>
+                                <th>WALI KELAS</th>
+                                <th style="text-align: center; color: #93c5fd;">LAKI-LAKI (L)</th>
+                                <th style="text-align: center; color: #fbcfe8;">PEREMPUAN (P)</th>
+                                <th style="text-align: center;">TOTAL SISWA</th>
+                                <th>ROMBEL</th>
+                            </tr>
+                        </thead>
+                        <tbody id="siswaPublicTableBody">
+                            <tr>
+                                <td style="text-align: center; font-weight: bold;">1</td>
+                                <td><strong>Kelas I (Satu)</strong></td>
+                                <td>Yuli Syetia Sari, S.Pd</td>
+                                <td style="text-align: center; font-weight: 700; color: #1d4ed8;">11</td>
+                                <td style="text-align: center; font-weight: 700; color: #be185d;">15</td>
+                                <td style="text-align: center; font-weight: 800; font-size: 15px;">26</td>
+                                <td>1 Rombel</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center; font-weight: bold;">2</td>
+                                <td><strong>Kelas II (Dua)</strong></td>
+                                <td>Elias Tabuni, S.Pd</td>
+                                <td style="text-align: center; font-weight: 700; color: #1d4ed8;">14</td>
+                                <td style="text-align: center; font-weight: 700; color: #be185d;">11</td>
+                                <td style="text-align: center; font-weight: 800; font-size: 15px;">25</td>
+                                <td>1 Rombel</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center; font-weight: bold;">3</td>
+                                <td><strong>Kelas III (Tiga)</strong></td>
+                                <td>Rita Paulina Wabiser, S.Pd</td>
+                                <td style="text-align: center; font-weight: 700; color: #1d4ed8;">14</td>
+                                <td style="text-align: center; font-weight: 700; color: #be185d;">13</td>
+                                <td style="text-align: center; font-weight: 800; font-size: 15px;">27</td>
+                                <td>1 Rombel</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center; font-weight: bold;">4</td>
+                                <td><strong>Kelas IV (Empat)</strong></td>
+                                <td>Warno, S.Pd.SD</td>
+                                <td style="text-align: center; font-weight: 700; color: #1d4ed8;">12</td>
+                                <td style="text-align: center; font-weight: 700; color: #be185d;">11</td>
+                                <td style="text-align: center; font-weight: 800; font-size: 15px;">23</td>
+                                <td>1 Rombel</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center; font-weight: bold;">5</td>
+                                <td><strong>Kelas V (Lima)</strong></td>
+                                <td>Rini Handayani, S.Pd</td>
+                                <td style="text-align: center; font-weight: 700; color: #1d4ed8;">13</td>
+                                <td style="text-align: center; font-weight: 700; color: #be185d;">14</td>
+                                <td style="text-align: center; font-weight: 800; font-size: 15px;">27</td>
+                                <td>1 Rombel</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center; font-weight: bold;">6</td>
+                                <td><strong>Kelas VI (Enam)</strong></td>
+                                <td>Cicik Mursidah, S.Pd</td>
+                                <td style="text-align: center; font-weight: 700; color: #1d4ed8;">13</td>
+                                <td style="text-align: center; font-weight: 700; color: #be185d;">16</td>
+                                <td style="text-align: center; font-weight: 800; font-size: 15px;">29</td>
+                                <td>1 Rombel</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" style="text-align: right; padding-right: 20px; font-weight: 800;">JUMLAH TOTAL:</td>
+                                <td id="publicTotalL" style="text-align: center; color: #1d4ed8; font-size: 16px; font-weight: 800;">76</td>
+                                <td id="publicTotalP" style="text-align: center; color: #be185d; font-size: 16px; font-weight: 800;">79</td>
+                                <td id="publicTotalAll" style="text-align: center; color: var(--primary); font-size: 18px; font-weight: 800;">157</td>
+                                <td style="font-weight: 700;">6 Rombel</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <!-- GRAFIK VISUALISASI KELAS (PURE CSS / RESPONSIVE) -->
+            <div class="card" style="padding: 30px; margin-bottom: 40px;">
+                <h3 style="font-size: 19px; color: var(--primary-dark); font-weight: 800; margin-bottom: 20px;">
+                    📊 Grafik Komparasi Siswa per Tingkatan Kelas
+                </h3>
+
+                <div id="siswaGrafikContainer" style="display: flex; flex-direction: column; gap: 16px;">
+                    <!-- KELAS 1 -->
+                    <div>
+                        <div style="display: flex; justify-content: space-between; font-size: 13.5px; font-weight: 700; margin-bottom: 6px;">
+                            <span>Kelas I (Total: 26 Siswa)</span>
+                            <span>Laki-laki: 11 | Perempuan: 15</span>
+                        </div>
+                        <div style="height: 24px; background: #e2e8f0; border-radius: 6px; overflow: hidden; display: flex;">
+                            <div style="width: 42.3%; background: #2563eb; color: white; font-size: 11px; display: flex; align-items: center; justify-content: center; font-weight: bold;">11 L</div>
+                            <div style="width: 57.7%; background: #db2777; color: white; font-size: 11px; display: flex; align-items: center; justify-content: center; font-weight: bold;">15 P</div>
+                        </div>
+                    </div>
+
+                    <!-- KELAS 2 -->
+                    <div>
+                        <div style="display: flex; justify-content: space-between; font-size: 13.5px; font-weight: 700; margin-bottom: 6px;">
+                            <span>Kelas II (Total: 25 Siswa)</span>
+                            <span>Laki-laki: 14 | Perempuan: 11</span>
+                        </div>
+                        <div style="height: 24px; background: #e2e8f0; border-radius: 6px; overflow: hidden; display: flex;">
+                            <div style="width: 56%; background: #2563eb; color: white; font-size: 11px; display: flex; align-items: center; justify-content: center; font-weight: bold;">14 L</div>
+                            <div style="width: 44%; background: #db2777; color: white; font-size: 11px; display: flex; align-items: center; justify-content: center; font-weight: bold;">11 P</div>
+                        </div>
+                    </div>
+
+                    <!-- KELAS 3 -->
+                    <div>
+                        <div style="display: flex; justify-content: space-between; font-size: 13.5px; font-weight: 700; margin-bottom: 6px;">
+                            <span>Kelas III (Total: 27 Siswa)</span>
+                            <span>Laki-laki: 14 | Perempuan: 13</span>
+                        </div>
+                        <div style="height: 24px; background: #e2e8f0; border-radius: 6px; overflow: hidden; display: flex;">
+                            <div style="width: 51.8%; background: #2563eb; color: white; font-size: 11px; display: flex; align-items: center; justify-content: center; font-weight: bold;">14 L</div>
+                            <div style="width: 48.2%; background: #db2777; color: white; font-size: 11px; display: flex; align-items: center; justify-content: center; font-weight: bold;">13 P</div>
+                        </div>
+                    </div>
+
+                    <!-- KELAS 4 -->
+                    <div>
+                        <div style="display: flex; justify-content: space-between; font-size: 13.5px; font-weight: 700; margin-bottom: 6px;">
+                            <span>Kelas IV (Total: 23 Siswa)</span>
+                            <span>Laki-laki: 12 | Perempuan: 11</span>
+                        </div>
+                        <div style="height: 24px; background: #e2e8f0; border-radius: 6px; overflow: hidden; display: flex;">
+                            <div style="width: 52.2%; background: #2563eb; color: white; font-size: 11px; display: flex; align-items: center; justify-content: center; font-weight: bold;">12 L</div>
+                            <div style="width: 47.8%; background: #db2777; color: white; font-size: 11px; display: flex; align-items: center; justify-content: center; font-weight: bold;">11 P</div>
+                        </div>
+                    </div>
+
+                    <!-- KELAS 5 -->
+                    <div>
+                        <div style="display: flex; justify-content: space-between; font-size: 13.5px; font-weight: 700; margin-bottom: 6px;">
+                            <span>Kelas V (Total: 27 Siswa)</span>
+                            <span>Laki-laki: 13 | Perempuan: 14</span>
+                        </div>
+                        <div style="height: 24px; background: #e2e8f0; border-radius: 6px; overflow: hidden; display: flex;">
+                            <div style="width: 48.1%; background: #2563eb; color: white; font-size: 11px; display: flex; align-items: center; justify-content: center; font-weight: bold;">13 L</div>
+                            <div style="width: 51.9%; background: #db2777; color: white; font-size: 11px; display: flex; align-items: center; justify-content: center; font-weight: bold;">14 P</div>
+                        </div>
+                    </div>
+
+                    <!-- KELAS 6 -->
+                    <div>
+                        <div style="display: flex; justify-content: space-between; font-size: 13.5px; font-weight: 700; margin-bottom: 6px;">
+                            <span>Kelas VI (Total: 29 Siswa)</span>
+                            <span>Laki-laki: 13 | Perempuan: 16</span>
+                        </div>
+                        <div style="height: 24px; background: #e2e8f0; border-radius: 6px; overflow: hidden; display: flex;">
+                            <div style="width: 44.8%; background: #2563eb; color: white; font-size: 11px; display: flex; align-items: center; justify-content: center; font-weight: bold;">13 L</div>
+                            <div style="width: 55.2%; background: #db2777; color: white; font-size: 11px; display: flex; align-items: center; justify-content: center; font-weight: bold;">16 P</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 20px; justify-content: center; margin-top: 24px; font-size: 13px;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="display: inline-block; width: 14px; height: 14px; background: #2563eb; border-radius: 3px;"></span>
+                        <span>Siswa Laki-Laki (76)</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="display: inline-block; width: 14px; height: 14px; background: #db2777; border-radius: 3px;"></span>
+                        <span>Siswa Perempuan (79)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EKSTRAKURIKULER & PENGEMBANGAN DIRI -->
+            <div style="margin-bottom: 40px;">
+                <div class="section-header">
+                    <span class="section-pill">Bakat & Minat</span>
+                    <h2 class="section-title">Kegiatan Ekstrakurikuler</h2>
+                    <p class="section-desc">Mewadahi kreativitas, ketahanan fisik, kepemimpinan, dan pelestarian seni budaya siswa.</p>
+                </div>
+
+                <div class="features-grid">
+                    <div class="feature-box">
+                        <div class="feature-icon-wrapper">⛺</div>
+                        <h3 class="feature-title">Gerakan Pramuka</h3>
+                        <p class="feature-desc">
+                            Kegiatan wajib untuk melatih kedisiplinan, kemandirian, gotong royong, dan kecintaan pada tanah air bagi Pramuka Siaga dan Penggalang.
+                        </p>
+                    </div>
+
+                    <div class="feature-box">
+                        <div class="feature-icon-wrapper">⚽</div>
+                        <h3 class="feature-title">Olahraga Atletik & Sepak Bola</h3>
+                        <p class="feature-desc">
+                            Memanfaatkan halaman sekolah yang luas untuk pembinaan bakat olahraga seperti sepak bola, voli, lari cepat, dan senam kebugaran.
+                        </p>
+                    </div>
+
+                    <div class="feature-box">
+                        <div class="feature-icon-wrapper">🎭</div>
+                        <h3 class="feature-title">Seni Musik & Tari Papua</h3>
+                        <p class="feature-desc">
+                            Mengenalkan dan melestarikan kekayaan budaya khas Keerom dan Papua melalui sanggar tari tradisional serta nyanyian daerah.
+                        </p>
+                    </div>
+
+                    <div class="feature-box">
+                        <div class="feature-icon-wrapper">💻</div>
+                        <h3 class="feature-title">Literasi Digital & Komputer</h3>
+                        <p class="feature-desc">
+                            Pengenalan dasar komputer, pengetikan, dan pencarian edukatif memanfaatkan koneksi internet Starlink di ruang TIK sekolah.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        
+            <!-- ==========================================
+                 SOP TATA TERTIB & DISIPLIN KESISWAAN
+                 ========================================== -->
+            <div style="margin-top: 50px; margin-bottom: 30px;">
+                <div class="section-header">
+                    <span class="section-pill">SOP & Tata Tertib Siswa</span>
+                    <h2 class="section-title">Kedisiplinan, Jam Belajar & Pembiasaan Karakter</h2>
+                    <p class="section-desc">Pedoman resmi tata tertib peserta didik, larangan keras sekolah, jam pembelajaran per jenjang, dan seragam sekolah.</p>
+                </div>
+
+                <!-- TATA TERTIB MASUK & HARIAN -->
+                <div class="card" style="padding: 28px; margin-bottom: 25px; border-left: 5px solid var(--primary);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+                        <h3 style="font-size: 18px; color: var(--primary-dark); font-weight: 800; margin: 0;">
+                            ✨ 14 Ketentuan Tata Tertib Peserta Didik
+                        </h3>
+                        <a href="sop.html" class="btn btn-secondary" style="font-size: 12px; padding: 6px 14px; background: #e0f2fe; color: #0369a1; border-color: #bae6fd;">Dokumen SOP Lengkap →</a>
+                    </div>
+                    <ol style="margin: 0; padding-left: 20px; font-size: 14px; color: #334155; line-height: 1.7; display: flex; flex-direction: column; gap: 6px;">
+                        <li><strong>Hadir Jam 07.00 WIT</strong> sebelum jam pembelajaran dimulai.</li>
+                        <li><strong>Budaya 5S</strong> – Senyum, salam, sapa, sopan, dan santun kepada guru dan teman.</li>
+                        <li><strong>Upacara Bendera</strong> – Wajib mengikuti upacara setiap hari Senin dengan seragam lengkap.</li>
+                        <li><strong>Kebersihan Lingkungan</strong> – Wajib memungut sampah dan membuang pada tempatnya.</li>
+                        <li><strong>Piket Kelas</strong> – Petugas piket wajib datang lebih awal membersihkan kelas dan MCK.</li>
+                        <li><strong>Jam Pembelajaran</strong> – Dimulai pukul 07.30 WIT dan berakhir hingga pukul 14.00 WIT.</li>
+                        <li><strong>Berdoa Bersama</strong> – Membudayakan berdoa sebelum dan sesudah pembelajaran.</li>
+                        <li><strong>Berbaris Rapi</strong> sebelum masuk ruang kelas.</li>
+                        <li><strong>Rak Sepatu</strong> – Meletakkan sepatu secara tertib pada rak sepatu depan kelas.</li>
+                        <li><strong>Berjabat Tangan</strong> dengan bapak/ibu guru saat memasuki kelas.</li>
+                        <li><strong>Adab Makan Sehat & MBG</strong> – Membudayakan cuci tangan pakai sabun dan berdoa sebelum makan bekal atau MBG.</li>
+                        <li><strong>Izin Ketidakhadiran</strong> – Wajib menyampaikan surat izin orang tua jika sakit/berhalangan.</li>
+                        <li><strong>Keamanan Pagar</strong> – Dilarang keluar pagar sekolah tanpa izin guru.</li>
+                        <li><strong>Kantin Sehat</strong> – Dilarang berbelanja makanan di luar lingkungan sekolah.</li>
+                    </ol>
+
+                    <!-- LARANGAN -->
+                    <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 16px; margin-top: 18px;">
+                        <div style="color: #b91c1c; font-weight: 800; font-size: 14.5px; margin-bottom: 8px;">
+                            ⛔ Larangan Tegas Peserta Didik (Zero Tolerance):
+                        </div>
+                        <ul style="margin: 0; padding-left: 20px; font-size: 13.5px; color: #991b1b; display: flex; flex-direction: column; gap: 4px;">
+                            <li>Dilarang mencoret-coret dinding sekolah, meja, dan kursi.</li>
+                            <li>Dilarang berbicara tidak sopan atau berkata kotor.</li>
+                            <li>Dilarang bermain di lingkungan sekolah di luar jam sekolah tanpa izin guru.</li>
+                            <li>Dilarang merusak taman atau tanaman penghijauan sekolah.</li>
+                            <li>Dilarang menyembunyikan sepatu, tas, atau alat tulis temannya.</li>
+                            <li>Dilarang keras melakukan perundungan (bullying) atau kekerasan fisik dan verbal.</li>
+                            <li>Dilarang merokok, memakai narkoba, dan mengonsumsi minuman keras (miras).</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- JADWAL JAM BELAJAR PER JENJANG KELAS -->
+                <div class="card" style="padding: 28px; margin-bottom: 25px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+                        <h3 style="font-size: 18px; color: var(--primary-dark); font-weight: 800; margin: 0;">
+                            ⏰ Jadwal Jam Pembelajaran & Literasi 10 Menit
+                        </h3>
+                        <span style="background: #eff6ff; color: #1e40af; padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 700;">Semua Kelas: Wajib Literasi 10 Menit di Awal Jam</span>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-top: 14px;">
+                        <div style="background: #f8fafc; border-radius: 8px; padding: 16px; border-top: 3px solid #2563eb;">
+                            <strong style="color: #1d4ed8; font-size: 15px; display: block; margin-bottom: 8px;">KELAS 1</strong>
+                            <div style="font-size: 13.5px; color: #334155; line-height: 1.6;">
+                                <div>• 07.30 – 09.00: Pembelajaran Sesi I</div>
+                                <div style="color: #b45309;">• 09.00 – 09.15: Istirahat</div>
+                                <div>• 09.15 – 10.45: Pembelajaran Sesi II (Pulang)</div>
+                            </div>
+                        </div>
+
+                        <div style="background: #f8fafc; border-radius: 8px; padding: 16px; border-top: 3px solid #059669;">
+                            <strong style="color: #047857; font-size: 15px; display: block; margin-bottom: 8px;">KELAS 2 & 3</strong>
+                            <div style="font-size: 13.5px; color: #334155; line-height: 1.6;">
+                                <div>• 07.30 – 09.00: Pembelajaran Sesi I</div>
+                                <div style="color: #b45309;">• 09.00 – 09.15: Istirahat</div>
+                                <div>• 09.15 – 11.55: Pembelajaran Sesi II (Pulang)</div>
+                            </div>
+                        </div>
+
+                        <div style="background: #f8fafc; border-radius: 8px; padding: 16px; border-top: 3px solid #d97706;">
+                            <strong style="color: #b45309; font-size: 15px; display: block; margin-bottom: 8px;">KELAS 4, 5, & 6</strong>
+                            <div style="font-size: 13.5px; color: #334155; line-height: 1.6;">
+                                <div>• 07.30 – 09.15: Pembelajaran Sesi I</div>
+                                <div style="color: #b45309;">• 09.15 – 09.30: Istirahat I</div>
+                                <div>• 09.30 – 10.40: Pembelajaran Sesi II</div>
+                                <div style="color: #b45309;">• 10.40 – 10.55: Istirahat II</div>
+                                <div>• 10.55 – 13.00: Pembelajaran Sesi III (Pulang / Ekstra s.d 14.00)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- JADWAL SERAGAM SISWA & JUMAT BERSIH -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px;">
+                    <div class="card" style="padding: 24px;">
+                        <h4 style="font-size: 16px; color: var(--primary-dark); font-weight: 800; margin: 0 0 12px;">
+                            🎒 Jadwal Seragam Siswa
+                        </h4>
+                        <div style="font-size: 13.5px; color: #334155; display: flex; flex-direction: column; gap: 8px;">
+                            <div><strong>Senin & Selasa:</strong> Seragam Putih-Merah lengkap (topi, dasi)</div>
+                            <div><strong>Rabu & Kamis:</strong> Seragam Batik Khas Papua</div>
+                            <div><strong>Hari Jumat:</strong> Seragam Pramuka Lengkap</div>
+                            <div><strong>Mata Pelajaran Olahraga:</strong> Kaos Olahraga Sekolah</div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="padding: 24px;">
+                        <h4 style="font-size: 16px; color: var(--primary-dark); font-weight: 800; margin: 0 0 12px;">
+                            🏃 Program Jumat Sehat & Bersih
+                        </h4>
+                        <p style="font-size: 13.5px; color: #334155; line-height: 1.6; margin: 0;">
+                            Pukul <strong>07.00 WIT</strong> seluruh siswa dan guru berkumpul di halaman sekolah melaksanakan <strong>Senam Sehat Bersama</strong>, dilanjutkan aksi kurve gotong royong pembersihan serentak lingkungan kelas, halaman, taman, dan fasilitas MCK.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                        <img src="images/logo-keerom.png" alt="Logo Keerom" style="width: 44px; height: 44px; object-fit: contain;" decoding="async" loading="lazy">
+                        <div>
+                            <h4 style="margin: 0; padding: 0; font-size: 16px; border: none;">SDN INPRES ARSO VIII</h4>
+                            <span style="font-size: 12px; color: #94a3b8;">Kabupaten Keerom, Papua</span>
+                        </div>
+                    </div>
+                    <p>Lembaga pendidikan dasar negeri yang mendidik 157 putra-putri di Kampung Dukwia, Arso Barat. Berorientasi pada pembinaan iman, karakter mulia, dan kecakapan IPTEK.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Menu Utama</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">🏠 Beranda</a></li>
+                        <li><a href="profil.html">📖 Profil & Visi Misi</a></li>
+                        <li><a href="guru.html">👩‍🏫 Dewan Guru & GTK</a></li>
+                        <li><a href="siswa.html">👨‍🎓 Data Kesiswaan</a></li>
+                        <li><a href="sop.html">📜 SOP & Tata Tertib</a></li>
+                        <li><a href="sapras.html">🏫 Kondisi Sarpras</a></li>
+                        <li><a href="kolaborasi.html">🤝 Mitra & Kolaborasi</a></li>
+                        <li><a href="pengembangan-guru.html">📚 Pengembangan Guru (K3S/KKG)</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Layanan</h4>
+                    <ul class="footer-links">
+                        <li><a href="pengumuman.html#ppdb">📝 Pendaftaran PPDB</a></li>
+                        <li><a href="berita.html">📰 Berita & Kegiatan</a></li>
+                        <li><a href="galeri.html">📷 Galeri Foto</a></li>
+                        <li><a href="kontak.html">📍 Kontak & Lokasi</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Kontak Kami</h4>
+                    <ul class="footer-contact-list">
+                        <li><span>📍</span><span>Jln. Sulawesi, RT 05 / RW 03, Dukwia, Arso Barat, Keerom, Papua 99473</span></li>
+                        <li><span>📞</span><span>0812-4821-9125</span></li>
+                        <li><span>✉️</span><span>sdninpresarso8@gmail.com</span></li>
+                        <li><span>🕒</span><span>Senin - Jumat: 07.15 - 12.30 WIT</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div>&copy; 2026 SDN Inpres Arso VIII - Pemerintah Kabupaten Keerom.</div>
+                <div>Koordinat: Lat -2.822991º, Long 140.703999º</div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- FLOATING ACTIONS -->
+    <div class="floating-actions">
+        <a href="https://wa.me/6281248219125" target="_blank" class="fab fab-whatsapp" aria-label="WhatsApp">💬</a>
+        <button class="fab fab-scroll-top" aria-label="Kembali ke atas">▲</button>
+    </div>
+
+    <script src="js/data_sekolah.js?v=20261116_v51"></script>
+    <script src="js/main.js?v=20261116_v51"></script>
+</body>
+</html>

@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Panduan Pengelolaan dan Pembaruan Data Website Resmi SD Negeri Inpres Arso VIII, Kabupaten Keerom Papua.">
+    <title>Panduan Pengelolaan Website - SDN Inpres Arso VIII</title>
+    
+    <script>
+        if (sessionStorage.getItem('sdn_admin_logged') !== 'true' && localStorage.getItem('sdn_admin_logged') !== 'true') {
+            window.location.replace('login.html');
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css?v=20261116_v51">
+    <!-- Open Graph / Media Sosial Preview -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Buku Panduan Operator & Pengelola - SDN Inpres Arso VIII">
+    <meta property="og:description" content="Petunjuk teknis pemeliharaan website sekolah, pengelolaan data siswa, guru, pengumuman, dan galeri kegiatan.">
+    <meta property="og:image" content="images/logo-keerom.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Buku Panduan Operator & Pengelola - SDN Inpres Arso VIII">
+    <meta name="twitter:description" content="Petunjuk teknis pemeliharaan website sekolah, pengelolaan data siswa, guru, pengumuman, dan galeri kegiatan.">
+    <meta name="twitter:image" content="images/logo-keerom.png">
+    <link rel="dns-prefetch" href="https://arso8-a2bcf-default-rtdb.firebaseio.com">
+    <!-- Favicon & Mobile Touch Icons Resmi SDN Inpres Arso VIII -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="images/logo-keerom-192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon-180.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0d5c3a">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="SDN Arso VIII">
+</head>
+<body>
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <div class="container">
+            <div class="top-bar-left">
+                <div class="top-bar-item">
+                    <span>📍 Jln. Sulawesi, Kampung Dukwia, Distrik Arso Barat, Kab. Keerom - Papua</span>
+                </div>
+                <div class="top-bar-item top-bar-contact-hide">
+                    <span>📞 0812-4821-9125</span>
+                </div>
+                <div class="top-bar-item top-bar-contact-hide">
+                    <span>✉️ sdninpresarso8@gmail.com</span>
+                </div>
+            </div>
+            <div class="top-bar-right">
+                <div class="top-bar-clock" id="topBarClock" title="Waktu Indonesia Timur">
+                    <span class="clock-icon">🕒</span> <span class="live-wit-clock">WIT</span>
+                </div>
+                <a href="login.html" class="top-bar-admin-btn" title="Masuk ke Portal Admin SDN Inpres Arso VIII">
+                    <svg class="admin-user-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <span>Admin</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- HEADER & NAVIGASI -->
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="index.html" class="brand-wrapper">
+                <img src="images/logo-keerom.png" alt="Lambang Kabupaten Keerom" class="brand-logo" decoding="async">
+                <div class="brand-text">
+                    <h1>SDN INPRES ARSO VIII</h1>
+                    <p>Dinas Pendidikan dan Pengajaran Kab. Keerom - Papua (NPSN: 60300868)</p>
+                </div>
+            </a>
+
+            <button class="mobile-toggle" aria-label="Buka Menu Navigasi">☰</button>
+
+            <nav class="main-nav">
+                <a href="index.html" class="nav-link">Beranda</a>
+                <div class="nav-item-dropdown">
+                    <a href="profil.html" class="nav-link nav-dropdown-toggle">
+                        Profil Sekolah <span class="dropdown-chevron">▾</span>
+                    </a>
+                    <div class="nav-dropdown-menu">
+                        <a href="profil.html" class="nav-dropdown-item">
+                            <span class="dropdown-icon">🏛️</span>
+                            <div>
+                                <strong>Profil Sekolah</strong>
+                                <small>Sejarah, Visi Misi & Identitas</small>
+                            </div>
+                        </a>
+                        <a href="guru.html" class="nav-dropdown-item">
+                            <span class="dropdown-icon">👩‍🏫</span>
+                            <div>
+                                <strong>Dewan Guru & GTK</strong>
+                                <small>Struktur Organisasi & Tenaga Pendidik</small>
+                            </div>
+                        </a>
+                        <a href="siswa.html" class="nav-dropdown-item">
+                            <span class="dropdown-icon">👨‍🎓</span>
+                            <div>
+                                <strong>Kesiswaan</strong>
+                                <small>Data Siswa, Kelas & Rombel</small>
+                            </div>
+                        </a>
+                        <a href="sapras.html" class="nav-dropdown-item">
+                            <span class="dropdown-icon">🏫</span>
+                            <div>
+                                <strong>Sarana & Prasarana</strong>
+                                <small>Kondisi Ruang Kelas, TIK & Fasilitas</small>
+                            </div>
+                        </a>
+                        <a href="sop.html" class="nav-dropdown-item">
+                            <span class="dropdown-icon">📋</span>
+                            <div>
+                                <strong>Dokumen SOP</strong>
+                                <small>Standar Operasional Prosedur Resmi</small>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <a href="kolaborasi.html" class="nav-link">Mitra & Kolaborasi</a>
+                <a href="pengembangan-guru.html" class="nav-link">Pengembangan Guru</a>
+                <a href="berita.html" class="nav-link">Berita</a>
+                <a href="pengumuman.html" class="nav-link">Pengumuman</a>
+                <a href="galeri.html" class="nav-link">Galeri</a>
+                <a href="kontak.html" class="nav-link">Kontak</a>
+                <a href="pengumuman.html#ppdb" class="btn-nav-action">PPDB</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- BANNER SUB-HALAMAN -->
+    <section style="background: linear-gradient(135deg, var(--primary-dark), var(--primary)); color: white; padding: 45px 0;">
+        <div class="container">
+            <span class="badge-tag" style="background: rgba(255,255,255,0.2); font-size: 12px; margin-bottom: 10px; display: inline-block;">PUSAT PENGELOLAAN</span>
+            <h1 style="font-size: 32px; font-weight: 800; margin-bottom: 8px;">Panduan Mudah Mengolah Website</h1>
+            <p style="color: #e2e8f0; font-size: 15px; max-width: 700px;">
+                Petunjuk praktis bagi Kepala Sekolah, Dewan Guru, dan Operator SDN Inpres Arso VIII untuk memperbarui berita, foto, dan data sekolah tanpa kesulitan teknis.
+            </p>
+        </div>
+    </section>
+
+    <!-- KONTEN PANDUAN -->
+    <section>
+        <div class="container">
+
+            <!-- PENJELASAN STRUKTUR WEBSITE -->
+            <div class="card" style="padding: 30px; margin-bottom: 35px; border-left: 5px solid var(--primary);">
+                <span class="section-pill">Mudah Diakses & Mandiri</span>
+                <h2 style="font-size: 22px; color: var(--primary-dark); font-weight: 800; margin-bottom: 12px;">
+                    1. Cara Membuka Website di Komputer / Laptop Sekolah
+                </h2>
+                <div style="font-size: 14.5px; color: #475569; line-height: 1.8;">
+                    <p style="margin-bottom: 10px;">
+                        Website ini dirancang menggunakan standar <strong>HTML5, CSS3, dan JavaScript murni</strong> sehingga:
+                    </p>
+                    <ul style="padding-left: 20px; margin-bottom: 14px; display: flex; flex-direction: column; gap: 6px;">
+                        <li><strong>Dapat langsung dibuka di browser:</strong> Buka folder <code>WEBSITE-SEKOLAH-SDN INPRES ARSO VIII</code>, lalu klik dua kali pada file <code>index.html</code>. Website akan langsung terbuka sempurna di Google Chrome, Microsoft Edge, atau Mozilla Firefox!</li>
+                        <li><strong>Dapat diakses Offline maupun Online:</strong> Website tetap berjalan dan berpenampilan rapi meskipun jaringan internet sedang tidak aktif atau lambat.</li>
+                        <li><strong>Bisa disimpan di Flashdisk:</strong> Cukup salin seluruh isi folder ini ke flashdisk, dan website siap dipresentasikan di komputer mana pun tanpa instalasi aplikasi server tambahan (seperti XAMPP atau Python).</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- STRUKTUR MENU & FILE -->
+            <div class="card" style="padding: 30px; margin-bottom: 35px;">
+                <span class="section-pill">Struktur Halaman</span>
+                <h2 style="font-size: 22px; color: var(--primary-dark); font-weight: 800; margin-bottom: 16px;">
+                    2. Daftar File & Fungsinya Masing-Masing
+                </h2>
+
+                <div class="data-table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Nama File</th>
+                                <th>Menu di Website</th>
+                                <th>Isi Konten yang Bisa Diubah</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>index.html</code></td>
+                                <td><strong>Beranda</strong></td>
+                                <td>Banner utama, sambutan Kepala Sekolah, ringkasan statistik siswa, highlight berita, dan warta pengumuman resmi.</td>
+                            </tr>
+                            <tr>
+                                <td><code>profil.html</code></td>
+                                <td><strong>Profil</strong></td>
+                                <td>Visi, Misi, Indikator Visi, Tujuan Sekolah, SK Izin Operasional, SK Akreditasi A, dan sejarah Kampung Dukwia.</td>
+                            </tr>
+                            <tr>
+                                <td><code>guru.html</code></td>
+                                <td><strong>Dewan Guru</strong></td>
+                                <td>Daftar 12 tenaga pendidik, foto guru, pangkat/golongan, NIP, NUPTK, dan bagan struktur organisasi.</td>
+                            </tr>
+                            <tr>
+                                <td><code>siswa.html</code></td>
+                                <td><strong>Kesiswaan</strong></td>
+                                <td>Tabel data siswa per kelas (L/P), grafik visual perbandingan murid, 6 rombel, dan ekstrakurikuler.</td>
+                            </tr>
+                            <tr>
+                                <td><code>sapras.html</code></td>
+                                <td><strong>Sarpras</strong></td>
+                                <td>Kondisi 31 sarana prasarana riil (ruang kelas rusak sedang, ruang guru yang belum ada, Starlink, infocus, audio).</td>
+                            </tr>
+                            <tr>
+                                <td><code>berita.html</code></td>
+                                <td><strong>Berita</strong></td>
+                                <td>Artikel kegiatan belajar mengajar, perayaan hari besar keagamaan, dan pembinaan karakter.</td>
+                            </tr>
+                            <tr>
+                                <td><code>pengumuman.html</code></td>
+                                <td><strong>Pengumuman & PPDB</strong></td>
+                                <td>Surat edaran sekolah, kalender PAS, syarat PPDB, dan formulir pendaftaran online yang bisa dicetak.</td>
+                            </tr>
+                            <tr>
+                                <td><code>galeri.html</code></td>
+                                <td><strong>Galeri</strong></td>
+                                <td>Koleksi foto kegiatan belajar, olahraga, seni tari Papua, dan lingkungan hijau sekolah.</td>
+                            </tr>
+                            <tr>
+                                <td><code>kontak.html</code></td>
+                                <td><strong>Kontak & Lokasi</strong></td>
+                                <td>Nomor WhatsApp 0812-4821-9125, email sekolah, peta koordinat GPS satelit, dan jam kerja kantor.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- CARA MENGEDIT TEKS DENGAN MUDAH -->
+            <div class="card" style="padding: 30px; margin-bottom: 35px; border-left: 5px solid var(--secondary);">
+                <span class="section-pill">Langkah Praktis</span>
+                <h2 style="font-size: 22px; color: var(--primary-dark); font-weight: 800; margin-bottom: 12px;">
+                    3. Cara Mengubah Teks atau Foto Guru (Cukup dengan Notepad)
+                </h2>
+                <div style="font-size: 14.5px; color: #475569; line-height: 1.8;">
+                    <ol style="padding-left: 20px; display: flex; flex-direction: column; gap: 10px;">
+                        <li>
+                            <strong>Buka File dengan Notepad atau VS Code:</strong><br>
+                            Klik kanan pada file yang ingin diubah (misalnya <code>guru.html</code>) lalu pilih <em>Open With &gt; Notepad</em>.
+                        </li>
+                        <li>
+                            <strong>Cari Teks yang Ingin Diubah:</strong><br>
+                            Tekan tombol <code>Ctrl + F</code> pada keyboard, lalu ketik nama guru atau angka yang ingin diubah.
+                        </li>
+                        <li>
+                            <strong>Ganti Teksnya:</strong><br>
+                            Ubah teks sesuai data terbaru (misalnya jika ada penambahan guru baru atau pergantian wali kelas).
+                        </li>
+                        <li>
+                            <strong>Simpan Perubahan:</strong><br>
+                            Tekan <code>Ctrl + S</code> untuk menyimpan. Kemudian buka kembali file tersebut di browser (atau tekan <code>F5</code> / Refresh), dan perubahan langsung muncul seketika!
+                        </li>
+                        <li>
+                            <strong>Mengganti Foto:</strong><br>
+                            Letakkan file foto baru di dalam folder <code>images/</code> (misal: <code>images/kepala-sekolah.jpg</code>), lalu pada file HTML ubah bagian <code>src="images/kepala-sekolah.jpg"</code>.
+                        </li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- GENERATOR KODE PENGUMUMAN CEPAT -->
+            <div class="card" style="padding: 30px; border-top: 5px solid #2563eb;">
+                <span class="section-pill">Alat Bantu Guru / Operator</span>
+                <h2 style="font-size: 22px; color: var(--primary-dark); font-weight: 800; margin-bottom: 8px;">
+                    4. Generator Cepat Format Pengumuman Baru
+                </h2>
+                <p style="font-size: 14px; color: var(--dark-muted); margin-bottom: 20px;">
+                    Ketik judul dan pengumuman baru Anda di bawah ini, lalu klik tombol "Hasilkan Kode HTML". Salin kodenya dan tempelkan ke file <code>pengumuman.html</code>!
+                </p>
+
+                <div style="background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 20px;">
+                    <div class="form-group">
+                        <label class="form-label">Kategori Pengumuman:</label>
+                        <select id="genKategori" class="form-control">
+                            <option value="AKADEMIK">AKADEMIK</option>
+                            <option value="KEGIATAN SISWA">KEGIATAN SISWA</option>
+                            <option value="LIBUR SEKOLAH">LIBUR SEKOLAH</option>
+                            <option value="KOMITE & RAPAT">KOMITE & RAPAT</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Judul Pengumuman:</label>
+                        <input type="text" id="genJudul" class="form-control" placeholder="Contoh: Pemberitahuan Libur Awal Puasa / Hari Besar">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Isi Lengkap Pengumuman:</label>
+                        <textarea id="genIsi" class="form-control" placeholder="Tuliskan edaran resmi untuk para wali murid..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Tertanda Pengirim:</label>
+                        <input type="text" id="genPengirim" class="form-control" value="Kepala Sekolah - Adi Puspito, S.Pd">
+                    </div>
+
+                    <button type="button" onclick="generateSnippet()" class="btn btn-primary" style="padding: 10px 24px;">
+                        ✨ Hasilkan Kode HTML Siap Tempel
+                    </button>
+                </div>
+
+                <div id="genOutputBox" style="display: none;">
+                    <label class="form-label">Kode HTML Siap Salin:</label>
+                    <textarea id="genOutput" class="form-control" style="font-family: monospace; font-size: 12.5px; height: 160px; background: #1e293b; color: #a5f3fc;" readonly></textarea>
+                    <div style="margin-top: 10px;">
+                        <button type="button" onclick="copySnippet()" class="btn" style="background: #16a34a; color: white; padding: 8px 18px; font-size: 13px;">
+                            📋 Salin Kode ke Clipboard
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    
+            <!-- ==========================================
+                 PANDUAN PEMAPARAN / PRESENTASI KE SEKOLAH
+                 ========================================== -->
+            <div class="card" style="padding: 32px; border-top: 5px solid #0f766e; margin-bottom: 35px; background: #ffffff;">
+                <span class="section-pill" style="background: #ccfbf1; color: #0f766e;">Siap Presentasi</span>
+                <h2 style="font-size: 24px; color: var(--primary-dark); font-weight: 800; margin-bottom: 12px;">
+                    5. Bahan Panduan Pemaparan ke Kepala Sekolah & Dewan Guru
+                </h2>
+                <p style="font-size: 14.5px; color: var(--dark-muted); line-height: 1.7; margin-bottom: 22px;">
+                    Gunakan poin-poin presentasi berikut saat memaparkan website ini di depan Kepala Sekolah (Bapak Adi Puspito, S.Pd), Dewan Guru, dan Komite Sekolah agar manfaatnya langsung dipahami secara jelas:
+                </p>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; margin-bottom: 25px;">
+                    <!-- POIN 1 -->
+                    <div style="background: #f8fafc; border-radius: 10px; padding: 20px; border-left: 4px solid var(--primary);">
+                        <strong style="color: var(--primary); font-size: 15px; display: block; margin-bottom: 6px;">1. Mendukung Akreditasi A & Profil Resmi</strong>
+                        <p style="font-size: 13.5px; color: #475569; line-height: 1.6; margin: 0;">
+                            Website ini memuat data pokok, SK Izin Operasional PTSP, SK Akreditasi A BAN-SM, luas lahan 10.000 m², dan 31 inventaris sarpras secara transparan untuk penilaian instansi kedinasan.
+                        </p>
+                    </div>
+
+                    <!-- POIN 2 -->
+                    <div style="background: #f8fafc; border-radius: 10px; padding: 20px; border-left: 4px solid #2563eb;">
+                        <strong style="color: #1d4ed8; font-size: 15px; display: block; margin-bottom: 6px;">2. Publikasi Akses Starlink & Literasi Digital</strong>
+                        <p style="font-size: 13.5px; color: #475569; line-height: 1.6; margin: 0;">
+                            Membuktikan kepada dinas dan masyarakat bahwa sekolah di Kampung Dukwia, Keerom aktif memanfaatkan internet satelit Starlink untuk kemajuan pembelajaran siswa.
+                        </p>
+                    </div>
+
+                    <!-- POIN 3 -->
+                    <div style="background: #f8fafc; border-radius: 10px; padding: 20px; border-left: 4px solid #d97706;">
+                        <strong style="color: #b45309; font-size: 15px; display: block; margin-bottom: 6px;">3. Pusat Informasi Orang Tua Murid dari HP</strong>
+                        <p style="font-size: 13.5px; color: #475569; line-height: 1.6; margin: 0;">
+                            Orang tua siswa dapat mengecek jadwal seragam 5 minggu, jam belajar per jenjang kelas, aturan 5S, larangan sekolah, dan jadwal kurve Jumat Bersih langsung lewat ponsel tanpa perlu datang ke sekolah.
+                        </p>
+                    </div>
+
+                    <!-- POIN 4 -->
+                    <div style="background: #f8fafc; border-radius: 10px; padding: 20px; border-left: 4px solid #059669;">
+                        <strong style="color: #047857; font-size: 15px; display: block; margin-bottom: 6px;">4. Sistem Pendaftaran Siswa Baru (PPDB) Online</strong>
+                        <p style="font-size: 13.5px; color: #475569; line-height: 1.6; margin: 0;">
+                            Wali murid baru bisa mendaftar secara online dari HP, dan data pendaftar langsung tersimpan rapi di Login Admin untuk diverifikasi operator sekolah.
+                        </p>
+                    </div>
+
+                    <!-- POIN 5 -->
+                    <div style="background: #f8fafc; border-radius: 10px; padding: 20px; border-left: 4px solid #7c3aed;">
+                        <strong style="color: #6d28d9; font-size: 15px; display: block; margin-bottom: 6px;">5. 100% Bebas Biaya Server & Bebas Kadaluarsa</strong>
+                        <p style="font-size: 13.5px; color: #475569; line-height: 1.6; margin: 0;">
+                            Website ini berjalan di infrastruktur awan Netlify kelas dunia secara gratis selamanya. Sekolah tidak terbebani biaya langganan hosting bulanan sepeser pun.
+                        </p>
+                    </div>
+
+                    <!-- POIN 6 -->
+                    <div style="background: #f8fafc; border-radius: 10px; padding: 20px; border-left: 4px solid #db2777;">
+                        <strong style="color: #be185d; font-size: 15px; display: block; margin-bottom: 6px;">6. Kesiapan Upgrade ke Domain Resmi (.sch.id)</strong>
+                        <p style="font-size: 13.5px; color: #475569; line-height: 1.6; margin: 0;">
+                            Draf surat permohonan ke PANDI sudah siap dicetak. Kapan pun sekolah ingin menaikkan ke domain <code>sdninpresarso8.sch.id</code> (biaya ~Rp 55.000/tahun dari BOS), sistem langsung terhubung dalam 1 hari.
+                        </p>
+                    </div>
+                </div>
+
+                <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 18px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+                    <div>
+                        <strong style="color: #166534; font-size: 15px; display: block; margin-bottom: 4px;">📄 Draf Surat Permohonan Domain Resmi Sudah Tersedia</strong>
+                        <span style="font-size: 13.5px; color: #374151;">Dapat langsung dicetak untuk ditandatangani Bapak Kepala Sekolah saat rapat disetujui.</span>
+                    </div>
+                    <a href="surat-permohonan-domain.html" target="_blank" class="btn" style="background: #16a34a; color: white; font-weight: 700; font-size: 13.5px; padding: 10px 18px; border-radius: 8px;">
+                        Buka Draf Surat Permohonan →
+                    </a>
+                </div>
+            </div>
+
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                        <img src="images/logo-keerom.png" alt="Logo Keerom" style="width: 44px; height: 44px; object-fit: contain;" decoding="async" loading="lazy">
+                        <div>
+                            <h4 style="margin: 0; padding: 0; font-size: 16px; border: none;">SDN INPRES ARSO VIII</h4>
+                            <span style="font-size: 12px; color: #94a3b8;">Kabupaten Keerom, Papua</span>
+                        </div>
+                    </div>
+                    <p>Lembaga pendidikan dasar negeri yang mendidik 157 putra-putri di Kampung Dukwia, Arso Barat. Berorientasi pada pembinaan iman, karakter mulia, dan kecakapan IPTEK.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Menu Utama</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">🏠 Beranda</a></li>
+                        <li><a href="profil.html">📖 Profil & Visi Misi</a></li>
+                        <li><a href="guru.html">👩‍🏫 Dewan Guru & GTK</a></li>
+                        <li><a href="siswa.html">👨‍🎓 Data Kesiswaan</a></li>
+                        <li><a href="sop.html">📜 SOP & Tata Tertib</a></li>
+                        <li><a href="sapras.html">🏫 Kondisi Sarpras</a></li>
+                        <li><a href="kolaborasi.html">🤝 Mitra & Kolaborasi</a></li>
+                        <li><a href="pengembangan-guru.html">📚 Pengembangan Guru (K3S/KKG)</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Layanan</h4>
+                    <ul class="footer-links">
+                        <li><a href="pengumuman.html#ppdb">📝 Pendaftaran PPDB</a></li>
+                        <li><a href="berita.html">📰 Berita & Kegiatan</a></li>
+                        <li><a href="galeri.html">📷 Galeri Foto</a></li>
+                        <li><a href="kontak.html">📍 Kontak & Lokasi</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Kontak Kami</h4>
+                    <ul class="footer-contact-list">
+                        <li><span>📍</span><span>Jln. Sulawesi, RT 05 / RW 03, Dukwia, Arso Barat, Keerom, Papua 99473</span></li>
+                        <li><span>📞</span><span>0812-4821-9125</span></li>
+                        <li><span>✉️</span><span>sdninpresarso8@gmail.com</span></li>
+                        <li><span>🕒</span><span>Senin - Jumat: 07.15 - 12.30 WIT</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div>&copy; 2026 SDN Inpres Arso VIII - Pemerintah Kabupaten Keerom.</div>
+                <div>Koordinat: Lat -2.822991º, Long 140.703999º</div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- FLOATING ACTIONS -->
+    <div class="floating-actions">
+        <a href="https://wa.me/6281248219125" target="_blank" class="fab fab-whatsapp" aria-label="WhatsApp">💬</a>
+        <button class="fab fab-scroll-top" aria-label="Kembali ke atas">▲</button>
+    </div>
+
+    <script src="js/data_sekolah.js?v=20261116_v51"></script>
+    <script src="js/main.js?v=20261116_v51"></script>
+    <script>
+        function generateSnippet() {
+            const kategori = document.getElementById('genKategori').value;
+            const judul = document.getElementById('genJudul').value || 'Judul Pengumuman';
+            const isi = document.getElementById('genIsi').value || 'Isi edaran pengumuman...';
+            const pengirim = document.getElementById('genPengirim').value || 'Kepala Sekolah';
+            const tgl = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+
+            const snippet = `<div class="card" style="padding: 24px; border-left: 5px solid var(--primary);">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px; margin-bottom: 10px;">
+        <span class="badge-tag akreditasi">${kategori}</span>
+        <span style="font-size: 12px; color: var(--dark-muted);">Diterbitkan: ${tgl}</span>
+    </div>
+    <h3 style="font-size: 18px; color: var(--primary-dark); font-weight: 800; margin-bottom: 8px;">
+        ${judul}
+    </h3>
+    <p style="font-size: 14px; color: #475569; line-height: 1.7; margin-bottom: 12px;">
+        ${isi}
+    </p>
+    <div style="font-size: 12.5px; color: var(--dark-muted); font-style: italic;">
+        Tertanda: ${pengirim}
+    </div>
+</div>`;
+
+            document.getElementById('genOutput').value = snippet;
+            document.getElementById('genOutputBox').style.display = 'block';
+        }
+
+        function copySnippet() {
+            const output = document.getElementById('genOutput');
+            output.select();
+            document.execCommand('copy');
+            alert('Kode HTML berhasil disalin! Anda sekarang dapat menempelkannya (Paste) ke dalam file pengumuman.html.');
+        }
+    </script>
+</body>
+</html>

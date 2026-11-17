@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buku Panduan Serah Terima & Presentasi Resmi Website SDN Inpres Arso VIII</title>
+    <script>
+        if (sessionStorage.getItem('sdn_admin_logged') !== 'true' && localStorage.getItem('sdn_admin_logged') !== 'true') {
+            window.location.replace('login.html');
+        }
+    </script>
+    <style>
+        :root {
+            --primary: #0f766e;
+            --primary-dark: #115e59;
+            --secondary: #d97706;
+            --accent: #0284c7;
+            --bg: #f8fafc;
+            --text: #0f172a;
+            --muted: #475569;
+            --card: #ffffff;
+            --border: #cbd5e1;
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.75;
+            margin: 0;
+            padding: 30px 15px;
+            font-size: 14.5px;
+        }
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            background: var(--card);
+            border-radius: 14px;
+            box-shadow: 0 4px 25px rgba(0,0,0,0.08);
+            padding: 45px;
+            border: 1px solid #e2e8f0;
+        }
+        .kop-surat {
+            border-bottom: 3px double #0f172a;
+            padding-bottom: 18px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .kop-logo {
+            width: 80px;
+            height: auto;
+        }
+        .kop-text {
+            flex: 1;
+            text-align: center;
+        }
+        .kop-text h3 {
+            margin: 0;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .kop-text h2 {
+            margin: 3px 0;
+            font-size: 20px;
+            font-weight: 800;
+            color: #0f766e;
+            text-transform: uppercase;
+        }
+        .kop-text p {
+            margin: 0;
+            font-size: 12px;
+            color: #475569;
+        }
+        .header-doc {
+            text-align: center;
+            background: #f0fdfa;
+            border: 1.5px solid #ccfbf1;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 35px;
+        }
+        .header-doc h1 {
+            color: var(--primary);
+            margin: 0 0 6px;
+            font-size: 23px;
+            font-weight: 800;
+        }
+        .header-doc p {
+            color: #0d9488;
+            margin: 0;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .section {
+            margin-bottom: 40px;
+            page-break-inside: avoid;
+        }
+        .section-title {
+            color: var(--primary-dark);
+            font-size: 19px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-left: 5px solid var(--primary);
+            padding-left: 14px;
+            margin-bottom: 16px;
+            background: #f8fafc;
+            padding-top: 8px;
+            padding-bottom: 8px;
+            border-radius: 0 8px 8px 0;
+        }
+        .speech-box {
+            background: #f0fdfa;
+            border-left: 4px solid #0d9488;
+            border-radius: 8px;
+            padding: 22px 26px;
+            font-style: normal;
+            color: #134e4a;
+            margin-bottom: 22px;
+            line-height: 1.85;
+            box-shadow: 0 2px 8px rgba(13,148,136,0.08);
+        }
+        .speech-box strong {
+            color: #042f2e;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 18px 0;
+            font-size: 14px;
+        }
+        table th, table td {
+            border: 1px solid var(--border);
+            padding: 12px 14px;
+            text-align: left;
+            vertical-align: top;
+        }
+        table th {
+            background: #f1f5f9;
+            color: #1e293b;
+            font-weight: 700;
+        }
+        .card-pill {
+            display: inline-block;
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        .highlight-card {
+            background: #fffbeb;
+            border: 1px solid #fef3c7;
+            border-radius: 10px;
+            padding: 18px 22px;
+            margin: 18px 0;
+            line-height: 1.75;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin: 18px 0;
+        }
+        .feature-item {
+            background: #ffffff;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 16px 18px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+        }
+        .feature-item strong {
+            color: #0f766e;
+            display: block;
+            margin-bottom: 4px;
+            font-size: 14.5px;
+        }
+        .signature-box {
+            margin-top: 50px;
+            padding-top: 25px;
+            border-top: 2px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            text-align: center;
+            page-break-inside: avoid;
+        }
+        .sig-block {
+            width: 45%;
+        }
+        .sig-space {
+            height: 80px;
+        }
+        .btn-print {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: #0f766e;
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 9999px;
+            font-weight: 800;
+            font-size: 14px;
+            box-shadow: 0 6px 20px rgba(15,118,110,0.45);
+            cursor: pointer;
+            z-index: 10000;
+            transition: all 0.2s ease;
+        }
+        .btn-print:hover {
+            background: #115e59;
+            transform: translateY(-2px);
+        }
+        @media print {
+            body { background: white; padding: 0; font-size: 12.5px; }
+            .container { box-shadow: none; padding: 0; max-width: 100%; border: none; }
+            .btn-print { display: none; }
+            .section { page-break-inside: avoid; margin-bottom: 25px; }
+            .speech-box { background: #fafafa !important; border: 1px solid #ccc !important; }
+            .highlight-card { background: #fafafa !important; border: 1px solid #ccc !important; }
+        }
+    </style>
+    <!-- Favicon & Mobile Touch Icons Resmi SDN Inpres Arso VIII -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="images/logo-keerom-192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon-180.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0d5c3a">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="SDN Arso VIII">
+</head>
+<body>
+
+    <button onclick="window.print()" class="btn-print">🖨️ Cetak Buku Panduan (PDF)</button>
+
+    <div class="container">
+        <!-- KOP RESMI DOKUMEN -->
+        <div class="kop-surat">
+            <img src="images/logo-keerom.png" alt="Lambang Daerah Kabupaten Keerom" class="kop-logo">
+            <div class="kop-text">
+                <h3>PEMERINTAH KABUPATEN KEEROM</h3>
+                <h3>DINAS PENDIDIKAN DAN PENGAJARAN</h3>
+                <h2>SD NEGERI INPRES ARSO VIII</h2>
+                <p>NPSN: 60300868 • Terakreditasi A (BAN-SM) • Kode Pos: 99473</p>
+                <p>Alamat: Jalan Sulawesi, Kampung Dukwia, Distrik Arso Barat, Kabupaten Keerom, Papua</p>
+            </div>
+        </div>
+
+        <div class="header-doc">
+            <h1>BUKU PANDUAN LENGKAP SERAH TERIMA & PRESENTASI WEBSITE RESMI</h1>
+            <p>Domain Resmi Nasional Berbadan Hukum: <strong>https://sdninpresarso8.sch.id</strong></p>
+        </div>
+
+        <!-- ============================================================= -->
+        <!-- BAGIAN 1: SKRIP PRESENTASI & CARA BICARA DI DEPAN KEPALA SEKOLAH -->
+        <!-- ============================================================= -->
+        <div class="section">
+            <h2 class="section-title">🎙️ Bagian 1: Skrip Bicara / Kata Pengantar di Depan Kepala Sekolah & Dewan Guru</h2>
+            <p><em>(Kaka dapat membacakan atau menyampaikan poin-poin berikut saat rapat presentasi. Bahasa yang digunakan sangat sopan, berwibawa, dan membanggakan):</em></p>
+            
+            <div class="speech-box">
+                "Selamat pagi Bapak Kepala Sekolah <strong>(Bapak Adi Puspito, S.Pd)</strong>, Bapak/Ibu Dewan Guru yang saya hormati, dan rekan Operator Sekolah.<br><br>
+                Puji syukur ke hadirat Tuhan Yang Maha Esa, hari ini dengan penuh rasa bangga saya mempersembahkan dan menyerahkan secara resmi <strong>Website Resmi SD Negeri Inpres Arso VIII</strong> yang beralamat resmi nasional di:<br>
+                👉 <strong>https://sdninpresarso8.sch.id</strong><br><br>
+                Website ini bukan website biasa. Website ini telah memiliki status legalitas berbadan hukum resmi dari <strong>PANDI (Pengelola Nama Domain Internet Indonesia)</strong> dan <strong>Kementerian Komunikasi dan Informatika RI</strong>, menggunakan domain khusus sekolah Indonesia (<strong>.sch.id</strong>).<br><br>
+                Hadirnya website ini memberikan 5 manfaat besar langsung bagi sekolah kita:
+                <ol style="margin: 8px 0 12px 20px; padding: 0;">
+                    <li><strong>Menaikkan Akreditasi & Martabat Sekolah:</strong> SDN Inpres Arso VIII kini memiliki gerbang digital resmi yang megah dan setara dengan sekolah-sekolah unggulan nasional.</li>
+                    <li><strong>Etalase Kemitraan & Mutu Guru:</strong> Menunjukkan secara transparan dedikasi 12 tenaga pendidik, kegiatan KKG Gugus 1 Arso Barat, dan 6 pilar kemitraan sekolah dengan Komite, Puskesmas, dan Kepolisian.</li>
+                    <li><strong>Pendaftaran Siswa Baru (PPDB Online):</strong> Wali murid kini dapat mendaftarkan anaknya secara online dari HP tanpa perlu antre di sekolah.</li>
+                    <li><strong>Transparansi Informasi:</strong> Profil sarana TIK Satelit Starlink, ruang kelas, dan pembiasaan keagamaan dapat dilihat dinas dan masyarakat kapan saja.</li>
+                    <li><strong>Pengelolaan Mandiri yang Sangat Mudah:</strong> Operator dan guru dapat menambah berita, menerbitkan pengumuman resmi, dan mengelola arsip tanpa perlu keahlian koding yang rumit.</li>
+                </ol>
+                Mari kita bersama-sama melihat setiap bagian dan fitur unggulan dari website sekolah kita."
+            </div>
+        </div>
+
+        <!-- ============================================================= -->
+        <!-- BAGIAN 2: TUR LENGKAP TAMPILAN PUBLIK (YANG DILIHAT MASYARAKAT) -->
+        <!-- ============================================================= -->
+        <div class="section">
+            <h2 class="section-title">🖥️ Bagian 2: Panduan Menjelaskan Setiap Halaman Kepada Bapak Kepala Sekolah & Guru</h2>
+            <p>Saat mempresentasikan di laptop / proyektor, Kaka dapat membuka menu satu per satu sesuai urutan berikut:</p>
+
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <strong>1. Beranda Utama (index.html)</strong>
+                    <span>Menampilkan Teks Berjalan Gerbang (Marquee), <strong>Banner Slider Sorotan Kegiatan Otomatis</strong> (Foto Keluarga Besar Sekolah, ANBK Starlink, Senam, Pramuka, Kerohanian), Sambutan Kepala Sekolah, Statistik 157 Siswa & 12 Guru, serta Kabar Sekolah Terkini.</span>
+                </div>
+                <div class="feature-item">
+                    <strong>2. Profil Sekolah (profil.html)</strong>
+                    <span>Memuat Identitas Resmi Sekolah (NPSN 60300868, Akreditasi A BAN-SM), Sejarah Pendirian di Kampung Dukwia, Visi, Misi, Tujuan, serta Nilai Luhur Budaya Papua.</span>
+                </div>
+                <div class="feature-item">
+                    <strong>3. Dewan Guru & Bagan Struktur (guru.html)</strong>
+                    <span>Daftar profil 12 Tenaga Pendidik & Kependidikan lengkap dengan jabatan, NIP, pangkat. Dilengkapi <strong>Bagan Struktur Organisasi Interaktif HD</strong> dengan tombol Zoom (+/-) dan navigasi seret.</span>
+                </div>
+                <div class="feature-item">
+                    <strong>4. Kesiswaan (siswa.html)</strong>
+                    <span>Informasi 6 Rombongan Belajar (Kelas I sampai VI), total 157 siswa (76 Laki-laki / 81 Perempuan), tata tertib, ekstrakurikuler Pramuka & Olahraga, dan pembiasaan karakter.</span>
+                </div>
+                <div class="feature-item">
+                    <strong>5. Sarana & Prasarana (sapras.html)</strong>
+                    <span>Fasilitas ruang kelas, laboratorium komputer berbasis <strong>Internet Satelit Starlink & Telkomsel Orbit</strong>, perpustakaan, toilet ramah anak, dan lahan hijau asri seluas 10.000 m².</span>
+                </div>
+                <div class="feature-item">
+                    <strong>6. Dokumen SOP Resmi (sop.html)</strong>
+                    <span>Standar Operasional Prosedur kedinasan resmi sekolah, mencakup SOP Pembelajaran, Kehadiran Guru, Kebersihan Sekolah, Keamanan, dan Penanganan Tamu.</span>
+                </div>
+            </div>
+
+            <!-- PENJELASAN KHUSUS: MITRA & PENGEMBANGAN GURU -->
+            <div style="background: #f0fdf4; border: 1.5px solid #bbf7d0; border-radius: 10px; padding: 20px; margin: 24px 0;">
+                <h3 style="color: #166534; margin: 0 0 10px; font-size: 17px; display: flex; align-items: center; gap: 8px;">
+                    <span>🤝</span> Poin Penting 1: Menu Kemitraan & Kolaborasi (kolaborasi.html)
+                </h3>
+                <p style="margin: 0 0 10px; color: #14532d;">
+                    <strong>Jelaskan kepada Kepala Sekolah & Komite:</strong> Halaman ini membuktikan bahwa SDN Inpres Arso VIII memiliki jejaring kerja sama yang kuat di Kabupaten Keerom melalui <strong>6 Pilar Ekosistem Kemitraan</strong>:
+                </p>
+                <ul style="margin: 0; padding-left: 20px; color: #166534; line-height: 1.8;">
+                    <li><strong>Guru dengan Guru:</strong> Supervisi akademik dan pertukaran modul ajar Kurikulum Merdeka.</li>
+                    <li><strong>Guru dengan Siswa:</strong> Bimbingan kepribadian ramah anak dan pengembangan minat bakat.</li>
+                    <li><strong>Sekolah dengan Komite Sekolah:</strong> Sinergi perumusan RKAS, pemeliharaan sarana, dan gotong royong.</li>
+                    <li><strong>Sekolah dengan Paguyuban Wali Murid:</strong> Pendampingan belajar murid di rumah dan komunikasi terbuka.</li>
+                    <li><strong>Sekolah dengan Puskesmas Arso Barat:</strong> Program UKS, Bulan Imunisasi Anak Sekolah (BIAS), penyuluhan gizi, dan obat cacing berkala.</li>
+                    <li><strong>Sekolah dengan Pemerintah Kampung Dukwia & Aparat Keamanan (Polsek/Koramil):</strong> Menjamin keamanan lingkungan sekolah dan penanaman wawasan kebangsaan.</li>
+                </ul>
+            </div>
+
+            <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 10px; padding: 20px; margin: 24px 0;">
+                <h3 style="color: #1e40af; margin: 0 0 10px; font-size: 17px; display: flex; align-items: center; gap: 8px;">
+                    <span>👩‍🏫</span> Poin Penting 2: Menu Pengembangan Guru & KKG (pengembangan-guru.html)
+                </h3>
+                <p style="margin: 0 0 10px; color: #1e3a8a;">
+                    <strong>Jelaskan kepada Dewan Guru:</strong> Halaman ini adalah panggung kehormatan bagi para guru, menunjukkan bahwa pendidik SDN Inpres Arso VIII adalah pembelajar aktif yang selalu mengasah kompetensi:
+                </p>
+                <ul style="margin: 0; padding-left: 20px; color: #1e40af; line-height: 1.8;">
+                    <li><strong>Pengelola Resmi KKKS & KKG Gusek 1:</strong> Berdasarkan SK resmi tanggal 23 Juli 2026, diketuai oleh <strong>Bapak Robi Ulludin, S.Pd.SD.</strong> (NIP 196906201992031018) dengan sekretariat di Jl. Melati Barat Arso I, Kampung Sanggaria.</li>
+                    <li><strong>Jadwal Resmi Semester Gasal TP 2026/2027 (Hari Rabu Bergilir):</strong> Terdiri dari 8 agenda terpadu pembagian Kelas Awal (Kelas 1-3 & Agama) dan Kelas Tinggi (Kelas 4-6, PJOK, Seni, Inggris) dengan fokus Modul Ajar Mendalam, Kisi-kisi ATS & AAS, dan Simulasi Pembelajaran.</li>
+                    <li><strong>SDN Inpres Arso VIII sebagai Tuan Rumah:</strong> Pada Rabu, 11 November 2026, kampus SDN Inpres Arso VIII sukses menjadi Tuan Rumah Workshop Gugus untuk Penyusunan Kisi-kisi dan Naskah Soal AAS bersama pemateri Turut, S.Pd, Ketua KKG, dan Ketua KKKS.</li>
+                    <li><strong>Riset Ajar Satelit Starlink:</strong> Seluruh dewan guru memanfaatkan koneksi Starlink di sekolah untuk mengunduh referensi kurikulum merdeka dan bank soal terpadu.</li>
+                </ul>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <strong>7. Pengumuman & PPDB Online (pengumuman.html)</strong>
+                    <span>Pusat edaran kedinasan dan formulir pendaftaran murid baru online. Orang tua cukup mengisi nama anak, TTL, nama ortu, dan nomor WhatsApp dari HP. Terlindungi <strong>Math Captcha</strong> anti-spam.</span>
+                </div>
+                <div class="feature-item">
+                    <strong>8. Berita & Galeri Dokumentasi (berita.html, galeri.html)</strong>
+                    <span>Dokumentasi digital perkemahan Pramuka, ANBK, senam pagi, dan perayaan hari besar keagamaan. Dilengkapi fitur album foto layar penuh (Lightbox).</span>
+                </div>
+                <div class="feature-item">
+                    <strong>9. Kontak Sekolah (kontak.html)</strong>
+                    <span>Formulir kirim pesan langsung, peta lokasi Kampung Dukwia, nomor telepon Kepala Sekolah, dan email resmi kedinasan sekolah.</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================= -->
+        <!-- BAGIAN 3: PELATIHAN PENGELOLAAN PANEL ADMIN (DAPUR WEBSITE) -->
+        <!-- ============================================================= -->
+        <div class="section">
+            <h2 class="section-title">⚙️ Bagian 3: Panduan Praktis Pengelolaan Panel Admin (Untuk Operator Sekolah)</h2>
+            
+            <div class="highlight-card">
+                <strong style="color: #92400e; font-size: 15px;">🔐 Kredensial Akses Panel Admin:</strong><br>
+                • <strong>Alamat Halaman Masuk:</strong> <code>https://sdninpresarso8.sch.id/login.html</code><br>
+                • <strong>Nama Pengguna (Username):</strong> <code>admin</code><br>
+                • <strong>Kata Sandi Bawaan (Password):</strong> <code>sdnarso8juara</code><br>
+                • <strong>Sistem Pemulihan Mandiri (Anti-Terkunci):</strong> Jika operator lupa kata sandi, klik tombol <em>"Lupa Kata Sandi?"</em> di halaman login. Kode verifikasi OTP akan dikirimkan otomatis ke email resmi sekolah: <strong>sdninpresarso8@gmail.com</strong>. Selain itu, kunci darurat bawaan <code>sdnarso8juara</code> selalu dapat digunakan sebagai penolong darurat.
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 25%;">Fitur di Panel Admin</th>
+                        <th style="width: 45%;">Apa yang Bisa Diubah / Dikelola</th>
+                        <th style="width: 30%;">Langkah Penggunaan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>🎙️ Sambutan Kepala Sekolah</strong></td>
+                        <td>Mengubah pidato tahun ajaran baru, visi pimpinan, dan foto resmi Bapak Kepala Sekolah.</td>
+                        <td>Buka tab Sambutan, edit tulisan di kotak, pilih foto baru jika ada, klik <strong>Simpan Sambutan</strong>.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>👨‍🏫 Dewan Guru & GTK</strong></td>
+                        <td>Menambah guru baru, mutasi, ubah mata pelajaran, NIP, serta urutan hierarki guru.</td>
+                        <td>Gunakan tombol <strong>⬆️ Naik</strong> & <strong>⬇️ Turun</strong> untuk mengatur posisi, lalu klik <strong>Simpan Urutan Guru</strong>.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>👨‍🎓 Data Siswa & Rombel (Terkoneksi Guru)</strong></td>
+                        <td>Mengatur jumlah siswa L/P per kelas dan menentukan Wali Kelas yang terhubung langsung dengan Dewan Guru.</td>
+                        <td>Buka tab Siswa, ubah angka siswa dan pilih Wali Kelas dari dropdown guru. Jika ada guru baru atau pergantian nama guru di tab Dewan Guru, nama wali kelas otomatis ikut tersinkronisasi.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>📰 Berita & Kegiatan</strong></td>
+                        <td>Mempublikasikan kegiatan sekolah, prestasi murid, dan ujian semester.</td>
+                        <td>Klik <strong>+ Tambah Berita</strong>, isi judul, tanggal, unggah foto kegiatan, klik simpan. Berita otomatis tampil di slider dan halaman berita.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>📢 Kelola Pengumuman Sekolah</strong></td>
+                        <td>Menerbitkan surat edaran, pengumuman PAS, jadwal PPDB, dan warta resmi sekolah tanpa batasan kedaluwarsa.</td>
+                        <td>Buka tab Pengumuman, klik <strong>+ Tambah Pengumuman</strong>, tulis judul dan rincian edaran, klik simpan. Otomatis tampil di beranda dan halaman publik.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>📝 Pendaftar PPDB Online</strong></td>
+                        <td>Melihat data calon siswa baru yang mendaftar online lewat smartphone orang tua murid, menetapkan status kelulusan, dan konfirmasi WhatsApp.</td>
+                        <td>Buka tab PPDB, periksa berkas anak. Klik <strong>✓ Terima</strong> atau <strong>✕ Tolak</strong>, lalu klik <strong>💬 WA</strong> untuk langsung kirim surat konfirmasi resmi ke HP ortu. Klik <strong>📄 Cetak</strong> untuk cetak surat fisik, atau <strong>🖨️ Cetak Rekapitulasi</strong> untuk pengumuman di gerbang.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>📜 SOP, Tata Tertib, Piket, Seragam & Pramuka</strong></td>
+                        <td>Mengatur poin tata tertib guru & siswa, jadwal piket harian guru (Senin–Jumat) yang terkoneksi langsung dengan Dewan Guru, siklus seragam dinas 5 minggu, dan tim pembina Pramuka (Siaga & Penggalang).</td>
+                        <td>Buka tab Dokumen SOP Sekolah di Admin. Edit teks aturan, pilih guru piket harian dari menu dropdown, tentukan seragam mingguan, atau tambahkan pembina pramuka dengan 1 klik. Klik tombol <strong>Simpan</strong> pada masing-masing bagian. Otomatis seketika tayang di halaman <code>sop.html</code> dan <code>guru.html</code>.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>📚 Pengembangan Guru: K3S & KKG Gusek 1 Arso Barat</strong></td>
+                        <td>Mengelola profil kelembagaan Gugus 1: Alamat Sekretariat (bila ada kepindahan kantor), Ketua Pengelola & NIP, Waktu Pertemuan rutin, Dasar Penetapan SK, Uraian Program Strategis K3S, serta Pengelola Kelompok A dan B.</td>
+                        <td>Buka tab Pengembangan Guru (K3S/KKG). Pada bagian atas, ubah rincian sekretariat, pimpinan, atau program kerja sesuai kebutuhan, lalu klik <strong>Simpan Profil & Program Gugus</strong>. Untuk jadwal bergilir bulanan dan unggah foto dokumentasi kegiatan, kelola pada formulir di bawahnya. Otomatis tayang di <code>pengembangan-guru.html</code>.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>💾 Cadangkan & Pulihkan (Backup)</strong></td>
+                        <td>Mengamankan seluruh data website ke dalam 1 berkas aman ke flashdisk sekolah (mencakup SOP, data guru, siswa, PPDB, dan foto).</td>
+                        <td>Klik <strong>Unduh Cadangan (.JSON)</strong> secara berkala. Jika ada salah ketik, cukup klik <strong>Pulihkan Data</strong>.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- PANDUAN LENGKAP KONFIRMASI KELULUSAN PPDB -->
+            <div style="background: #f8fafc; border: 2px solid #0284c7; border-radius: 8px; padding: 20px; margin-top: 25px;">
+                <h3 style="color: #0369a1; font-size: 13pt; margin-top: 0; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+                    📢 Panduan Praktis Konfirmasi Kelulusan PPDB (Diterima / Belum Diterima)
+                </h3>
+                <p style="font-size: 10pt; color: #334155; margin-bottom: 14px;">
+                    Sekolah memiliki <strong>3 Saluran Resmi</strong> yang telah terintegrasi untuk menetapkan status dan memberi kabar kepada calon wali murid:
+                </p>
+                <div style="display: grid; grid-template-columns: 1fr; gap: 12px; font-size: 9.5pt;">
+                    <div style="background: white; border-left: 4px solid #16a34a; padding: 12px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                        <strong style="color: #166534; font-size: 10.5pt;">1. Saluran WhatsApp Resmi 1-Klik (Dari Panel Admin)</strong><br>
+                        Operator cukup membuka tab PPDB di Admin, tentukan status anak dengan klik tombol hijau <strong>✓ Terima</strong> atau merah <strong>✕ Tolak</strong>. Setelah itu, klik tombol hijau <strong>💬 WA</strong>. Sistem seketika membuka WhatsApp ke nomor HP orang tua murid lengkap dengan draf surat pengumuman resmi bertanda tangan panitia (menyebutkan nama anak, nomor registrasi, dan berkas yang wajib dibawa).
+                    </div>
+                    <div style="background: white; border-left: 4px solid #0284c7; padding: 12px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                        <strong style="color: #0369a1; font-size: 10.5pt;">2. Saluran Cek Mandiri di Website (24 Jam oleh Orang Tua Murid)</strong><br>
+                        Orang tua murid dapat langsung membuka halaman pengumuman di <code>https://sdninpresarso8.sch.id/pengumuman.html#ppdb</code>. Pada kotak <strong>"🔍 Cek Mandiri Status PPDB"</strong>, orang tua cukup mengetik Nomor Registrasi (contoh: <code>PPDB-123456</code>) atau Nama Calon Siswa, lalu klik Cek Status. Website langsung menampilkan lencana kelulusan (Diterima / Tidak Diterima / Menunggu Berkas) secara transparan.
+                    </div>
+                    <div style="background: white; border-left: 4px solid #d97706; padding: 12px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                        <strong style="color: #b45309; font-size: 10.5pt;">3. Saluran Cetak Papan Pengumuman & Surat Keterangan Fisik</strong><br>
+                        Di panel admin, operator dapat mengklik tombol <strong>🖨️ Cetak Rekapitulasi / Pengumuman Papan</strong> untuk mencetak daftar seluruh nama calon siswa yang diterima lengkap dengan Kop Surat Sekolah dan tanda tangan Kepala Sekolah untuk ditempel di papan pengumuman depan gerbang. Panitia juga dapat mencetak <strong>📄 Cetak Surat Penerimaan</strong> perorangan untuk arsip dan tanda terima resmi fisik.
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ============================================================= -->
+        <!-- BAGIAN 4: PENGALIHAN AKUN RUMAHWEB & PEMBAYARAN PERPANJANGAN -->
+        <!-- ============================================================= -->
+        <div class="section">
+            <h2 class="section-title">💳 Bagian 4: Pengalihan Kepemilikan Akun & Cara Pembayaran Perpanjangan (Tahun 2027)</h2>
+            
+            <div class="highlight-card">
+                <strong>1. Status Legalitas Domain:</strong> Domain resmi <strong>sdninpresarso8.sch.id</strong> telah disetujui PANDI dan Kominfo.<br>
+                <strong>2. Masa Aktif Domain:</strong> Aktif penuh hingga <strong>12 November 2027</strong> (masih sangat panjang!).<br>
+                <strong>3. Biaya Perpanjangan:</strong> Hanya <strong>Rp 60.000 / tahun</strong> (sekitar Rp 5.000 per bulan). Sangat hemat dan sah dianggarkan dari dana operasional BOS sekolah.
+            </div>
+
+            <h4 style="color: var(--primary); margin: 18px 0 8px;">A. Cara Mengalihkan Akun Rumahweb ke Email Resmi Sekolah:</h4>
+            <p>Agar pihak sekolah memegang kendali kepemilikan penuh selamanya tanpa bergantung pada pihak luar:</p>
+            <ol style="line-height: 1.85;">
+                <li>Buka situs portal pengelola di <code>https://new.clientzone.rumahweb.com</code>.</li>
+                <li>Masuk menggunakan akun yang terdaftar, lalu klik nama profil di pojok kanan atas, pilih <strong>Pengaturan Akun / Edit Profile</strong>.</li>
+                <li>Ubah alamat email menjadi email resmi sekolah: <code>sdninpresarso8@gmail.com</code>.</li>
+                <li>Ubah nomor telepon menjadi nomor kontak resmi Bapak Kepala Sekolah atau Operator Sekolah.</li>
+                <li>Klik <strong>Simpan Perubahan</strong>, lalu buka kotak masuk email sekolah untuk mengklik tautan konfirmasi pengalihan.</li>
+            </ol>
+
+            <h4 style="color: var(--primary); margin: 18px 0 8px;">B. Cara Pembayaran Perpanjangan Nanti (Menjelang November 2027):</h4>
+            <ul style="line-height: 1.85;">
+                <li><strong>Pemberitahuan Otomatis:</strong> 30 hari sebelum masa aktif berakhir, tagihan resmi otomatis masuk ke email <code>sdninpresarso8@gmail.com</code>.</li>
+                <li><strong>Metode Pembayaran Sangat Fleksibel:</strong> Sekolah dapat membayar via Transfer Bank (BRI, BNI, Mandiri), Scan QRIS, atau bayar tunai di kasir <strong>Indomaret / Alfamart</strong> terdekat di Arso.</li>
+                <li><strong>Langsung Aktif:</strong> Begitu pembayaran terverifikasi, domain otomatis bertambah masa aktifnya 1 tahun tanpa perlu menyetel ulang server.</li>
+            </ul>
+        </div>
+
+        <!-- ============================================================= -->
+        <!-- BAGIAN 5: CARA PENGGUNAAN APLIKASI DESKTOP PRAKTIS -->
+        <!-- ============================================================= -->
+        <div class="section">
+            <h2 class="section-title">💻 Bagian 5: Jalan Pintas Praktis di Laptop / Komputer Sekolah</h2>
+            <p>Di dalam folder website yang diserahkan, telah dibuatkan berkas jalan pintas <em>(shortcut)</em> agar operator sekolah tidak perlu menghafal perintah teknis:</p>
+            <ul>
+                <li><strong><code>KLIK_UNTUK_BUKA_WEBSITE.bat</code>:</strong> Cukup klik 2 kali tombol ini di komputer sekolah, maka peramban (browser) akan langsung terbuka menampilkan website sekolah secara instan.</li>
+                <li><strong><code>KLIK_UNTUK_UPDATE_ONLINE.bat</code>:</strong> Jika ada pembaruan berkas di komputer sekolah, klik 2 kali tombol ini maka dalam hitungan detik data terbaru langsung terunggah ke internet.</li>
+                <li><strong>Paket Arsip Master (.ZIP):</strong> Berkas cadangan lengkap berukuran ~3,8 MB yang siap disimpan di flashdisk Kepala Sekolah sebagai arsip keamanan abadi.</li>
+            </ul>
+        </div>
+
+        <!-- ============================================================= -->
+        <!-- BAGIAN 6: LEMBAR PENGESAHAN SERAH TERIMA FISIK -->
+        <!-- ============================================================= -->
+        <div class="section">
+            <h2 class="section-title">📑 Bagian 6: Berita Acara & Lembar Pengesahan Serah Terima Resmi</h2>
+            <p>Pada hari ini, <strong>Senin, 16 November 2026</strong>, bertempat di SD Negeri Inpres Arso VIII, Kampung Dukwia, Distrik Arso Barat, Kabupaten Keerom, Provinsi Papua, telah dilaksanakan serah terima operasional dan kepemilikan Website Resmi Sekolah Dasar Negeri Inpres Arso VIII (<strong>https://sdninpresarso8.sch.id</strong>) dalam keadaan baik, lengkap, dan berfungsi normal 100%.</p>
+
+            <div class="signature-box">
+                <div class="sig-block">
+                    <span>Yang Menyerahkan,</span><br>
+                    <strong>Pengembang / Pengelola Teknis</strong>
+                    <div class="sig-space"></div>
+                    <strong>( .................................................... )</strong><br>
+                    <span>Inisiator & Pembuat Website</span>
+                </div>
+                <div class="sig-block">
+                    <span>Mengetahui & Menerima,</span><br>
+                    <strong>Kepala Sekolah SDN Inpres Arso VIII</strong>
+                    <div class="sig-space"></div>
+                    <strong>ADI PUSPITO, S.Pd</strong><br>
+                    <span>NIP. 19800427 200909 1 002</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px; padding-top: 15px; border-top: 1px solid var(--border); color: #64748b; font-size: 13px;">
+            Dokumen Resmi Serah Terima | SD Negeri Inpres Arso VIII, Kabupaten Keerom, Papua • 2026
+        </div>
+    </div>
+
+</body>
+</html>
