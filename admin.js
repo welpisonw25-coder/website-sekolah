@@ -1,0 +1,5730 @@
+
+// ===================================================================
+// GLOBAL SAFE STORAGE HELPER (SDN INPRES ARSO VIII)
+// ===================================================================
+window.safeAdminSet = function(k, v) {
+    if (!v) return;
+    try {
+        localStorage.setItem(k, typeof v === 'string' ? v : JSON.stringify(v));
+    } catch (e) {}
+};
+function safeAdminSet(k, v) {
+    return window.safeAdminSet(k, v);
+}
+
+
+// PENGALIHAN OTOMATIS KE DOMAIN RESMI KEDINASAN (SCH.ID)
+if (typeof window !== 'undefined' && window.location.hostname === 'sdninpresarso8.surge.sh') {
+    window.location.replace('https://sdninpresarso8.sch.id' + window.location.pathname + window.location.search + window.location.hash);
+}
+
+// ===================================================================
+// SISTEM SINKRONISASI OTOMATIS KE INTERNET (SDN INPRES ARSO VIII)
+// ===================================================================
+window.closeActiveLightbox = function () {
+    const modals = document.querySelectorAll('.lightbox-modal');
+    modals.forEach(m => {
+        m.classList.remove('active');
+        m.style.display = 'none';
+    });
+    document.body.style.overflow = '';
+};
+
+window.openLightboxWith = function (src, alt) {
+    if (!src) return;
+    let modal = document.getElementById('globalLightbox') || document.querySelector('.lightbox-modal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.className = 'lightbox-modal';
+        modal.id = 'globalLightbox';
+        modal.style.cssText = 'display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.92); z-index: 999999; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; backdrop-filter: blur(4px);';
+        modal.innerHTML = `
+            <button type="button" class="lightbox-close" aria-label="Tutup Tampilan" title="Tutup Tampilan (Esc)" style="position: fixed; top: 20px; right: 24px; color: #ffffff; font-size: 26px; font-weight: 800; cursor: pointer; background: rgba(15, 23, 42, 0.85); border: 2px solid rgba(255, 255, 255, 0.7); border-radius: 50%; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; z-index: 1000000; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6); transition: all 0.2s ease; outline: none;">✕</button>
+            <div class="lightbox-content" style="max-width: 92vw; max-height: 88vh; border-radius: 12px; overflow: hidden; position: relative; background: #000000; box-shadow: 0 10px 40px rgba(0,0,0,0.8); display: flex; flex-direction: column; align-items: center;">
+                <img src="${src}" alt="${(alt || 'Dokumentasi')}" style="max-width: 100%; max-height: 80vh; object-fit: contain; display: block;">
+                <div id="lightboxCaptionBox" style="width: 100%; background: #0f172a; color: #f8fafc; font-size: 13.5px; padding: 12px 18px; text-align: center; border-top: 1px solid rgba(255,255,255,0.15); box-sizing: border-box;">
+                    <span id="lightboxCaptionText">${(alt || 'Dokumentasi Foto SDN Inpres Arso VIII')}</span>
+                </div>
+            </div>
+            <div style="position: absolute; bottom: 12px; left: 0; width: 100%; text-align: center; pointer-events: none;">
+                <span style="background: rgba(0,0,0,0.65); color: #cbd5e1; font-size: 12px; padding: 4px 14px; border-radius: 9999px;">✕ Klik tombol X di pojok atas atau tekan Esc untuk menutup</span>
+            </div>
+        `;
+        document.body.appendChild(modal);
+
+        const closeBtn = modal.querySelector('.lightbox-close');
+        if (closeBtn) closeBtn.onclick = function(e) { e.preventDefault(); e.stopPropagation(); window.closeActiveLightbox(); };
+        modal.onclick = function(e) {
+            if (e.target === modal || e.target.classList.contains('lightbox-content')) {
+                window.closeActiveLightbox();
+            }
+        };
+    }
+
+    let modalImg = modal.querySelector('.lightbox-content img');
+    let captionText = modal.querySelector('#lightboxCaptionText');
+    if (modalImg) {
+        modalImg.src = src;
+        modalImg.alt = alt || 'Dokumentasi Foto';
+    }
+    if (captionText) {
+        captionText.textContent = alt || 'Dokumentasi Foto SDN Inpres Arso VIII';
+    }
+
+    modal.classList.add('active');
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+};
+
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+        window.closeActiveLightbox();
+    }
+});
+
+function showSyncToast(message, isError) {
+    let toast = document.getElementById('adminSyncToast');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'adminSyncToast';
+        toast.style.cssText = 'position: fixed; bottom: 24px; right: 24px; padding: 14px 22px; background: #0f172a; color: #ffffff; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); font-size: 13.5px; font-weight: 600; z-index: 999999; display: flex; align-items: center; gap: 12px; transition: all 0.3s ease; max-width: 480px;';
+        document.body.appendChild(toast);
+    }
+    toast.style.background = isError ? '#991b1b' : '#065f46';
+    toast.style.border = isError ? '2px solid #ef4444' : '2px solid #10b981';
+    toast.innerHTML = '<span>' + message + '</span>';
+    toast.style.opacity = '1';
+    toast.style.transform = 'translateY(0)';
+
+    clearTimeout(window._syncToastTimer);
+    window._syncToastTimer = setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(20px)';
+    }, 5500);
+}
+
+function syncToServer(category, data) {
+    showSyncToast('☁️ Menyimpan langsung ke Google Cloud Database...');
+
+    // 1. Simpan langsung ke Google Firebase (Cloud Database)
+    // Menggunakan PATCH ke root node agar data_sekolah.json & child node terupdate seketika
+    const rootUrl = 'https://arso8-a2bcf-default-rtdb.firebaseio.com/data_sekolah.json';
+    const rootPayload = (category === 'all') ? data : { [category]: data };
+
+    fetch(rootUrl, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(rootPayload)
+    })
+    .then(res => {
+        if (res.ok) {
+            showSyncToast('🎉 SUKSES! Perubahan langsung aktif & detik ini juga tayang di semua HP & Laptop!');
+        } else {
+            // Fallback PUT jika PATCH bermasalah
+            const subUrl = (category === 'all')
+                ? rootUrl
+                : `https://arso8-a2bcf-default-rtdb.firebaseio.com/data_sekolah/${category}.json`;
+            fetch(subUrl, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            }).then(r => {
+                if (r.ok) showSyncToast('🎉 SUKSES! Perubahan langsung aktif di internet!');
+            }).catch(() => {});
+        }
+    })
+    .catch(err => {
+        console.warn('Cloud sync error:', err);
+        // Fallback PUT ke category node
+        if (category !== 'all') {
+            const subUrl = `https://arso8-a2bcf-default-rtdb.firebaseio.com/data_sekolah/${category}.json`;
+            fetch(subUrl, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            }).then(r => {
+                if (r.ok) showSyncToast('🎉 SUKSES! Perubahan langsung aktif di internet!');
+            }).catch(() => {});
+        }
+    });
+
+    // 2. Jika sedang membuka dari server lokal laptop, sinkronkan juga ke file lokal
+    if (window.location.origin.includes('localhost') || window.location.origin.includes('127.0.0.1')) {
+        fetch('/api/sync_data', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ category: category, data: data })
+        }).catch(() => {});
+    }
+}
+
+window.publishAllToOnline = function() {
+    const allData = {
+        sambutan: (typeof getSambutanData === 'function') ? getSambutanData() : defaultSambutan,
+        berita: (typeof getBeritaData === 'function') ? getBeritaData() : [],
+        pengumuman: (typeof getPengumumanData === 'function') ? getPengumumanData() : [],
+        galeri: (typeof getGaleriData === 'function') ? getGaleriData() : [],
+        guru: (typeof getGuruData === 'function') ? getGuruData() : [],
+        siswa: (typeof getSiswaData === 'function') ? getSiswaData() : {},
+        sarpras: (typeof getSarprasData === 'function') ? getSarprasData() : [],
+        kolaborasi: (typeof getKolaborasiData === 'function') ? getKolaborasiData() : (window.SDN_DATABASE.kolaborasi || []),
+        kkg: (typeof getKKGData === 'function') ? getKKGData() : (window.SDN_DATABASE.kkg || {}),
+        sop_data: (typeof getSOPData === 'function') ? getSOPData() : (window.SDN_DATABASE.sop_data || {}),
+        ppdb_config: (typeof getPPDBConfig === 'function') ? getPPDBConfig() : {}
+    };
+    syncToServer('all', allData);
+};
+
+window.switchAdminTab = function(tabId) {
+    if (!tabId) return;
+    const tabLinks = document.querySelectorAll('.admin-nav-item');
+    const tabPanels = document.querySelectorAll('.admin-tab-panel');
+    tabLinks.forEach(l => {
+        if (l.getAttribute('data-tab') === tabId) {
+            l.classList.add('active');
+        } else {
+            l.classList.remove('active');
+        }
+    });
+    tabPanels.forEach(p => {
+        if (p.id === tabId) {
+            p.classList.add('active');
+        } else {
+            p.classList.remove('active');
+        }
+    });
+
+    // Reset scroll konten
+    const content = document.querySelector('.admin-content');
+    if (content) content.scrollTop = 0;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Pada layar HP/tablet, scroll ke panel yang aktif
+    const targetPanel = document.getElementById(tabId);
+    if (targetPanel && window.innerWidth <= 900) {
+        targetPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // Panggil populate form saat tab dibuka
+    if (tabId === 'tab-profil' && typeof window.populateProfilForm === 'function') {
+        window.populateProfilForm();
+    } else if (tabId === 'tab-kontak' && typeof window.populateKontakForm === 'function') {
+        window.populateKontakForm();
+    }
+};
+/**
+ * ===================================================================
+ * JAVASCRIPT DASHBOARD PENGELOLA - SDN INPRES ARSO VIII
+ * Manajemen Data Sekolah, Pengumuman, Siswa, Guru, & PPDB Online
+ * ===================================================================
+ */
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Pembersihan otomatis sisa cache unsplash agar 100% menggunakan foto asli sekolah
+try {
+    ['sdn_berita_data', 'sdn_galeri_data'].forEach(function (k) {
+        var v = localStorage.getItem(k);
+        if (v && v.indexOf('unsplash') !== -1) {
+            localStorage.removeItem(k);
+        }
+    });
+} catch (e) {}
+    checkAdminAuth();
+    initClockWIT();
+    initAdminTabs();
+    initSambutanManager();
+    initBeritaManager();
+    initPengumumanManager();
+    initAgendaManager();
+    initSiswaManager();
+    initGuruManager();
+    initPPDBManager();
+    initPPDBConfigManager();
+    initGaleriManager();
+    initSarprasManager();
+    initKolaborasiManager();
+    initKKGManager();
+    initSOPManager();
+    initAccountSettings();
+    initBackupRestoreManager();
+
+    // Cek protokol file:// untuk memberi tahu pengguna bila membuka file offline laptop
+    if (window.location.protocol === 'file:') {
+        const warn = document.getElementById('fileProtocolWarning');
+        if (warn) warn.style.display = 'block';
+    }
+
+    // Sinkronisasi otomatis data terbaru dari Google Cloud saat dashboard admin dibuka di HP/Laptop mana saja
+    if (typeof fetch === 'function') {
+        fetch('https://arso8-a2bcf-default-rtdb.firebaseio.com/data_sekolah.json?t=' + Date.now(), { cache: 'no-store' })
+            .then(res => res.json())
+            .then(db => {
+                if (db && typeof db === 'object') {
+                    window.SDN_DATABASE = Object.assign(window.SDN_DATABASE || {}, db);
+
+                    function safeAdminSet(k, v) {
+                        if (!v) return;
+                        try {
+                            localStorage.setItem(k, typeof v === 'string' ? v : JSON.stringify(v));
+                        } catch (e) {}
+                    }
+
+                    safeAdminSet('sdn_sambutan_data', db.sambutan);
+                    safeAdminSet('sdn_berita_data', db.berita);
+                    safeAdminSet('sdn_pengumuman_data', db.pengumuman);
+                    safeAdminSet('sdn_guru_data', db.guru);
+                    safeAdminSet('sdn_sarpras_data', db.sarpras);
+                    safeAdminSet('sdn_kolaborasi_data', db.kolaborasi);
+                    safeAdminSet('sdn_kkg_data', db.kkg);
+                    safeAdminSet('sdn_sop_data', db.sop_data);
+                    safeAdminSet('sdn_ppdb_config', db.ppdb_config);
+                    safeAdminSet('sdn_ppdb_submissions', db.ppdb_submissions);
+                    if (db.siswa) {
+                        safeAdminSet('sdn_siswa_counts', db.siswa);
+                        safeAdminSet('sdn_siswa_kelas', db.siswa);
+                    }
+                    if (db.galeri) safeAdminSet('sdn_galeri_data', db.galeri);
+
+                    // Re-render data formulir dan tabel agar admin melihat data teranyar dari cloud
+                    if (typeof window.refreshAdminManagers === 'function') {
+                        window.refreshAdminManagers();
+                    }
+                }
+            })
+            .catch(() => {});
+    }
+});
+
+/* -------------------------------------------------------------------
+   1. AUTHENTICATION CHECK & LOGOUT
+   ------------------------------------------------------------------- */
+function checkAdminAuth() {
+    const isLogged = sessionStorage.getItem('sdn_admin_logged') === 'true' ||
+                     localStorage.getItem('sdn_admin_logged') === 'true';
+    if (!isLogged) {
+        window.location.replace('login.html');
+        return;
+    }
+
+    const logoutBtn = document.getElementById('adminLogoutBtn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (confirm('Apakah Anda yakin ingin keluar dari Login Admin?')) {
+                sessionStorage.removeItem('sdn_admin_logged');
+                localStorage.removeItem('sdn_admin_logged');
+                window.location.href = 'login.html';
+            }
+        });
+    }
+}
+
+/* -------------------------------------------------------------------
+   2. JAM DIGITAL WAKTU INDONESIA TIMUR (WIT)
+   ------------------------------------------------------------------- */
+
+// ==========================================================================
+// UNIVERSAL HELPER UNTUK PAGINASI & FILTER ADMIN (SDN INPRES ARSO 8)
+// Memastikan semua data arsip lama tetap aman & tersimpan 100%,
+// namun tampilan tabel di Admin Panel tetap rapi, ringkas, dan tidak makan tempat.
+// ==========================================================================
+function renderAdminPaginationControls(containerId, currentPage, totalPages, totalItems, pageSizeVal, onPageChange) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    if (totalItems === 0) {
+        container.innerHTML = '<div class="pagination-info" style="color: #94a3b8; font-size: 12.5px; padding: 6px 0;">Tidak ada data yang sesuai dengan kata kunci pencarian atau filter.</div>';
+        return;
+    }
+
+    const pageSizeNum = pageSizeVal === 'ALL' ? totalItems : (parseInt(pageSizeVal, 10) || totalItems);
+    const startIdx = pageSizeVal === 'ALL' ? 1 : Math.min((currentPage - 1) * pageSizeNum + 1, totalItems);
+    const endIdx = pageSizeVal === 'ALL' ? totalItems : Math.min(currentPage * pageSizeNum, totalItems);
+
+    let html = `
+        <div class="pagination-info">
+            Menampilkan <strong>${startIdx} - ${endIdx}</strong> dari total <strong>${totalItems}</strong> data arsip
+        </div>
+    `;
+
+    if (pageSizeVal !== 'ALL' && totalPages > 1) {
+        html += `<div class="pagination-controls">`;
+        html += `<button type="button" class="pagination-btn ${currentPage === 1 ? 'disabled' : ''}" data-page="${currentPage - 1}" ${currentPage === 1 ? 'disabled' : ''}>◀ Prev</button>`;
+
+        for (let p = 1; p <= totalPages; p++) {
+            if (p === 1 || p === totalPages || (p >= currentPage - 1 && p <= currentPage + 1)) {
+                html += `<button type="button" class="pagination-btn ${p === currentPage ? 'active' : ''}" data-page="${p}">${p}</button>`;
+            } else if (p === currentPage - 2 || p === currentPage + 2) {
+                html += `<span style="padding: 0 4px; color: #94a3b8;">...</span>`;
+            }
+        }
+
+        html += `<button type="button" class="pagination-btn ${currentPage === totalPages ? 'disabled' : ''}" data-page="${currentPage + 1}" ${currentPage === totalPages ? 'disabled' : ''}>Next ▶</button>`;
+        html += `</div>`;
+    }
+
+    container.innerHTML = html;
+    container.querySelectorAll('.pagination-btn[data-page]').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const p = parseInt(this.getAttribute('data-page'), 10);
+            if (p >= 1 && p <= totalPages && p !== currentPage) {
+                onPageChange(p);
+            }
+        });
+    });
+}
+
+function initClockWIT() {
+    const clockEl = document.getElementById('witClock');
+    if (!clockEl) return;
+
+    function updateTime() {
+        const now = new Date();
+        // Format waktu WIT (UTC+9)
+        const options = {
+            timeZone: 'Asia/Jayapura',
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        };
+        clockEl.textContent = now.toLocaleDateString('id-ID', options) + ' WIT';
+    }
+
+    updateTime();
+    setInterval(updateTime, 1000);
+}
+
+/* -------------------------------------------------------------------
+   3. TAB NAVIGASI DASHBOARD
+   ------------------------------------------------------------------- */
+window.switchAdminTab = function(tabId) {
+    if (!tabId) return;
+    const tabLinks = document.querySelectorAll('.admin-nav-item');
+    const tabPanels = document.querySelectorAll('.admin-tab-panel');
+    tabLinks.forEach(l => {
+        if (l.getAttribute('data-tab') === tabId) {
+            l.classList.add('active');
+        } else {
+            l.classList.remove('active');
+        }
+    });
+    tabPanels.forEach(p => {
+        if (p.id === tabId) {
+            p.classList.add('active');
+        } else {
+            p.classList.remove('active');
+        }
+    });
+
+    // Reset scroll konten
+    const content = document.querySelector('.admin-content');
+    if (content) content.scrollTop = 0;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Pada layar HP/tablet, scroll ke panel yang aktif
+    const targetPanel = document.getElementById(tabId);
+    if (targetPanel && window.innerWidth <= 900) {
+        targetPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // Panggil populate form saat tab dibuka
+    if (tabId === 'tab-profil' && typeof window.populateProfilForm === 'function') {
+        window.populateProfilForm();
+    } else if (tabId === 'tab-kontak' && typeof window.populateKontakForm === 'function') {
+        window.populateKontakForm();
+    }
+};
+
+function initAdminTabs() {
+    const tabLinks = document.querySelectorAll('.admin-nav-item');
+    const tabPanels = document.querySelectorAll('.admin-tab-panel');
+
+    tabLinks.forEach(link => {
+        link.addEventListener('click', function (e) {
+            const targetId = this.getAttribute('data-tab');
+            if (!targetId) {
+                // Link biasa atau unduhan (misal panduan/sop mandiri), jangan batalkan navigasi!
+                return;
+            }
+            e.preventDefault();
+
+            tabLinks.forEach(l => l.classList.remove('active'));
+            tabPanels.forEach(p => p.classList.remove('active'));
+
+            this.classList.add('active');
+            const targetPanel = document.getElementById(targetId);
+            if (targetPanel) {
+                targetPanel.classList.add('active');
+                if (window.innerWidth <= 900) {
+                    targetPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }
+        });
+    });
+
+    // Cek URL Hash (misal admin.html#pengumuman atau admin.html#berita)
+    const rawHash = (window.location.hash || '').replace('#', '').toLowerCase();
+    if (rawHash) {
+        const hashToTab = {
+            'ringkasan': 'tab-ringkasan',
+            'sambutan': 'tab-sambutan',
+            'profil': 'tab-profil',
+            'berita': 'tab-berita',
+            'pengumuman': 'tab-pengumuman',
+            'agenda': 'tab-agenda',
+            'siswa': 'tab-siswa',
+            'guru': 'tab-guru',
+            'ppdb': 'tab-ppdb',
+            'sarpras': 'tab-sarpras',
+            'galeri': 'tab-galeri',
+            'kolaborasi': 'tab-kolaborasi',
+            'mitra': 'tab-kolaborasi',
+            'kkg': 'tab-kkg',
+            'pengembangan-guru': 'tab-kkg',
+            'panduan': 'tab-panduan',
+            'sop': 'tab-sop',
+            'pengaturan': 'tab-pengaturan'
+        };
+        const target = hashToTab[rawHash] || (rawHash.startsWith('tab-') ? rawHash : null);
+        if (target && document.getElementById(target)) {
+            setTimeout(() => window.switchAdminTab(target), 150);
+        }
+    }
+}
+
+
+/* -------------------------------------------------------------------
+   3A. KELOLA SAMBUTAN KEPALA SEKOLAH (BERANDA / INDEX.HTML)
+   ------------------------------------------------------------------- */
+const defaultSambutan = {
+    nama: "Adi Puspito, S.Pd",
+    jabatan: "Kepala Sekolah SDN Inpres Arso VIII (Pembina Utama Muda, IV/c)",
+    judul: "Mendidik dengan Hati, Merajut Asa di Ujung Timur Nusantara",
+    foto: "images/kepala-sekolah.jpg",
+    isi: "Tabea, Salam Sejahtera, Assalamu'alaikum Warahmatullahi Wabarakatuh.\n\nPuji syukur kita panjatkan ke hadirat Tuhan Yang Maha Esa atas tersedianya website resmi SD Negeri Inpres Arso VIII. Terletak di Kampung Dukwia, Distrik Arso Barat, Kabupaten Keerom, sekolah kami terus berikhtiar memberikan layanan pendidikan terbaik yang merata bagi seluruh anak didik tanpa membedakan latar belakang suku, agama, dan budaya.\n\nWalaupun berada di daerah perbatasan dengan keterbatasan sarana prasarana yang sedang kami terus upayakan peningkatannya, kami bersyukur telah difasilitasi dengan koneksi internet satelit Starlink dan Telkomsel Orbit. Hal ini memacu semangat anak-anak dan para dewan guru untuk tidak tertinggal dalam penguasaan literasi digital dan teknologi informasi modern.\n\nMari bersama-sama komite sekolah, para orang tua, dan masyarakat Kampung Dukwia kita jaga dan bimbing anak-anak kita menjadi generasi yang beriman, berbudi pekerti luhur, sehat jasmani, dan mencintai lingkungan hidup."
+};
+
+function getSambutanData() {
+    if (window.SDN_DATABASE && window.SDN_DATABASE.sambutan && typeof window.SDN_DATABASE.sambutan === 'object' && (window.SDN_DATABASE.sambutan.nama || window.SDN_DATABASE.sambutan.isi)) {
+        return window.SDN_DATABASE.sambutan;
+    }
+    const d = localStorage.getItem('sdn_sambutan_data');
+    if (d) {
+        try {
+            const p = JSON.parse(d);
+            if (p && p.nama) return p;
+        } catch (e) {}
+    }
+    return defaultSambutan;
+}
+
+function saveSambutanData(data) {
+    try {
+        localStorage.setItem('sdn_sambutan_data', JSON.stringify(data));
+    } catch (e) {}
+    if (window.SDN_DATABASE) window.SDN_DATABASE.sambutan = data;
+    syncToServer('sambutan', data);
+    try { window.dispatchEvent(new Event('storage')); } catch (e) {}
+}
+
+function initSambutanManager() {
+    const form = document.getElementById('sambutanForm');
+    if (!form) return;
+
+    const namaInput = document.getElementById('inputSambutanNama');
+    const jabatanInput = document.getElementById('inputSambutanJabatan');
+    const judulInput = document.getElementById('inputSambutanJudul');
+    const isiInput = document.getElementById('inputSambutanIsi');
+    const fotoFileInput = document.getElementById('inputSambutanFotoFile');
+    const previewImg = document.getElementById('previewSambutanFoto');
+    const btnReset = document.getElementById('btnResetSambutanDefault');
+
+    let currentFotoData = '';
+
+    function populateForm() {
+        const data = getSambutanData();
+        if (namaInput) namaInput.value = data.nama || '';
+        if (jabatanInput) jabatanInput.value = data.jabatan || '';
+        if (judulInput) judulInput.value = data.judul || '';
+        if (isiInput) isiInput.value = data.isi || '';
+        if (previewImg && data.foto) {
+            previewImg.src = data.foto;
+            currentFotoData = data.foto;
+        }
+    }
+
+    if (fotoFileInput && !fotoFileInput._bound) {
+        fotoFileInput._bound = true;
+        fotoFileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 500;
+                    const scale = MAX_WIDTH / img.width;
+                    const w = (img.width > MAX_WIDTH) ? MAX_WIDTH : img.width;
+                    const h = (img.width > MAX_WIDTH) ? (img.height * scale) : img.height;
+                    canvas.width = w;
+                    canvas.height = h;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, w, h);
+                    currentFotoData = canvas.toDataURL('image/jpeg', 0.85);
+                    if (previewImg) previewImg.src = currentFotoData;
+                };
+                img.src = evt.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    if (!form._bound) {
+        form._bound = true;
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const data = {
+                nama: namaInput.value.trim(),
+                jabatan: jabatanInput.value.trim(),
+                judul: judulInput.value.trim(),
+                isi: isiInput.value.trim(),
+                foto: currentFotoData || 'images/kepala-sekolah.jpg'
+            };
+            saveSambutanData(data);
+            alert('✅ Sambutan Kepala Sekolah berhasil diperbarui!\nPerubahan langsung otomatis tampil di Beranda Utama website.');
+        });
+    }
+
+    if (btnReset && !btnReset._bound) {
+        btnReset._bound = true;
+        btnReset.addEventListener('click', function() {
+            if (confirm('Pulihkan teks sambutan ke sambutan awal bawaan sekolah?')) {
+                saveSambutanData(defaultSambutan);
+                populateForm();
+                alert('Sambutan Kepala Sekolah berhasil dikembalikan ke bawaan awal.');
+            }
+        });
+    }
+
+    populateForm();
+}
+
+
+/* -------------------------------------------------------------------
+   3B. KELOLA BERITA SEKOLAH (CRUD + SINKRONISASI KE DASHBOARD & BERANDA)
+   ------------------------------------------------------------------- */
+const defaultBeritaList = [
+    {
+        id: 1,
+        judul: "Komitmen Bersama Pendidik SDN Inpres Arso VIII Menyambut Tahun Ajaran Baru",
+        kategori: "Karakter & Mutu Pendidik",
+        penulis: "Tim Humas Sekolah",
+        tanggal: "05 November 2026",
+        foto: "images/gerbang-sekolah.jpg",
+        snippet: "Kepala Sekolah Adi Puspito, S.Pd bersama 11 tenaga pendidik berfoto bersama di depan Gapura Resmi SDN Inpres Arso VIII. Seluruh dewan guru berkomitmen mewujudkan mutu pendidikan berkualitas, berakhlak mulia, dan unggul IPTEK di Kabupaten Keerom.",
+        isi: "Kepala Sekolah Adi Puspito, S.Pd bersama 11 tenaga pendidik berfoto bersama di depan Gapura Resmi SDN Inpres Arso VIII. Seluruh dewan guru berkomitmen mewujudkan mutu pendidikan berkualitas, berakhlak mulia, dan unggul IPTEK di Kabupaten Keerom. Melalui kebersamaan dan kerja sama dengan orang tua serta Komite Sekolah, SDN Inpres Arso VIII terus berbenah menghadirkan lingkungan belajar yang aman, nyaman, dan berdaya saing."
+    },
+    {
+        id: 2,
+        judul: "Pemanfaatan Jaringan Starlink untuk Simulasi ANBK & Pembelajaran Komputer",
+        kategori: "Teknologi & ANBK",
+        penulis: "Tim IT Sekolah",
+        tanggal: "02 November 2026",
+        foto: "images/kegiatan-anbk-komputer.jpg",
+        snippet: "Siswa kelas tinggi SDN Inpres Arso VIII aktif mengikuti simulasi ANBK dan pembelajaran komputer berbasis internet di ruang TIK sekolah dengan koneksi satelit Starlink.",
+        isi: "Pemanfaatan jaringan internet satelit Starlink dan modem Telkomsel Orbit di SDN Inpres Arso VIII memberikan kemudahan bagi dewan guru dan siswa kelas tinggi dalam mengakses bank soal ANBK, portal Kemendikbudristek, serta materi pembelajaran interaktif berbasis multimedia."
+    },
+    {
+        id: 3,
+        judul: "Semarak Senam Kebugaran Jasmani dan Olahraga Bersama Seluruh Siswa & Guru",
+        kategori: "Kesehatan & Olahraga",
+        penulis: "Ferdinand, S.Pd",
+        tanggal: "28 Oktober 2026",
+        foto: "images/kegiatan-senam-bersama.jpg",
+        snippet: "Menjaga kebugaran jasmani dan membina kekompakan antar murid, seluruh siswa dari Kelas I hingga Kelas VI bersama dewan guru rutin melaksanakan senam pagi bersama di halaman sekolah.",
+        isi: "Kegiatan senam pagi bersama dipimpin oleh Guru Penjaskes Bapak Ferdinand, S.Pd dan diikuti oleh seluruh siswa dari Kelas I hingga Kelas VI serta segenap dewan guru. Olahraga rutin ini terbukti meningkatkan semangat dan daya konsentrasi siswa dalam mengikuti proses belajar mengajar."
+    },
+    {
+        id: 4,
+        judul: "Pembinaan Rohani dan Peringatan Hari Besar Keagamaan Siswa",
+        kategori: "Karakter & Budi Pekerti",
+        penulis: "Dewan Guru Agama",
+        tanggal: "24 Oktober 2026",
+        foto: "images/kegiatan-keagamaan-rohani.jpg",
+        snippet: "Menjunjung tinggi toleransi dan keberagaman, sekolah membina keimanan siswa melalui pembagian kelas keagamaan Islam, Kristen Protestan, dan Katolik secara intensif dan harmonis.",
+        isi: "SDN Inpres Arso VIII mengedepankan pembentukan budi pekerti luhur bagi seluruh generasi muda. Setiap pekan, guru agama Islam, Kristen Protestan, dan Katolik membimbing para siswa sesuai keyakinan masing-masing dalam suasana persaudaraan yang damai dan toleran di Tanah Papua."
+    },
+    {
+        id: 5,
+        judul: "Rapat Koordinasi Dewan Guru & Kepala Sekolah Tingkatkan Kualitas Belajar",
+        kategori: "Manajemen Sekolah",
+        penulis: "Kepala Sekolah",
+        tanggal: "20 Oktober 2026",
+        foto: "images/kegiatan-rapat-dewan-guru.jpg",
+        snippet: "Bapak Kepala Sekolah Adi Puspito, S.Pd memimpin rapat kerja dewan guru di kantor sekolah guna mematangkan implementasi Kurikulum Merdeka dan evaluasi berkala capaian belajar peserta didik.",
+        isi: "Rapat koordinasi dewan guru rutin diselenggarakan di ruang kantor SDN Inpres Arso VIII. Fokus utama pembahasan mencakup kedisiplinan guru mengajar, pemanfaatan perangkat TIK, serta strategi pendampingan khusus bagi peserta didik agar mencapai kompetensi maksimal."
+    },
+    {
+        id: 6,
+        judul: "Prestasi dan Semangat Siswa Gugus Depan 08-013 Pramuka SDN Inpres Arso VIII",
+        kategori: "Pramuka & Budaya Papua",
+        penulis: "Pembina Pramuka",
+        tanggal: "15 Oktober 2026",
+        foto: "images/kegiatan-pramuka-budaya.jpg",
+        snippet: "Mengenakan busana adat Papua dan pakaian tradisional Nusantara, regu Pramuka SDN Inpres Arso VIII tampil membanggakan dalam kegiatan perkemahan dan festival budaya daerah.",
+        isi: "Gugus Depan 08-013 SDN Inpres Arso VIII aktif menanamkan jiwa kepanduan, kemandirian, dan kecintaan pada kearifan lokal. Penampilan busana tradisional khas Papua dan Nusantara melatih rasa percaya diri peserta didik dalam menghargai warisan luhur bangsa."
+    }
+];
+
+function initBeritaManager() {
+    const form = document.getElementById('addBeritaForm');
+    const editIdInput = document.getElementById('editBeritaId');
+    const formHeading = document.getElementById('formBeritaHeading');
+    const btnSubmit = document.getElementById('btnSimpanBerita');
+    const btnBatal = document.getElementById('btnBatalEditBerita');
+
+    const judulInput = document.getElementById('beritaJudul');
+    const kategoriInput = document.getElementById('beritaKategori');
+    const penulisInput = document.getElementById('beritaPenulis');
+    const fileInput = document.getElementById('beritaFileInput');
+    const previewContainer = document.getElementById('beritaPreviewContainer');
+    const previewImg = document.getElementById('beritaPreviewImg');
+    const snippetInput = document.getElementById('beritaSnippet');
+    const isiInput = document.getElementById('beritaIsi');
+    const tableBody = document.getElementById('beritaTableBody');
+    const dashCount = document.getElementById('dashCountBerita');
+    const dashPreviewList = document.getElementById('dashBeritaPreviewList');
+    const btnReset = document.getElementById('btnResetBeritaDefault');
+
+    let currentImageDataUrl = '';
+
+    // Kompresi foto berita menggunakan canvas (< 80KB)
+    function compressImageFile(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onerror = reject;
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onerror = reject;
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+                    const maxDim = 800;
+                    if (width > maxDim || height > maxDim) {
+                        if (width > height) {
+                            height = Math.round((height * maxDim) / width);
+                            width = maxDim;
+                        } else {
+                            width = Math.round((width * maxDim) / height);
+                            height = maxDim;
+                        }
+                    }
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    resolve(canvas.toDataURL('image/jpeg', 0.75));
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    if (fileInput) {
+        fileInput.addEventListener('change', async function() {
+            if (this.files && this.files[0]) {
+                const file = this.files[0];
+                if (!file.type.startsWith('image/')) {
+                    alert('Harap pilih berkas gambar (JPG, PNG, WebP).');
+                    this.value = '';
+                    return;
+                }
+                try {
+                    currentImageDataUrl = await compressImageFile(file);
+                    if (previewImg && previewContainer) {
+                        previewImg.src = currentImageDataUrl;
+                        previewContainer.style.display = 'block';
+                    }
+                } catch (err) {
+                    console.error('Kompresi gambar gagal:', err);
+                    alert('Gagal memproses gambar. Silakan coba gambar lain.');
+                }
+            } else {
+                if (!editIdInput || !editIdInput.value) {
+                    currentImageDataUrl = '';
+                    if (previewContainer) previewContainer.style.display = 'none';
+                }
+            }
+        });
+    }
+
+    function resetBeritaForm() {
+        if (form) form.reset();
+        if (editIdInput) editIdInput.value = '';
+        currentImageDataUrl = '';
+        if (previewContainer) previewContainer.style.display = 'none';
+        if (formHeading) formHeading.textContent = '+ Tulis Berita Baru';
+        if (btnSubmit) btnSubmit.innerHTML = '📢 Terbitkan Berita Sekarang';
+        if (btnBatal) btnBatal.style.display = 'none';
+    }
+
+    if (btnBatal) {
+        btnBatal.addEventListener('click', resetBeritaForm);
+    }
+
+    function getBeritaData() {
+        if (window.SDN_DATABASE && Array.isArray(window.SDN_DATABASE.berita) && window.SDN_DATABASE.berita.length > 0) {
+            return window.SDN_DATABASE.berita;
+        }
+        const raw = localStorage.getItem('sdn_berita_data');
+        if (raw && !raw.includes('unsplash')) {
+            try {
+                const parsed = JSON.parse(raw);
+                return Array.isArray(parsed) ? parsed : defaultBeritaList;
+            } catch (e) {
+                return defaultBeritaList;
+            }
+        }
+        return defaultBeritaList;
+    }
+
+    function saveBeritaData(data) {
+        try {
+            localStorage.setItem('sdn_berita_data', JSON.stringify(data));
+        } catch (e) {
+            if (e.name === 'QuotaExceededError') {
+                alert('Peringatan: Penyimpanan browser penuh. Foto berita tidak dapat disimpan dalam ukuran besar. Coba gunakan foto dengan resolusi lebih kecil.');
+            }
+        }
+        if (window.SDN_DATABASE) window.SDN_DATABASE.berita = data;
+        syncToServer('berita', data);
+        try { window.dispatchEvent(new Event('storage')); } catch (e) {}
+    }
+
+    // State Paginasi & Pencarian Berita Admin
+    let beritaPage = 1;
+    const adminBeritaSearch = document.getElementById('adminBeritaSearch');
+    const adminBeritaPageSize = document.getElementById('adminBeritaPageSize');
+
+    if (adminBeritaSearch) {
+        adminBeritaSearch.addEventListener('input', () => {
+            beritaPage = 1;
+            renderBerita();
+        });
+    }
+    if (adminBeritaPageSize) {
+        adminBeritaPageSize.addEventListener('change', () => {
+            beritaPage = 1;
+            renderBerita();
+        });
+    }
+
+    function renderBerita() {
+        const allItems = getBeritaData();
+
+        // Update Counter di Dashboard Utama
+        if (dashCount) {
+            dashCount.textContent = allItems.length;
+        }
+
+        // Filter pencarian
+        const q = adminBeritaSearch ? adminBeritaSearch.value.trim().toLowerCase() : '';
+        let filteredItems = allItems;
+        if (q) {
+            filteredItems = allItems.filter(item => 
+                (item.judul && item.judul.toLowerCase().includes(q)) ||
+                (item.snippet && item.snippet.toLowerCase().includes(q)) ||
+                (item.penulis && item.penulis.toLowerCase().includes(q)) ||
+                (item.kategori && item.kategori.toLowerCase().includes(q)) ||
+                (item.tanggal && item.tanggal.toLowerCase().includes(q)) ||
+                (item.isi && item.isi.toLowerCase().includes(q))
+            );
+        }
+
+        const totalItems = filteredItems.length;
+        const pageSizeVal = adminBeritaPageSize ? adminBeritaPageSize.value : '5';
+        const pageSize = pageSizeVal === 'ALL' ? totalItems : (parseInt(pageSizeVal, 10) || 5);
+        const totalPages = pageSizeVal === 'ALL' ? 1 : Math.ceil(totalItems / pageSize) || 1;
+        if (beritaPage > totalPages) beritaPage = totalPages;
+        if (beritaPage < 1) beritaPage = 1;
+
+        const startIdx = pageSizeVal === 'ALL' ? 0 : (beritaPage - 1) * pageSize;
+        const endIdx = pageSizeVal === 'ALL' ? totalItems : Math.min(startIdx + pageSize, totalItems);
+        const pagedItems = filteredItems.slice(startIdx, endIdx);
+
+        // Update Tabel di Tab Berita
+        if (tableBody) {
+            tableBody.innerHTML = '';
+            if (pagedItems.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 30px; color: #94a3b8;">${allItems.length === 0 ? 'Belum ada berita yang diterbitkan. Silakan tulis berita baru di atas.' : 'Tidak ada berita yang cocok dengan kata kunci pencarian.'}</td></tr>`;
+            } else {
+                pagedItems.forEach((item, index) => {
+                    const realNum = startIdx + index + 1;
+                    const tr = document.createElement('tr');
+                    const imgThumb = item.foto || 'images/gerbang-sekolah.jpg';
+                    tr.innerHTML = `
+                        <td style="text-align: center; font-weight: 700;">${realNum}</td>
+                        <td>
+                            <img src="${imgThumb}" alt="${escapeHTML(item.judul)}" style="width: 80px; height: 50px; object-fit: cover; border-radius: 6px; border: 1px solid #e2e8f0;">
+                        </td>
+                        <td>
+                            <strong style="color: var(--primary-dark); font-size: 14px;">${escapeHTML(item.judul)}</strong>
+                            <p style="font-size: 12.5px; color: #64748b; margin: 4px 0 0; line-height: 1.4;">${escapeHTML(item.snippet || '')}</p>
+                        </td>
+                        <td>
+                            <span class="badge" style="background: #e0f2fe; color: #0369a1; font-size: 11px; padding: 3px 8px; border-radius: 4px; font-weight: 700; display: inline-block; margin-bottom: 4px;">
+                                ${escapeHTML(item.kategori || 'Kegiatan')}
+                            </span>
+                            <div style="margin-bottom: 4px;">
+                                ${item.status === 'draft' ? '<span style="background: #fef3c7; color: #92400e; font-size: 10.5px; font-weight: 800; padding: 2px 7px; border-radius: 4px; border: 1px solid #fcd34d;">🟡 Draft</span>' : '<span style="background: #dcfce7; color: #166534; font-size: 10.5px; font-weight: 800; padding: 2px 7px; border-radius: 4px; border: 1px solid #86efac;">🟢 Terbit</span>'}
+                            </div>
+                            <div style="font-size: 11.5px; color: #64748b;">📅 ${escapeHTML(item.tanggal)}</div>
+                            <div style="font-size: 11px; color: #94a3b8;">✍️ ${escapeHTML(item.penulis || 'Humas')}</div>
+                        </td>
+                        <td style="text-align: center; white-space: nowrap;">
+                            <button type="button" class="btn-toggle-status-berita" data-id="${item.id}" title="Ubah Status Publikasi" style="background: ${item.status === 'draft' ? '#fef3c7' : '#f1f5f9'}; border: 1px solid ${item.status === 'draft' ? '#fcd34d' : '#cbd5e1'}; color: ${item.status === 'draft' ? '#b45309' : '#334155'}; padding: 5px 9px; border-radius: 6px; cursor: pointer; font-size: 11.5px; font-weight: 700; margin-right: 4px;">
+                                ${item.status === 'draft' ? '🚀 Terbitkan' : '💾 Jadikan Draft'}
+                            </button>
+                            <button type="button" class="btn-edit-berita" data-id="${item.id}" title="Edit Berita Ini" style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; padding: 6px 11px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 700; margin-right: 4px;">
+                                ✏️ Edit
+                            </button>
+                            <button type="button" class="btn-delete-berita" data-id="${item.id}" title="Hapus Berita Ini" style="background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; padding: 6px 11px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 700;">
+                                🗑️ Hapus
+                            </button>
+                        </td>
+                    `;
+                    tableBody.appendChild(tr);
+                });
+
+                // Handler tombol Edit Berita
+                tableBody.querySelectorAll('.btn-toggle-status-berita').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = parseInt(this.getAttribute('data-id'), 10);
+                        const all = getBeritaData();
+                        const item = all.find(b => b.id === id);
+                        if (!item) return;
+                        item.status = (item.status === 'draft') ? 'published' : 'draft';
+                        saveBeritaData(all);
+                        renderBerita();
+                        logAdminActivity('Ubah Status Berita', `Mengubah status "${(item.judul || '').slice(0, 30)}..." menjadi ${item.status}`);
+                        showSyncToast(item.status === 'published' ? '🚀 Berita berhasil diterbitkan!' : '💾 Berita diubah menjadi draft.');
+                    });
+                });
+
+                tableBody.querySelectorAll('.btn-edit-berita').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = parseInt(this.getAttribute('data-id'), 10);
+                        const cur = getBeritaData();
+                        const item = cur.find(b => b.id === id);
+                        if (!item) return;
+
+                        if (editIdInput) editIdInput.value = item.id;
+                        if (judulInput) judulInput.value = item.judul;
+                        if (kategoriInput) kategoriInput.value = item.kategori;
+                        if (penulisInput) penulisInput.value = item.penulis || 'Humas SDN Inpres Arso VIII';
+                        if (snippetInput) snippetInput.value = item.snippet;
+                        if (isiInput) isiInput.value = item.isi || item.snippet;
+
+                        if (item.foto) {
+                            currentImageDataUrl = item.foto;
+                            if (previewImg && previewContainer) {
+                                previewImg.src = item.foto;
+                                previewContainer.style.display = 'block';
+                            }
+                        } else {
+                            currentImageDataUrl = '';
+                            if (previewContainer) previewContainer.style.display = 'none';
+                        }
+
+                        if (formHeading) formHeading.textContent = `✏️ Edit Berita: "${item.judul.slice(0, 35)}..."`;
+                        if (btnSubmit) btnSubmit.innerHTML = '💾 Simpan Perubahan Berita';
+                        if (btnBatal) btnBatal.style.display = 'inline-block';
+
+                        const cardForm = document.getElementById('cardBeritaForm') || form;
+                        cardForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    });
+                });
+
+                // Handler tombol Hapus Berita
+                tableBody.querySelectorAll('.btn-delete-berita').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = parseInt(this.getAttribute('data-id'), 10);
+                        if (confirm('Apakah Anda yakin ingin menghapus berita ini dari publikasi?')) {
+                            const cur = getBeritaData();
+                            const filtered = cur.filter(b => b.id !== id);
+                            saveBeritaData(filtered);
+                            if (editIdInput && parseInt(editIdInput.value, 10) === id) {
+                                resetBeritaForm();
+                            }
+                            renderBerita();
+                        }
+                    });
+                });
+            }
+        }
+
+        // Render Kontrol Paginasi Berita
+        renderAdminPaginationControls('adminBeritaPagination', beritaPage, totalPages, totalItems, pageSizeVal, (p) => {
+            beritaPage = p;
+            renderBerita();
+        });
+
+        // Update Pratinjau Berita di Dashboard Utama (dashBeritaPreviewList)
+        if (dashPreviewList) {
+            dashPreviewList.innerHTML = '';
+            const previewItems = allItems.slice(0, 4);
+            if (previewItems.length === 0) {
+                dashPreviewList.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 25px; color: #94a3b8;">Belum ada berita terbit.</div>`;
+            } else {
+                previewItems.forEach(item => {
+                    const card = document.createElement('div');
+                    card.style.cssText = 'background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px; display: flex; gap: 14px; align-items: flex-start;';
+                    const imgThumb = item.foto || 'images/gerbang-sekolah.jpg';
+                    card.innerHTML = `
+                        <img src="${imgThumb}" alt="${escapeHTML(item.judul)}" style="width: 85px; height: 65px; object-fit: cover; border-radius: 6px; border: 1px solid #cbd5e1; flex-shrink: 0;">
+                        <div style="flex: 1; min-width: 0;">
+                            <div style="display: flex; gap: 6px; align-items: center; margin-bottom: 4px; flex-wrap: wrap;">
+                                <span style="background: #e0f2fe; color: #0284c7; font-size: 10.5px; font-weight: 700; padding: 2px 6px; border-radius: 4px;">${escapeHTML(item.kategori || 'Kegiatan')}</span>
+                                <span style="font-size: 11px; color: #94a3b8;">📅 ${escapeHTML(item.tanggal)}</span>
+                            </div>
+                            <h4 style="font-size: 13.5px; font-weight: 700; color: #0f172a; margin: 0 0 4px; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${escapeHTML(item.judul)}</h4>
+                            <p style="font-size: 12px; color: #64748b; margin: 0; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${escapeHTML(item.snippet || '')}</p>
+                        </div>
+                    `;
+                    dashPreviewList.appendChild(card);
+                });
+            }
+        }
+    }
+
+    // Submit form tambah / simpan edit berita
+    if (form && !form._bound) {
+        form._bound = true;
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const judul = judulInput.value.trim();
+            const kategori = kategoriInput.value;
+            const penulis = penulisInput.value.trim() || 'Humas SDN Inpres Arso VIII';
+            const snippet = snippetInput.value.trim();
+            const isi = isiInput.value.trim();
+
+            if (!judul || !snippet || !isi) {
+                alert('Harap lengkapi semua bidang yang bertanda bintang (*).');
+                return;
+            }
+
+            const isEdit = editIdInput && editIdInput.value;
+            const cur = getBeritaData();
+
+            if (isEdit) {
+                const editId = parseInt(editIdInput.value, 10);
+                const itemIndex = cur.findIndex(b => b.id === editId);
+                if (itemIndex !== -1) {
+                    cur[itemIndex].judul = judul;
+                    cur[itemIndex].kategori = kategori;
+                    cur[itemIndex].penulis = penulis;
+                    cur[itemIndex].snippet = snippet;
+                    cur[itemIndex].isi = isi;
+                    if (currentImageDataUrl) {
+                        cur[itemIndex].foto = currentImageDataUrl;
+                    }
+                    saveBeritaData(cur);
+                    resetBeritaForm();
+                    renderBerita();
+                    alert(`✅ Perubahan berita "${judul}" berhasil disimpan!
+Perubahan langsung tayang di Dashboard Utama, Beranda, dan Halaman Berita.`);
+                    return;
+                }
+            }
+
+            // Mode Tambah Baru
+            const now = new Date();
+            const tanggalStr = `${now.getDate().toString().padStart(2, '0')} ${['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'][now.getMonth()]} ${now.getFullYear()}`;
+
+            const newBerita = {
+                id: Date.now(),
+                judul: judul,
+                kategori: kategori,
+                penulis: penulis,
+                tanggal: tanggalStr,
+                foto: currentImageDataUrl || 'images/gerbang-sekolah.jpg',
+                status: statusVal,
+                snippet: snippet,
+                isi: isi
+            };
+
+            cur.unshift(newBerita);
+            saveBeritaData(cur);
+
+            resetBeritaForm();
+            renderBerita();
+            alert(`✅ Berita "${judul}" berhasil diterbitkan!
+Berita ini langsung tampil di Dashboard Utama, Beranda Sekolah, dan Halaman Berita.`);
+        });
+    }
+
+    // Reset ke data berita bawaan
+    if (btnReset) {
+        btnReset.addEventListener('click', function() {
+            if (confirm('Pulihkan berita ke data bawaan sekolah? Berita kustom yang baru ditambahkan akan digantikan dengan berita awal.')) {
+                saveBeritaData(defaultBeritaList);
+                resetBeritaForm();
+                renderBerita();
+                alert('Berita berhasil dipulihkan ke pengaturan bawaan sekolah.');
+            }
+        });
+    }
+
+    // Inisialisasi awal saat halaman admin dimuat
+    renderBerita();
+}
+
+
+/* -------------------------------------------------------------------
+   4. KELOLA PENGUMUMAN SEKOLAH (CRUD LENGKAP DENGAN EDIT & LOCALSTORAGE)
+   ------------------------------------------------------------------- */
+const defaultPengumuman = [
+    {
+        id: 1,
+        judul: "Jadwal Penilaian Akhir Semester (PAS) Ganjil 2026/2027",
+        kategori: "AKADEMIK",
+        tanggal: "04 November 2026",
+        isi: "Asesmen Akhir Semester Ganjil akan dilaksanakan mulai tanggal 08 Desember s.d. 14 Desember 2026. Seluruh siswa diharapkan menjaga kesehatan dan mempersiapkan diri dengan baik.",
+        pengirim: "Kepala Sekolah - Adi Puspito, S.Pd"
+    },
+    {
+        id: 2,
+        judul: "Upacara Peringatan Hari Pahlawan Nasional 10 November 2026",
+        kategori: "KEGIATAN",
+        tanggal: "26 Oktober 2026",
+        isi: "Upacara bendera peringatan Hari Pahlawan bertempat di lapangan upacara SDN Inpres Arso VIII pada pukul 07.30 WIT. Siswa wajib berseragam merah putih lengkap.",
+        pengirim: "Urusan Kesiswaan"
+    },
+    {
+        id: 3,
+        judul: "Gerakan Jumat Bersih dan Peduli Lingkungan Sekolah 1 Hektar",
+        kategori: "LINGKUNGAN",
+        tanggal: "15 Oktober 2026",
+        isi: "Kerja bakti bersama membersihkan taman, ruang kelas, dan saluran air sekolah seluas 10.000 m² untuk menciptakan lingkungan belajar yang asri dan sehat.",
+        pengirim: "Tim Pembina Lingkungan"
+    }
+];
+
+function getPengumumanData() {
+    if (window.SDN_DATABASE && Array.isArray(window.SDN_DATABASE.pengumuman) && window.SDN_DATABASE.pengumuman.length > 0) {
+        return window.SDN_DATABASE.pengumuman;
+    }
+    const data = localStorage.getItem('sdn_pengumuman_data');
+    return data ? JSON.parse(data) : defaultPengumuman;
+}
+
+function savePengumumanData(data) {
+    try {
+        localStorage.setItem('sdn_pengumuman_data', JSON.stringify(data));
+    } catch (e) {}
+    if (window.SDN_DATABASE) window.SDN_DATABASE.pengumuman = data;
+    syncToServer('pengumuman', data);
+    try { window.dispatchEvent(new Event('storage')); } catch (e) {}
+}
+
+function initPengumumanManager() {
+    const tableBody = document.getElementById('pengumumanTableBody');
+    const form = document.getElementById('addPengumumanForm');
+    const editIdInput = document.getElementById('editPengumumanId');
+    const judulInput = document.getElementById('inputJudul');
+    const kategoriInput = document.getElementById('inputKategori');
+    const isiInput = document.getElementById('inputIsi');
+    const pengirimInput = document.getElementById('inputPengirim');
+    const btnSubmit = document.getElementById('btnSimpanPengumuman');
+    const btnBatal = document.getElementById('btnBatalEditPengumuman');
+    const btnReset = document.getElementById('btnResetPengumumanDefault');
+    const formHeading = document.getElementById('formPengumumanHeading');
+
+    if (!tableBody) return;
+
+    function resetPengumumanForm() {
+        if (form) form.reset();
+        if (editIdInput) editIdInput.value = '';
+        if (formHeading) formHeading.textContent = '+ Tambah Pengumuman Baru';
+        if (btnSubmit) btnSubmit.innerHTML = '💾 Simpan & Terbitkan Pengumuman';
+        if (btnBatal) btnBatal.style.display = 'none';
+        if (pengirimInput) pengirimInput.value = 'Kepala Sekolah - Adi Puspito, S.Pd';
+    }
+
+    // State Paginasi & Pencarian Pengumuman Admin
+    let pengumumanPage = 1;
+    const adminPengumumanSearch = document.getElementById('adminPengumumanSearch');
+    const adminPengumumanPageSize = document.getElementById('adminPengumumanPageSize');
+
+    if (adminPengumumanSearch) {
+        adminPengumumanSearch.addEventListener('input', () => {
+            pengumumanPage = 1;
+            renderTable();
+        });
+    }
+    if (adminPengumumanPageSize) {
+        adminPengumumanPageSize.addEventListener('change', () => {
+            pengumumanPage = 1;
+            renderTable();
+        });
+    }
+
+    function renderTable() {
+        const allItems = getPengumumanData();
+
+        // Update counter ringkasan di dashboard utama
+        const countBadge = document.getElementById('dashCountPengumuman');
+        if (countBadge) countBadge.textContent = allItems.length;
+
+        // Filter pencarian
+        const q = adminPengumumanSearch ? adminPengumumanSearch.value.trim().toLowerCase() : '';
+        let filteredItems = allItems;
+        if (q) {
+            filteredItems = allItems.filter(item => 
+                (item.judul && item.judul.toLowerCase().includes(q)) ||
+                (item.isi && item.isi.toLowerCase().includes(q)) ||
+                (item.kategori && item.kategori.toLowerCase().includes(q)) ||
+                (item.pengirim && item.pengirim.toLowerCase().includes(q)) ||
+                (item.tanggal && item.tanggal.toLowerCase().includes(q))
+            );
+        }
+
+        const totalItems = filteredItems.length;
+        const pageSizeVal = adminPengumumanPageSize ? adminPengumumanPageSize.value : '5';
+        const pageSize = pageSizeVal === 'ALL' ? totalItems : (parseInt(pageSizeVal, 10) || 5);
+        const totalPages = pageSizeVal === 'ALL' ? 1 : Math.ceil(totalItems / pageSize) || 1;
+        if (pengumumanPage > totalPages) pengumumanPage = totalPages;
+        if (pengumumanPage < 1) pengumumanPage = 1;
+
+        const startIdx = pageSizeVal === 'ALL' ? 0 : (pengumumanPage - 1) * pageSize;
+        const endIdx = pageSizeVal === 'ALL' ? totalItems : Math.min(startIdx + pageSize, totalItems);
+        const pagedItems = filteredItems.slice(startIdx, endIdx);
+
+        tableBody.innerHTML = '';
+
+        if (pagedItems.length === 0) {
+            tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #94a3b8; padding: 25px;">${allItems.length === 0 ? 'Belum ada pengumuman tersimpan. Silakan tambahkan pengumuman baru di atas.' : 'Tidak ada pengumuman yang cocok dengan pencarian.'}</td></tr>`;
+        } else {
+            pagedItems.forEach((item, index) => {
+                const realNum = startIdx + index + 1;
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="text-align: center; font-weight: bold;">${realNum}</td>
+                    <td>
+                        <strong style="color: var(--primary-dark); font-size: 14px;">${escapeHTML(item.judul)}</strong><br>
+                        <small style="color: #64748b; line-height: 1.4; display: block; margin-top: 4px;">${escapeHTML((item.isi || '').substring(0, 95))}...</small>
+                        <div style="font-size: 11px; color: #94a3b8; margin-top: 3px;">✍️ ${escapeHTML(item.pengirim || 'Kepala Sekolah')}</div>
+                    </td>
+                    <td>
+                        <span class="badge-tag akreditasi" style="font-size: 11px;">${escapeHTML(item.kategori || 'UMUM')}</span>
+                        <div style="margin-top: 4px;">
+                            ${item.status === 'draft' ? '<span style="background: #fef3c7; color: #92400e; font-size: 10.5px; font-weight: 800; padding: 2px 7px; border-radius: 4px; border: 1px solid #fcd34d;">🟡 Draft</span>' : '<span style="background: #dcfce7; color: #166534; font-size: 10.5px; font-weight: 800; padding: 2px 7px; border-radius: 4px; border: 1px solid #86efac;">🟢 Terbit</span>'}
+                        </div>
+                    </td>
+                    <td style="font-size: 12.5px; color: #475569;">📅 ${escapeHTML(item.tanggal)}</td>
+                    <td style="text-align: center; white-space: nowrap;">
+                        <button type="button" class="btn-toggle-status-pengumuman" data-id="${item.id}" style="background: ${item.status === 'draft' ? '#fef3c7' : '#f1f5f9'}; border: 1px solid ${item.status === 'draft' ? '#fcd34d' : '#cbd5e1'}; color: ${item.status === 'draft' ? '#b45309' : '#334155'}; padding: 5px 8px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 700; margin-right: 4px;">
+                            ${item.status === 'draft' ? '🚀 Terbitkan' : '💾 Draft'}
+                        </button>
+                        <button type="button" class="btn-action-edit-pengumuman" data-id="${item.id}" style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 700; margin-right: 4px;">✏️ Edit</button>
+                        <button type="button" class="btn-action-delete-pengumuman" data-id="${item.id}" style="background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 700;">🗑️ Hapus</button>
+                    </td>
+                `;
+                tableBody.appendChild(tr);
+            });
+
+            // Pasang event listener Edit
+            tableBody.querySelectorAll('.btn-toggle-status-pengumuman').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'), 10);
+                    const all = getPengumumanData();
+                    const item = all.find(p => p.id === id);
+                    if (!item) return;
+                    item.status = (item.status === 'draft') ? 'published' : 'draft';
+                    savePengumumanData(all);
+                    renderTable();
+                    logAdminActivity('Ubah Status Pengumuman', `Mengubah status "${(item.judul || '').slice(0, 30)}..." menjadi ${item.status}`);
+                    showSyncToast(item.status === 'published' ? '🚀 Pengumuman berhasil diterbitkan!' : '💾 Pengumuman diubah menjadi draft.');
+                });
+            });
+
+            tableBody.querySelectorAll('.btn-action-edit-pengumuman').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'), 10);
+                    const items = getPengumumanData();
+                    const item = items.find(i => i.id === id);
+                    if (!item) return;
+
+                    if (editIdInput) editIdInput.value = item.id;
+                    if (judulInput) judulInput.value = item.judul;
+                    if (kategoriInput) kategoriInput.value = item.kategori;
+                    if (isiInput) isiInput.value = item.isi;
+                    if (pengirimInput) pengirimInput.value = item.pengirim || 'Kepala Sekolah - Adi Puspito, S.Pd';
+
+                    if (formHeading) formHeading.textContent = `✏️ Edit Pengumuman: "${item.judul.slice(0, 32)}..."`;
+                    if (btnSubmit) btnSubmit.innerHTML = '💾 Simpan Perubahan Pengumuman';
+                    if (btnBatal) btnBatal.style.display = 'inline-block';
+
+                    const cardForm = document.getElementById('cardPengumumanForm') || form;
+                    cardForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                });
+            });
+
+            // Pasang event listener Hapus
+            tableBody.querySelectorAll('.btn-action-delete-pengumuman').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'), 10);
+                    if (confirm('Apakah Anda yakin ingin menghapus pengumuman ini?')) {
+                        let items = getPengumumanData();
+                        items = items.filter(i => i.id !== id);
+                        savePengumumanData(items);
+                        if (editIdInput && parseInt(editIdInput.value, 10) === id) {
+                            resetPengumumanForm();
+                        }
+                        renderTable();
+                    }
+                });
+            });
+        }
+
+        // Render Kontrol Paginasi Pengumuman
+        renderAdminPaginationControls('adminPengumumanPagination', pengumumanPage, totalPages, totalItems, pageSizeVal, (p) => {
+            pengumumanPage = p;
+            renderTable();
+        });
+    }
+
+    if (form) {
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const judul = judulInput.value.trim();
+            const kategori = kategoriInput.value;
+            const isi = isiInput.value.trim();
+            const pengirim = pengirimInput.value.trim() || 'Kepala Sekolah - Adi Puspito, S.Pd';
+
+            if (!judul || !isi) {
+                alert('Silakan isi judul dan materi isi pengumuman.');
+                return;
+            }
+
+            const items = getPengumumanData();
+            const isEdit = editIdInput && editIdInput.value;
+
+            if (isEdit) {
+                const editId = parseInt(editIdInput.value, 10);
+                const itemIndex = items.findIndex(i => i.id === editId);
+                if (itemIndex !== -1) {
+                    items[itemIndex].judul = judul;
+                    items[itemIndex].kategori = kategori;
+                    items[itemIndex].isi = isi;
+                    items[itemIndex].pengirim = pengirim;
+                    savePengumumanData(items);
+                    resetPengumumanForm();
+                    renderTable();
+                    alert(`✅ Pengumuman "${judul}" berhasil diperbarui!
+Perubahan langsung otomatis tampil di halaman Pengumuman & Beranda.`);
+                    return;
+                }
+            }
+
+            // Mode Tambah Baru
+            const now = new Date();
+            const tglStr = `${now.getDate().toString().padStart(2, '0')} ${['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'][now.getMonth()]} ${now.getFullYear()}`;
+
+            const newItem = {
+                id: Date.now(),
+                judul: judul,
+                kategori: kategori,
+                tanggal: tglStr,
+                isi: isi,
+                pengirim: pengirim
+            };
+
+            items.unshift(newItem);
+            savePengumumanData(items);
+            resetPengumumanForm();
+            renderTable();
+            alert(`✅ Pengumuman "${judul}" berhasil diterbitkan!
+Pengumuman ini langsung aktif di halaman Pengumuman & Beranda.`);
+        });
+    }
+
+    if (btnBatal) {
+        btnBatal.addEventListener('click', function() {
+            resetPengumumanForm();
+        });
+    }
+
+    if (btnReset) {
+        btnReset.addEventListener('click', function() {
+            if (confirm('Pulihkan pengumuman ke data bawaan awal sekolah?')) {
+                savePengumumanData(defaultPengumuman);
+                resetPengumumanForm();
+                renderTable();
+                alert('Pengumuman berhasil dipulihkan ke pengaturan bawaan sekolah.');
+            }
+        });
+    }
+
+
+    // --- KELOLA PROFIL GUGUS 1, K3S & KKG KELOMPOK A/B (DINAMIS) ---
+    const btnSimpanProfil = document.getElementById('btnSimpanKKGProfil');
+    const btnResetProfil = document.getElementById('btnResetKKGProfil');
+
+    function populateKKGProfilFields() {
+        const data = getKKGData();
+        const info = data.gusek_info || {};
+        const k3s = data.k3s || {};
+        const kelA = data.kkg_kelompok_a || {};
+        const kelB = data.kkg_kelompok_b || {};
+
+        const elSekretariat = document.getElementById('kkgSekretariatInput');
+        if (elSekretariat) elSekretariat.value = info.alamat_sekretariat || '';
+
+        const elWaktu = document.getElementById('kkgWaktuInput');
+        if (elWaktu) elWaktu.value = info.hari_rutin || k3s.jadwal || '';
+
+        const elKetua = document.getElementById('kkgKetuaInput');
+        if (elKetua) elKetua.value = info.ketua || '';
+
+        const elNIP = document.getElementById('kkgNIPKetuaInput');
+        if (elNIP) elNIP.value = info.nip_ketua || '';
+
+        const elDasarSK = document.getElementById('kkgDasarSKInput');
+        if (elDasarSK) elDasarSK.value = info.dasar_hukum || info.tanggal_penetapan || '';
+
+        const elDeskripsi = document.getElementById('kkgDeskripsiInput');
+        if (elDeskripsi) elDeskripsi.value = info.deskripsi || '';
+
+        const elK3SProg = document.getElementById('k3sProgramsInput');
+        if (elK3SProg) elK3SProg.value = (k3s.uraian_kerja || []).join('\n');
+
+        const elKelAJudul = document.getElementById('kkgKelAJudul');
+        if (elKelAJudul) elKelAJudul.value = kelA.nama_kelompok || kelA.judul || '';
+
+        const elKelACakupan = document.getElementById('kkgKelACakupan');
+        if (elKelACakupan) elKelACakupan.value = kelA.cakupan || kelA.sasaran || '';
+
+        const elKelAJadwal = document.getElementById('kkgKelAJadwal');
+        if (elKelAJadwal) elKelAJadwal.value = kelA.jadwal || '';
+
+        const elKelAProg = document.getElementById('kkgKelAPrograms');
+        if (elKelAProg) elKelAProg.value = (kelA.uraian_kerja || []).join('\n');
+
+        const elKelBJudul = document.getElementById('kkgKelBJudul');
+        if (elKelBJudul) elKelBJudul.value = kelB.nama_kelompok || kelB.judul || '';
+
+        const elKelBCakupan = document.getElementById('kkgKelBCakupan');
+        if (elKelBCakupan) elKelBCakupan.value = kelB.cakupan || kelB.sasaran || '';
+
+        const elKelBJadwal = document.getElementById('kkgKelBJadwal');
+        if (elKelBJadwal) elKelBJadwal.value = kelB.jadwal || '';
+
+        const elKelBProg = document.getElementById('kkgKelBPrograms');
+        if (elKelBProg) elKelBProg.value = (kelB.uraian_kerja || []).join('\n');
+    }
+
+    populateKKGProfilFields();
+
+    if (btnSimpanProfil) {
+        btnSimpanProfil.addEventListener('click', function() {
+            const data = getKKGData();
+            if (!data.gusek_info) data.gusek_info = {};
+            if (!data.k3s) data.k3s = {};
+            if (!data.kkg_kelompok_a) data.kkg_kelompok_a = {};
+            if (!data.kkg_kelompok_b) data.kkg_kelompok_b = {};
+
+            const elSekretariat = document.getElementById('kkgSekretariatInput');
+            if (elSekretariat) {
+                data.gusek_info.alamat_sekretariat = elSekretariat.value.trim();
+                data.k3s.sekretariat = elSekretariat.value.trim();
+            }
+
+            const elWaktu = document.getElementById('kkgWaktuInput');
+            if (elWaktu) {
+                data.gusek_info.hari_rutin = elWaktu.value.trim();
+                data.k3s.jadwal = elWaktu.value.trim();
+            }
+
+            const elKetua = document.getElementById('kkgKetuaInput');
+            if (elKetua) data.gusek_info.ketua = elKetua.value.trim();
+
+            const elNIP = document.getElementById('kkgNIPKetuaInput');
+            if (elNIP) data.gusek_info.nip_ketua = elNIP.value.trim();
+
+            const elDasarSK = document.getElementById('kkgDasarSKInput');
+            if (elDasarSK) data.gusek_info.dasar_hukum = elDasarSK.value.trim();
+
+            const elDeskripsi = document.getElementById('kkgDeskripsiInput');
+            if (elDeskripsi) data.gusek_info.deskripsi = elDeskripsi.value.trim();
+
+            const elK3SProg = document.getElementById('k3sProgramsInput');
+            if (elK3SProg) {
+                data.k3s.uraian_kerja = elK3SProg.value.split('\n').map(l => l.trim()).filter(Boolean);
+            }
+
+            const elKelAJudul = document.getElementById('kkgKelAJudul');
+            if (elKelAJudul) data.kkg_kelompok_a.nama_kelompok = elKelAJudul.value.trim();
+
+            const elKelACakupan = document.getElementById('kkgKelACakupan');
+            if (elKelACakupan) data.kkg_kelompok_a.cakupan = elKelACakupan.value.trim();
+
+            const elKelAJadwal = document.getElementById('kkgKelAJadwal');
+            if (elKelAJadwal) data.kkg_kelompok_a.jadwal = elKelAJadwal.value.trim();
+
+            const elKelAProg = document.getElementById('kkgKelAPrograms');
+            if (elKelAProg) {
+                data.kkg_kelompok_a.uraian_kerja = elKelAProg.value.split('\n').map(l => l.trim()).filter(Boolean);
+            }
+
+            const elKelBJudul = document.getElementById('kkgKelBJudul');
+            if (elKelBJudul) data.kkg_kelompok_b.nama_kelompok = elKelBJudul.value.trim();
+
+            const elKelBCakupan = document.getElementById('kkgKelBCakupan');
+            if (elKelBCakupan) data.kkg_kelompok_b.cakupan = elKelBCakupan.value.trim();
+
+            const elKelBJadwal = document.getElementById('kkgKelBJadwal');
+            if (elKelBJadwal) data.kkg_kelompok_b.jadwal = elKelBJadwal.value.trim();
+
+            const elKelBProg = document.getElementById('kkgKelBPrograms');
+            if (elKelBProg) {
+                data.kkg_kelompok_b.uraian_kerja = elKelBProg.value.split('\n').map(l => l.trim()).filter(Boolean);
+            }
+
+            saveKKGData(data);
+            showSyncToast('🎉 Profil Gugus, Sekretariat, Program K3S & KKG Kelompok A/B berhasil disimpan!');
+            alert('✅ Profil Gugus 1, Sekretariat, dan Uraian Program K3S/KKG berhasil disimpan!');
+        });
+    }
+
+    if (btnResetProfil) {
+        btnResetProfil.addEventListener('click', function() {
+            if (confirm('Pulihkan profil Gugus 1, Sekretariat, dan uraian kerja K3S / KKG ke setelan default?')) {
+                const currentData = getKKGData();
+                currentData.gusek_info = JSON.parse(JSON.stringify(defaultKKGData.gusek_info));
+                currentData.k3s = JSON.parse(JSON.stringify(defaultKKGData.k3s));
+                currentData.kkg_kelompok_a = JSON.parse(JSON.stringify(defaultKKGData.kkg_kelompok_a));
+                currentData.kkg_kelompok_b = JSON.parse(JSON.stringify(defaultKKGData.kkg_kelompok_b));
+                saveKKGData(currentData);
+                populateKKGProfilFields();
+                showSyncToast('Profil & Program Gugus dipulihkan ke default.');
+                alert('Profil & Program Gugus berhasil dipulihkan.');
+            }
+        });
+    }
+
+    renderTable();
+}
+
+/* -------------------------------------------------------------------
+   5. KELOLA DATA SISWA PER KELAS & REKAPITULASI REAL-TIME
+   ------------------------------------------------------------------- */
+const defaultSiswaData = {
+    k1_l: 11, k1_p: 15, k1_wali: "Yuli Syetia Sari, S.Pd",
+    k2_l: 14, k2_p: 11, k2_wali: "Elias Tabuni, S.Pd",
+    k3_l: 14, k3_p: 13, k3_wali: "Rita Paulina Wabiser, S.Pd",
+    k4_l: 12, k4_p: 11, k4_wali: "Warno, S.Pd.SD",
+    k5_l: 13, k5_p: 14, k5_wali: "Rini Handayani, S.Pd",
+    k6_l: 13, k6_p: 16, k6_wali: "Cicik Mursidah, S.Pd"
+};
+
+function getSiswaData() {
+    if (window.SDN_DATABASE && window.SDN_DATABASE.siswa && typeof window.SDN_DATABASE.siswa === 'object') {
+        return window.SDN_DATABASE.siswa;
+    }
+    let d = null;
+    try {
+        const raw = localStorage.getItem('sdn_siswa_counts') || localStorage.getItem('sdn_siswa_kelas');
+        if (raw) d = JSON.parse(raw);
+    } catch (e) {}
+
+    if (!d) return { ...defaultSiswaData };
+
+    // Pastikan nilai default wali kelas selalu ada bila belum pernah disimpan sebelumnya
+    return { ...defaultSiswaData, ...d };
+}
+
+function initSiswaManager() {
+    const form = document.getElementById('siswaUpdateForm');
+    const saveAlert = document.getElementById('siswaSaveAlert');
+    const btnReset = document.getElementById('btnResetSiswaDefault');
+    if (!form) return;
+
+    // Fungsi mengisi pilihan dropdown Wali Kelas dari data dewan guru terbaru
+    function populateWaliDropdowns() {
+        const guruList = typeof getGuruData === 'function' ? getGuruData() : [];
+        for (let i = 1; i <= 6; i++) {
+            const sel = document.getElementById(`k${i}_wali`);
+            if (!sel) continue;
+            const curVal = sel.value;
+            sel.innerHTML = '<option value="">-- Pilih Wali Kelas dari Dewan Guru --</option>';
+
+            guruList.forEach(g => {
+                const opt = document.createElement('option');
+                opt.value = g.nama;
+                opt.textContent = `${g.nama} (${g.jabatan})`;
+                sel.appendChild(opt);
+            });
+
+            if (curVal) {
+                sel.value = curVal;
+            }
+        }
+    }
+    window.refreshWaliDropdowns = populateWaliDropdowns;
+
+    function populateInputs(data) {
+        populateWaliDropdowns();
+        const d = data || getSiswaData();
+        for (const [key, val] of Object.entries(d)) {
+            const el = document.getElementById(key);
+            if (el) el.value = val;
+        }
+        recalcTotals();
+    }
+
+    function recalcTotals() {
+        let totalL = 0;
+        let totalP = 0;
+
+        for (let i = 1; i <= 6; i++) {
+            const l = parseInt(document.getElementById(`k${i}_l`)?.value) || 0;
+            const p = parseInt(document.getElementById(`k${i}_p`)?.value) || 0;
+            const rowTotal = l + p;
+
+            const rowTotalEl = document.getElementById(`k${i}_total`);
+            if (rowTotalEl) rowTotalEl.textContent = rowTotal;
+
+            totalL += l;
+            totalP += p;
+        }
+
+        const totalAll = totalL + totalP;
+        const totalLEl = document.getElementById('calcTotalL');
+        const totalPEl = document.getElementById('calcTotalP');
+        const totalAllEl = document.getElementById('calcTotalAll');
+
+        if (totalLEl) totalLEl.textContent = totalL;
+        if (totalPEl) totalPEl.textContent = totalP;
+        if (totalAllEl) totalAllEl.textContent = totalAll;
+
+        // Update dashboard badges
+        const dashSiswa = document.getElementById('dashCountSiswa');
+        if (dashSiswa) dashSiswa.textContent = totalAll;
+    }
+
+    const inputs = form.querySelectorAll('input[type="number"]');
+    inputs.forEach(input => {
+        input.addEventListener('input', recalcTotals);
+    });
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const d = {};
+        for (let i = 1; i <= 6; i++) {
+            d[`k${i}_l`] = parseInt(document.getElementById(`k${i}_l`)?.value) || 0;
+            d[`k${i}_p`] = parseInt(document.getElementById(`k${i}_p`)?.value) || 0;
+            const waliSel = document.getElementById(`k${i}_wali`);
+            d[`k${i}_wali`] = waliSel ? waliSel.value.trim() : (defaultSiswaData[`k${i}_wali`] || '');
+        }
+
+        localStorage.setItem('sdn_siswa_counts', JSON.stringify(d));
+        localStorage.setItem('sdn_siswa_kelas', JSON.stringify(d));
+        if (window.SDN_DATABASE) window.SDN_DATABASE.siswa = d;
+        syncToServer('siswa', d);
+        try { window.dispatchEvent(new Event('storage')); } catch (e) {}
+
+        if (saveAlert) {
+            saveAlert.style.display = 'inline';
+            setTimeout(() => { saveAlert.style.display = 'none'; }, 4000);
+        }
+        alert('✅ Data siswa dan penugasan Wali Kelas berhasil disimpan!\nHalaman Kesiswaan (siswa.html) dan Beranda otomatis menampilkan data terbaru ini.');
+    });
+
+    if (btnReset) {
+        btnReset.addEventListener('click', function() {
+            if (confirm('Pulihkan data siswa dan wali kelas ke data bawaan awal (Total 157 siswa)?')) {
+                localStorage.setItem('sdn_siswa_counts', JSON.stringify(defaultSiswaData));
+                localStorage.setItem('sdn_siswa_kelas', JSON.stringify(defaultSiswaData));
+                populateInputs(defaultSiswaData);
+                alert('Data siswa per kelas berhasil dipulihkan.');
+            }
+        });
+    }
+
+    populateInputs();
+}
+
+/* -------------------------------------------------------------------
+   6. KELOLA DATA GURU & GTK (CRUD LENGKAP DENGAN EDIT, FOTO, & LOCALSTORAGE)
+   ------------------------------------------------------------------- */
+const defaultGuru = [
+    { id: 1, nama: "Adi Puspito, S.Pd", nip: "196702141992031009", jabatan: "Kepala Sekolah", status: "PNS", gol: "Pembina Utama Muda, IV/c", ttl: "Banyuwangi, 14-02-1967", nuptk: "4546745649200010", foto: "images/kepala-sekolah.jpg" },
+    { id: 7, nama: "Yuli Syetia Sari, S.Pd", nip: "199203132022212024", jabatan: "Guru Kelas I", status: "P3K", gol: "Golongan IX", ttl: "Jayapura, 13-03-1992", nuptk: "8645770671230192", foto: "images/guru-yuli.jpg" },
+    { id: 3, nama: "Elias Tabuni, S.Pd", nip: "196903091993011001", jabatan: "Guru Kelas II", status: "PNS", gol: "Pembina Utama Muda, IV/c", ttl: "Pyramit, 09-03-1969", nuptk: "3641747652200002", foto: "images/guru-elias.jpg" },
+    { id: 12, nama: "Rita Paulina Wabiser, S.Pd", nip: "-", jabatan: "Guru Kelas III", status: "Honor", gol: "-", ttl: "Biak, 18-07-1997", nuptk: "-", foto: "images/guru-rita.jpg" },
+    { id: 2, nama: "Warno, S.Pd.SD", nip: "197206061993051001", jabatan: "Guru Kelas IV", status: "PNS", gol: "Pembina Utama Muda, IV/c", ttl: "Ponorogo, 06-06-1972", nuptk: "1938750652200032", foto: "images/guru-warno.jpg" },
+    { id: 5, nama: "Rini Handayani, S.Pd", nip: "198408042015072002", jabatan: "Guru Kelas V", status: "PNS", gol: "Penata Muda Tk.I, III/b", ttl: "Ponorogo, 04-08-1984", nuptk: "6136762665300023", foto: "images/guru-rini.jpg" },
+    { id: 6, nama: "Cicik Mursidah, S.Pd", nip: "199512062020122023", jabatan: "Guru Kelas VI", status: "PNS", gol: "Penata Muda, III/a", ttl: "Bojonegoro, 06-12-1995", nuptk: "8538773674230073", foto: "images/guru-cicik.jpg" },
+    { id: 4, nama: "Ferdinand, S.Pd", nip: "197305281997111001", jabatan: "Guru Penjaskes / PJOK", status: "PNS", gol: "Pembina Tk.I, IV/b", ttl: "Abepura, 28-05-1973", nuptk: "7860751653200002", foto: "images/guru-ferdinand.jpg" },
+    { id: 8, nama: "Zainal Habiib Al Arif, S.Pd", nip: "199707062024211013", jabatan: "Guru Pendidikan Agama Islam", status: "P3K", gol: "Golongan IX", ttl: "Arso, 06-07-1997", nuptk: "2038775676130133", foto: "images/guru-zainal.jpg" },
+    { id: 9, nama: "Flavianus Rainaldus, S.Ag", nip: "-", jabatan: "Guru Pendidikan Agama Katolik", status: "Honor", gol: "-", ttl: "Bebot, 15-05-1990", nuptk: "3847768669130452", foto: "images/guru-flavianus.jpg" },
+    { id: 10, nama: "Esther Tina Maria Panjaitan, S.Pd", nip: "-", jabatan: "Guru Pendidikan Agama Protestan", status: "Honor", gol: "-", ttl: "Ujung Bandar, 20-10-1988", nuptk: "0352766667230403", foto: "images/guru-esther.jpg" },
+    { id: 11, nama: "Umi Wildana Zulfa", nip: "-", jabatan: "Guru Bahasa Inggris", status: "Honor", gol: "-", ttl: "Keerom, 23-07-2001", nuptk: "5055779680230013", foto: "images/guru-umi.jpg" }
+];
+
+function getGuruData() {
+    if (window.SDN_DATABASE && Array.isArray(window.SDN_DATABASE.guru) && window.SDN_DATABASE.guru.length > 0) {
+        return window.SDN_DATABASE.guru;
+    }
+    const d = localStorage.getItem('sdn_guru_data');
+    if (d) {
+        try {
+            const parsed = JSON.parse(d);
+            if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        } catch (e) {}
+    }
+    return defaultGuru;
+}
+
+function saveGuruData(items) {
+    try {
+        localStorage.setItem('sdn_guru_data', JSON.stringify(items));
+    } catch (e) {
+        console.error('Gagal menyimpan guru ke LocalStorage:', e);
+    }
+    if (window.SDN_DATABASE) {
+        window.SDN_DATABASE.guru = items;
+    }
+    syncToServer('guru', items);
+    try { window.dispatchEvent(new Event('storage')); } catch (e) {}
+
+    // Segera perbarui opsi dropdown wali kelas di Tab Siswa
+    if (typeof window.refreshWaliDropdowns === 'function') {
+        window.refreshWaliDropdowns();
+    }
+}
+
+// SINKRONISASI OTOMATIS: KONEKSI DEWAN GURU DENGAN DATA SISWA & WALI KELAS
+function syncGuruWithSiswa(oldNama, newNama, newJabatan) {
+    let siswaData = getSiswaData();
+    let updated = false;
+
+    // 1. Jika nama guru diedit (gelar/nama berubah), perbarui wali kelas yang diasuh
+    if (oldNama && newNama && oldNama !== newNama) {
+        for (let i = 1; i <= 6; i++) {
+            if (siswaData[`k${i}_wali`] === oldNama) {
+                siswaData[`k${i}_wali`] = newNama;
+                updated = true;
+            }
+        }
+    }
+
+    // 2. Jika jabatan guru secara spesifik menyatakan penugasan kelas, otomatis sinkronkan
+    if (newJabatan && newNama) {
+        const jLow = newJabatan.toLowerCase();
+        let targetClass = 0;
+        if (jLow.includes('kelas vi') || jLow.includes('kelas 6')) targetClass = 6;
+        else if (jLow.includes('kelas iv') || jLow.includes('kelas 4')) targetClass = 4;
+        else if (jLow.includes('kelas v') || jLow.includes('kelas 5')) targetClass = 5;
+        else if (jLow.includes('kelas iii') || jLow.includes('kelas 3')) targetClass = 3;
+        else if (jLow.includes('kelas ii') || jLow.includes('kelas 2')) targetClass = 2;
+        else if (jLow.includes('kelas i') || jLow.includes('kelas 1')) targetClass = 1;
+
+        if (targetClass >= 1 && targetClass <= 6) {
+            if (siswaData[`k${targetClass}_wali`] !== newNama) {
+                siswaData[`k${targetClass}_wali`] = newNama;
+                updated = true;
+            }
+        }
+    }
+
+    if (updated) {
+        localStorage.setItem('sdn_siswa_counts', JSON.stringify(siswaData));
+        localStorage.setItem('sdn_siswa_kelas', JSON.stringify(siswaData));
+        if (window.SDN_DATABASE) window.SDN_DATABASE.siswa = siswaData;
+        syncToServer('siswa', siswaData);
+    }
+
+    // Perbarui dropdown dan pilihan nilai terpilih di Tab Siswa
+    if (typeof window.refreshWaliDropdowns === 'function') {
+        window.refreshWaliDropdowns();
+        for (let i = 1; i <= 6; i++) {
+            const sel = document.getElementById(`k${i}_wali`);
+            if (sel && siswaData[`k${i}_wali`]) {
+                sel.value = siswaData[`k${i}_wali`];
+            }
+        }
+    }
+}
+
+function initGuruManager() {
+    const tableBody = document.getElementById('guruTableBody');
+    const form = document.getElementById('addGuruForm');
+    const editIdInput = document.getElementById('editGuruId');
+    const formHeading = document.getElementById('formGuruHeading');
+    const btnSubmit = document.getElementById('btnSimpanGuru');
+    const btnBatal = document.getElementById('btnBatalEditGuru');
+    const btnReset = document.getElementById('btnResetGuruDefault');
+
+    const namaInput = document.getElementById('guruNama');
+    const nipInput = document.getElementById('guruNip');
+    const jabatanInput = document.getElementById('guruJabatan');
+    const statusInput = document.getElementById('guruStatus');
+    const golInput = document.getElementById('guruGol');
+    const nuptkInput = document.getElementById('guruNuptk');
+    const ttlInput = document.getElementById('guruTtl');
+    const fileInput = document.getElementById('guruFotoFileInput');
+    const previewContainer = document.getElementById('guruFotoPreviewContainer');
+    const previewImg = document.getElementById('guruFotoPreviewImg');
+
+    let currentFotoDataUrl = '';
+
+    if (!tableBody) return;
+
+    // Kompresi foto guru agar hemat LocalStorage
+    if (fileInput) {
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 400;
+                    const scaleSize = MAX_WIDTH / img.width;
+                    const w = (img.width > MAX_WIDTH) ? MAX_WIDTH : img.width;
+                    const h = (img.width > MAX_WIDTH) ? (img.height * scaleSize) : img.height;
+                    canvas.width = w;
+                    canvas.height = h;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, w, h);
+                    currentFotoDataUrl = canvas.toDataURL('image/jpeg', 0.82);
+
+                    if (previewImg && previewContainer) {
+                        previewImg.src = currentFotoDataUrl;
+                        previewContainer.style.display = 'block';
+                    }
+                };
+                img.src = evt.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function resetGuruForm() {
+        if (form) form.reset();
+        if (editIdInput) editIdInput.value = '';
+        currentFotoDataUrl = '';
+        if (previewContainer) previewContainer.style.display = 'none';
+        if (formHeading) formHeading.textContent = '+ Tambah Pendidik / GTK Baru';
+        if (btnSubmit) btnSubmit.innerHTML = '💾 Simpan Data Guru';
+        if (btnBatal) btnBatal.style.display = 'none';
+    }
+
+    // State Paginasi & Pencarian Guru Admin
+    let guruPage = 1;
+    const adminGuruSearch = document.getElementById('adminGuruSearch');
+    const adminGuruPageSize = document.getElementById('adminGuruPageSize');
+
+    if (adminGuruSearch) {
+        adminGuruSearch.addEventListener('input', () => {
+            guruPage = 1;
+            renderTable();
+        });
+    }
+    if (adminGuruPageSize) {
+        adminGuruPageSize.addEventListener('change', () => {
+            guruPage = 1;
+            renderTable();
+        });
+    }
+
+    function renderTable() {
+        const allItems = getGuruData();
+
+        const dashGuru = document.getElementById('dashCountGuru');
+        if (dashGuru) dashGuru.textContent = allItems.length;
+
+        // Filter pencarian
+        const q = adminGuruSearch ? adminGuruSearch.value.trim().toLowerCase() : '';
+        let filteredItems = allItems;
+        if (q) {
+            filteredItems = allItems.filter(item => 
+                (item.nama && item.nama.toLowerCase().includes(q)) ||
+                (item.nip && item.nip.toLowerCase().includes(q)) ||
+                (item.jabatan && item.jabatan.toLowerCase().includes(q)) ||
+                (item.status && item.status.toLowerCase().includes(q)) ||
+                (item.gol && item.gol.toLowerCase().includes(q)) ||
+                (item.nuptk && item.nuptk.toLowerCase().includes(q)) ||
+                (item.ttl && item.ttl.toLowerCase().includes(q))
+            );
+        }
+
+        const totalItems = filteredItems.length;
+        const pageSizeVal = adminGuruPageSize ? adminGuruPageSize.value : '5';
+        const pageSize = pageSizeVal === 'ALL' ? totalItems : (parseInt(pageSizeVal, 10) || 5);
+        const totalPages = pageSizeVal === 'ALL' ? 1 : Math.ceil(totalItems / pageSize) || 1;
+        if (guruPage > totalPages) guruPage = totalPages;
+        if (guruPage < 1) guruPage = 1;
+
+        const startIdx = pageSizeVal === 'ALL' ? 0 : (guruPage - 1) * pageSize;
+        const endIdx = pageSizeVal === 'ALL' ? totalItems : Math.min(startIdx + pageSize, totalItems);
+        const pagedItems = filteredItems.slice(startIdx, endIdx);
+
+        tableBody.innerHTML = '';
+
+        if (pagedItems.length === 0) {
+            tableBody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #94a3b8; padding: 25px;">${allItems.length === 0 ? 'Belum ada data guru/GTK tersimpan.' : 'Tidak ada data guru yang cocok dengan pencarian.'}</td></tr>`;
+        } else {
+            pagedItems.forEach((item, index) => {
+                const realNum = startIdx + index + 1;
+                const tr = document.createElement('tr');
+                let statusBadge = item.status === 'PNS' ? 'badge-status pns' : (item.status === 'P3K' ? 'badge-status p3k' : 'badge-status honor');
+                const fotoThumb = item.foto || 'images/dewan-guru.jpg';
+
+                const allIdx = allItems.findIndex(g => String(g.id) === String(item.id));
+                const isFirst = allIdx === 0;
+                const isLast = allIdx === allItems.length - 1;
+
+                tr.innerHTML = `
+                    <td style="text-align: center; font-weight: 700;">${realNum}</td>
+                    <td style="text-align: center;">
+                        <img src="${fotoThumb}" alt="${escapeHTML(item.nama)}" style="width: 48px; height: 56px; object-fit: cover; border-radius: 6px; border: 1px solid #cbd5e1; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                    </td>
+                    <td>
+                        <strong style="color: var(--primary-dark); font-size: 13.5px;">${escapeHTML(item.nama)}</strong><br>
+                        <small style="color: #64748b;">NIP: ${escapeHTML(item.nip || '-')}</small>
+                    </td>
+                    <td>
+                        <div style="font-weight: 700; color: #1e293b; font-size: 13px;">${escapeHTML(item.jabatan)}</div>
+                        <small style="color: #64748b;">TTL: ${escapeHTML(item.ttl || '-')}</small>
+                    </td>
+                    <td style="text-align: center;"><span class="${statusBadge}">${escapeHTML(item.status)}</span></td>
+                    <td>
+                        <div style="font-size: 12.5px; color: #334155;">${escapeHTML(item.gol || '-')}</div>
+                        <small style="color: #64748b;">NUPTK: ${escapeHTML(item.nuptk || '-')}</small>
+                    </td>
+                    <td style="text-align: center; white-space: nowrap;">
+                        <button type="button" class="btn-move-up-guru" data-id="${item.id}" title="Naikkan Urutan" style="background: #f8fafc; color: #334155; border: 1px solid #cbd5e1; padding: 5px 8px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 700; margin-right: 2px;" ${isFirst ? 'disabled style="opacity: 0.35; cursor: not-allowed; background: #f8fafc; border: 1px solid #cbd5e1; padding: 5px 8px; border-radius: 6px; font-size: 12px;"' : ''}>⬆️</button>
+                        <button type="button" class="btn-move-down-guru" data-id="${item.id}" title="Turunkan Urutan" style="background: #f8fafc; color: #334155; border: 1px solid #cbd5e1; padding: 5px 8px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 700; margin-right: 6px;" ${isLast ? 'disabled style="opacity: 0.35; cursor: not-allowed; background: #f8fafc; border: 1px solid #cbd5e1; padding: 5px 8px; border-radius: 6px; font-size: 12px;"' : ''}>⬇️</button>
+                        <button type="button" class="btn-edit-guru" data-id="${item.id}" style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 700; margin-right: 4px;">✏️ Edit</button>
+                        <button type="button" class="btn-delete-guru" data-id="${item.id}" style="background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 700;">🗑️ Hapus</button>
+                    </td>
+                `;
+                tableBody.appendChild(tr);
+            });
+
+            // Event listener Naikkan Urutan Guru
+            tableBody.querySelectorAll('.btn-move-up-guru').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    const items = getGuruData();
+                    const idx = items.findIndex(g => String(g.id) === String(id));
+                    if (idx > 0) {
+                        const temp = items[idx];
+                        items[idx] = items[idx - 1];
+                        items[idx - 1] = temp;
+                        saveGuruData(items);
+                        renderTable();
+                    }
+                });
+            });
+
+            // Event listener Turunkan Urutan Guru
+            tableBody.querySelectorAll('.btn-move-down-guru').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    const items = getGuruData();
+                    const idx = items.findIndex(g => String(g.id) === String(id));
+                    if (idx < items.length - 1 && idx !== -1) {
+                        const temp = items[idx];
+                        items[idx] = items[idx + 1];
+                        items[idx + 1] = temp;
+                        saveGuruData(items);
+                        renderTable();
+                    }
+                });
+            });
+
+            // Event listener Edit Guru
+            tableBody.querySelectorAll('.btn-edit-guru').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    const items = getGuruData();
+                    const item = items.find(g => String(g.id) === String(id));
+                    if (!item) return;
+
+                    if (editIdInput) editIdInput.value = item.id;
+                    if (namaInput) namaInput.value = item.nama;
+                    if (nipInput) nipInput.value = item.nip === '-' ? '' : item.nip;
+                    if (jabatanInput) jabatanInput.value = item.jabatan;
+                    if (statusInput) statusInput.value = item.status;
+                    if (golInput) golInput.value = item.gol === '-' ? '' : item.gol;
+                    if (nuptkInput) nuptkInput.value = item.nuptk === '-' ? '' : item.nuptk;
+                    if (ttlInput) ttlInput.value = item.ttl || '';
+
+                    if (item.foto) {
+                        currentFotoDataUrl = item.foto;
+                        if (previewImg && previewContainer) {
+                            previewImg.src = item.foto;
+                            previewContainer.style.display = 'block';
+                        }
+                    } else {
+                        currentFotoDataUrl = '';
+                        if (previewContainer) previewContainer.style.display = 'none';
+                    }
+
+                    if (formHeading) formHeading.textContent = `✏️ Edit Data Guru: "${item.nama}"`;
+                    if (btnSubmit) btnSubmit.innerHTML = '💾 Simpan Perubahan Guru';
+                    if (btnBatal) btnBatal.style.display = 'inline-block';
+
+                    const cardForm = document.getElementById('cardGuruForm') || form;
+                    cardForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                });
+            });
+
+            // Event listener Hapus Guru
+            tableBody.querySelectorAll('.btn-delete-guru').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    if (confirm('Apakah Anda yakin ingin menghapus data guru/GTK ini?')) {
+                        let items = getGuruData();
+                        items = items.filter(g => String(g.id) !== String(id));
+                        saveGuruData(items);
+                        if (editIdInput && String(editIdInput.value) === String(id)) {
+                            resetGuruForm();
+                        }
+                        renderTable();
+                    }
+                });
+            });
+        }
+
+        // Render Kontrol Paginasi Guru
+        renderAdminPaginationControls('adminGuruPagination', guruPage, totalPages, totalItems, pageSizeVal, (p) => {
+            guruPage = p;
+            renderTable();
+        });
+    }
+
+    if (form && !form._guruInitDone) {
+        form._guruInitDone = true;
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const nama = namaInput.value.trim();
+            const nip = nipInput.value.trim() || '-';
+            const jabatan = jabatanInput.value.trim();
+            const status = statusInput.value;
+            const gol = golInput.value.trim() || '-';
+            const nuptk = nuptkInput.value.trim() || '-';
+            const ttl = ttlInput.value.trim() || '-';
+
+            if (!nama || !jabatan) {
+                alert('Nama lengkap dan jabatan guru wajib diisi.');
+                return;
+            }
+
+            const items = getGuruData();
+            const isEdit = editIdInput && editIdInput.value;
+
+            if (isEdit) {
+                const editId = editIdInput.value;
+                const itemIndex = items.findIndex(g => String(g.id) === String(editId));
+                if (itemIndex !== -1) {
+                    const oldNama = items[itemIndex].nama;
+
+                    items[itemIndex].nama = nama;
+                    items[itemIndex].nip = nip;
+                    items[itemIndex].jabatan = jabatan;
+                    items[itemIndex].status = status;
+                    items[itemIndex].gol = gol;
+                    items[itemIndex].nuptk = nuptk;
+                    items[itemIndex].ttl = ttl;
+                    if (currentFotoDataUrl) {
+                        items[itemIndex].foto = currentFotoDataUrl;
+                    }
+                    saveGuruData(items);
+
+                    // SINKRONISASI OTOMATIS: Update nama & penugasan wali kelas di Data Siswa
+                    syncGuruWithSiswa(oldNama, nama, jabatan);
+        if (typeof syncGuruWithSOP === 'function') syncGuruWithSOP(oldNama, nama);
+        if (typeof populateSOPTeacherDropdowns === 'function') populateSOPTeacherDropdowns();
+
+                    resetGuruForm();
+                    renderTable();
+                    alert(`✅ Data guru "${nama}" berhasil diperbarui!\nPerubahan otomatis tersinkronisasi ke penugasan Wali Kelas di Data Siswa dan halaman publik.`);
+                    return;
+                }
+            }
+
+            // Mode Tambah Baru
+            const newGuru = {
+                id: Date.now(),
+                nama: nama,
+                nip: nip,
+                jabatan: jabatan,
+                status: status,
+                gol: gol,
+                nuptk: nuptk,
+                ttl: ttl,
+                foto: currentFotoDataUrl || 'images/dewan-guru.jpg'
+            };
+
+            items.push(newGuru);
+            saveGuruData(items);
+
+            // SINKRONISASI OTOMATIS: Tambahkan ke pilihan wali kelas Data Siswa
+            syncGuruWithSiswa(null, nama, jabatan);
+        if (typeof populateSOPTeacherDropdowns === 'function') populateSOPTeacherDropdowns();
+
+            resetGuruForm();
+            renderTable();
+            alert(`✅ Pendidik baru "${nama}" berhasil ditambahkan!\nProfil guru langsung aktif dan otomatis tersedia di pilihan Wali Kelas data siswa.`);
+        });
+    }
+
+    if (btnBatal && !btnBatal._bound) {
+        btnBatal._bound = true;
+        btnBatal.addEventListener('click', function() {
+            resetGuruForm();
+        });
+    }
+
+    if (btnReset && !btnReset._bound) {
+        btnReset._bound = true;
+        btnReset.addEventListener('click', function() {
+            if (confirm('Pulihkan daftar guru ke 12 tenaga pendidik resmi bawaan sekolah?')) {
+                saveGuruData(defaultGuru);
+                resetGuruForm();
+                renderTable();
+                alert('Daftar dewan guru berhasil dipulihkan.');
+            }
+        });
+    }
+
+    renderTable();
+}
+
+/* -------------------------------------------------------------------
+   7. KELOLA DATA PENDAFTAR PPDB ONLINE
+   ------------------------------------------------------------------- */
+const samplePPDB = [
+    {
+        id: "PPDB-2026-001",
+        tgl: "05 November 2026",
+        nama: "Yohanes Petrus Kogoya",
+        gender: "Laki-laki",
+        ttl: "Keerom, 14 Mei 2020",
+        ortu: "Petrus Kogoya",
+        hp: "081248112233",
+        alamat: "Jln. Sulawesi RT 05 RW 03, Dukwia",
+        status: "Diterima"
+    },
+    {
+        id: "PPDB-2026-002",
+        tgl: "04 November 2026",
+        nama: "Siti Rahmawati",
+        gender: "Perempuan",
+        ttl: "Arso, 20 Juli 2020",
+        ortu: "Ahmad Sobari",
+        hp: "081344556677",
+        alamat: "Kampung Dukwia Jalur 2",
+        status: "Menunggu Berkas"
+    }
+];
+
+function getPPDBData() {
+    const d = localStorage.getItem('sdn_ppdb_submissions');
+    return d ? JSON.parse(d) : samplePPDB;
+}
+
+
+const defaultPPDBConfig = {
+    status: "BUKA",
+    tahunAjaran: "2026/2027",
+    jadwal: "Gelombang 1 (Mei - Juni), Gelombang 2 (Juli)",
+    jamPelayanan: "Senin - Jumat pukul 08.00 - 12.00 WIT",
+    kuota: "1 Rombongan Belajar (28-30 siswa)",
+    biaya: "GRATIS (Tanpa Pungutan Biaya)",
+    syarat: "1. Berusia minimal 6 tahun pada tanggal 1 Juli tahun berkenaan (prioritas 7 tahun).\n2. Fotokopi Akta Kelahiran atau Surat Keterangan Lahir (2 lembar).\n3. Fotokopi Kartu Keluarga (KK) orang tua/wali (2 lembar).\n4. Fotokopi KTP kedua orang tua (1 lembar).\n5. Pas foto hitam-putih / berwarna ukuran 3x4 (2 lembar).\n6. Mengisi formulir pendaftaran secara online atau di sekolah.",
+    kontak: "0812-4821-9125 (Pak Adi Puspito, S.Pd)"
+};
+
+function getPPDBConfig() {
+    const raw = localStorage.getItem('sdn_ppdb_config');
+    return raw ? JSON.parse(raw) : defaultPPDBConfig;
+}
+
+function initPPDBConfigManager() {
+    const form = document.getElementById('ppdbConfigForm');
+    const badgeDisplay = document.getElementById('ppdbStatusBadgeDisplay');
+    const alertMsg = document.getElementById('ppdbConfigAlert');
+    if (!form) return;
+
+    function populateForm() {
+        const cfg = getPPDBConfig();
+        const fStatus = document.getElementById('cfgPpdbStatus');
+        const fTahun = document.getElementById('cfgPpdbTahun');
+        const fJadwal = document.getElementById('cfgPpdbJadwal');
+        const fJam = document.getElementById('cfgPpdbJam');
+        const fKuota = document.getElementById('cfgPpdbKuota');
+        const fBiaya = document.getElementById('cfgPpdbBiaya');
+        const fSyarat = document.getElementById('cfgPpdbSyarat');
+        const fKontak = document.getElementById('cfgPpdbKontak');
+
+        if (fStatus) fStatus.value = cfg.status || 'BUKA';
+        if (fTahun) fTahun.value = cfg.tahunAjaran || '2026/2027';
+        if (fJadwal) fJadwal.value = cfg.jadwal || '';
+        if (fJam) fJam.value = cfg.jamPelayanan || '';
+        if (fKuota) fKuota.value = cfg.kuota || '';
+        if (fBiaya) fBiaya.value = cfg.biaya || '';
+        if (fSyarat) fSyarat.value = cfg.syarat || '';
+        if (fKontak) fKontak.value = cfg.kontak || '';
+
+        if (badgeDisplay) {
+            const isBuka = (cfg.status !== 'TUTUP');
+            badgeDisplay.innerHTML = isBuka
+                ? '<span style="background: #dcfce7; color: #16a34a; font-weight: 800; padding: 4px 12px; border-radius: 99px; font-size: 12px;">🟢 STATUS: DIBUKA</span>'
+                : '<span style="background: #fee2e2; color: #dc2626; font-weight: 800; padding: 4px 12px; border-radius: 99px; font-size: 12px;">🔴 STATUS: DITUTUP</span>';
+        }
+    }
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const newCfg = {
+            status: document.getElementById('cfgPpdbStatus').value,
+            tahunAjaran: document.getElementById('cfgPpdbTahun').value.trim(),
+            jadwal: document.getElementById('cfgPpdbJadwal').value.trim(),
+            jamPelayanan: document.getElementById('cfgPpdbJam').value.trim(),
+            kuota: document.getElementById('cfgPpdbKuota').value.trim(),
+            biaya: document.getElementById('cfgPpdbBiaya').value.trim(),
+            syarat: document.getElementById('cfgPpdbSyarat').value.trim(),
+            kontak: document.getElementById('cfgPpdbKontak').value.trim()
+        };
+
+        localStorage.setItem('sdn_ppdb_config', JSON.stringify(newCfg));
+        if (window.SDN_DATABASE) window.SDN_DATABASE.ppdb_config = newCfg;
+        syncToServer('ppdb_config', newCfg);
+        try { window.dispatchEvent(new Event('storage')); } catch (e) {}
+        populateForm();
+
+        if (alertMsg) {
+            alertMsg.style.display = 'inline';
+            setTimeout(() => { alertMsg.style.display = 'none'; }, 4000);
+        }
+        alert('Informasi PPDB berhasil disimpan! Halaman publik otomatis menampilkan data terbaru ini.');
+    });
+
+    populateForm();
+}
+
+function initPPDBManager() {
+    const tableBody = document.getElementById('ppdbTableBody');
+    if (!tableBody) return;
+
+    // State Paginasi & Pencarian PPDB Admin
+    let ppdbPage = 1;
+    const adminPPDBSearch = document.getElementById('adminPPDBSearch');
+    const adminPPDBFilterStatus = document.getElementById('adminPPDBFilterStatus');
+    const adminPPDBPageSize = document.getElementById('adminPPDBPageSize');
+
+    if (adminPPDBSearch) {
+        adminPPDBSearch.addEventListener('input', () => {
+            ppdbPage = 1;
+            renderPPDBTable();
+        });
+    }
+    if (adminPPDBFilterStatus) {
+        adminPPDBFilterStatus.addEventListener('change', () => {
+            ppdbPage = 1;
+            renderPPDBTable();
+        });
+    }
+    if (adminPPDBPageSize) {
+        adminPPDBPageSize.addEventListener('change', () => {
+            ppdbPage = 1;
+            renderPPDBTable();
+        });
+    }
+
+    function renderPPDBTable() {
+        const allItems = getPPDBData();
+
+        const dashPPDB = document.getElementById('dashCountPPDB');
+        if (dashPPDB) dashPPDB.textContent = allItems.length;
+
+        // Filter pencarian & status
+        const q = adminPPDBSearch ? adminPPDBSearch.value.trim().toLowerCase() : '';
+        const statusFilter = adminPPDBFilterStatus ? adminPPDBFilterStatus.value : 'ALL';
+
+        let filteredItems = allItems;
+        if (statusFilter && statusFilter !== 'ALL') {
+            filteredItems = filteredItems.filter(item => {
+                const s = (item.status || '').toLowerCase();
+                return s.includes(statusFilter.toLowerCase());
+            });
+        }
+        if (q) {
+            filteredItems = filteredItems.filter(item => 
+                (item.nama && item.nama.toLowerCase().includes(q)) ||
+                (item.id && item.id.toLowerCase().includes(q)) ||
+                (item.ortu && item.ortu.toLowerCase().includes(q)) ||
+                (item.hp && item.hp.toLowerCase().includes(q)) ||
+                (item.alamat && item.alamat.toLowerCase().includes(q)) ||
+                (item.ttl && item.ttl.toLowerCase().includes(q))
+            );
+        }
+
+        const totalItems = filteredItems.length;
+        const pageSizeVal = adminPPDBPageSize ? adminPPDBPageSize.value : '5';
+        const pageSize = pageSizeVal === 'ALL' ? totalItems : (parseInt(pageSizeVal, 10) || 5);
+        const totalPages = pageSizeVal === 'ALL' ? 1 : Math.ceil(totalItems / pageSize) || 1;
+        if (ppdbPage > totalPages) ppdbPage = totalPages;
+        if (ppdbPage < 1) ppdbPage = 1;
+
+        const startIdx = pageSizeVal === 'ALL' ? 0 : (ppdbPage - 1) * pageSize;
+        const endIdx = pageSizeVal === 'ALL' ? totalItems : Math.min(startIdx + pageSize, totalItems);
+        const pagedItems = filteredItems.slice(startIdx, endIdx);
+
+        tableBody.innerHTML = '';
+
+        if (pagedItems.length === 0) {
+            tableBody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #94a3b8; padding: 20px;">${allItems.length === 0 ? 'Belum ada calon pendaftar PPDB yang masuk.' : 'Tidak ada data calon siswa yang cocok dengan filter / pencarian.'}</td></tr>`;
+        } else {
+            pagedItems.forEach((item, index) => {
+                const realNum = startIdx + index + 1;
+                const tr = document.createElement('tr');
+                let statusColor = item.status === 'Diterima' ? '#16a34a' : (item.status === 'Tidak Diterima' ? '#dc2626' : '#d97706');
+                let statusBg = item.status === 'Diterima' ? '#dcfce7' : (item.status === 'Tidak Diterima' ? '#fee2e2' : '#fef3c7');
+
+                tr.innerHTML = `
+                    <td style="text-align: center; font-weight: bold;">${realNum}</td>
+                    <td><strong>${escapeHTML(item.nama)}</strong><br><small style="color: #64748b; font-weight: 600;">${escapeHTML(item.id)} • ${escapeHTML(item.tgl || '')}</small></td>
+                    <td>${escapeHTML(item.gender || '')}<br><small style="color: #64748b;">${escapeHTML(item.ttl || '')}</small></td>
+                    <td>${escapeHTML(item.ortu || '')}<br><small style="color: #0369a1; font-weight: 600;">📱 ${escapeHTML(item.hp || '')}</small></td>
+                    <td><small>${escapeHTML(item.alamat || '')}</small></td>
+                    <td><span style="background: ${statusBg}; color: ${statusColor}; padding: 4px 10px; border-radius: 999px; font-weight: 700; font-size: 11.5px; display: inline-block;">${escapeHTML(item.status)}</span></td>
+                    <td style="white-space: nowrap;">
+                        <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+                            ${item.status !== 'Diterima' ? `<button onclick="setPPDBStatus('${item.id}', 'Diterima')" title="Tetapkan Diterima" style="background: #16a34a; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 700;">✓ Terima</button>` : ''}
+                            ${item.status !== 'Tidak Diterima' ? `<button onclick="setPPDBStatus('${item.id}', 'Tidak Diterima')" title="Tetapkan Tidak Diterima" style="background: #ef4444; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 700;">✕ Tolak</button>` : ''}
+                            <button onclick="sendPPDBWhatsApp('${item.id}')" title="Kirim Surat Konfirmasi Resmi via WhatsApp ke Orang Tua" style="background: #25d366; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 700;">💬 WA</button>
+                            <button onclick="printPPDBLetter('${item.id}')" title="Cetak Surat Penerimaan / Bukti Seleksi" style="background: #0284c7; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 700;">📄 Cetak</button>
+                            <button onclick="deletePPDB('${item.id}')" title="Hapus Data Calon Siswa" style="background: #94a3b8; color: white; border: none; padding: 4px 6px; border-radius: 4px; cursor: pointer; font-size: 11px;">🗑️</button>
+                        </div>
+                    </td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        }
+
+        // Render Kontrol Paginasi PPDB
+        renderAdminPaginationControls('adminPPDBPagination', ppdbPage, totalPages, totalItems, pageSizeVal, (p) => {
+            ppdbPage = p;
+            renderPPDBTable();
+        });
+    }
+
+    window.setPPDBStatus = function(id, newStatus) {
+        let items = getPPDBData();
+        const found = items.find(i => i.id === id);
+        if (found) {
+            found.status = newStatus;
+            localStorage.setItem('sdn_ppdb_submissions', JSON.stringify(items));
+            syncToServer('ppdb_submissions', items);
+            renderPPDBTable();
+            alert(`✔ Status pendaftar ${found.nama} (${found.id}) telah diubah menjadi: ${newStatus}\n\nPanitia dapat langsung klik tombol '💬 WA' untuk mengirim pesan konfirmasi ke nomor orang tua.`);
+        }
+    };
+
+    window.sendPPDBWhatsApp = function(id) {
+        const items = getPPDBData();
+        const item = items.find(i => i.id === id);
+        if (!item) {
+            alert('Data calon siswa tidak ditemukan.');
+            return;
+        }
+
+        let hp = (item.hp || '').replace(/[^0-9]/g, '');
+        if (hp.startsWith('0')) hp = '62' + hp.substring(1);
+        if (!hp.startsWith('62')) hp = '62' + hp;
+
+        let pesan = '';
+        if (item.status === 'Diterima') {
+            pesan = `*PENGUMUMAN RESMI KELULUSAN PPDB*\n*SD NEGERI INPRES ARSO VIII*\n\nKepada Yth. Bapak/Ibu Wali dari:\n• *Nama Calon Siswa:* ${item.nama}\n• *No. Registrasi:* ${item.id}\n• *Status Kelulusan:* *DITERIMA / LOLOS SELEKSI*\n\nSelamat! Ananda dinyatakan DITERIMA sebagai Peserta Didik Baru di SD Negeri Inpres Arso VIII, Kabupaten Keerom.\n\n📋 *Jadwal Daftar Ulang & Verifikasi Fisik:*\n- Waktu: Jam kerja sekolah (08.00 - 12.00 WIT)\n- Tempat: Kantor SD Negeri Inpres Arso VIII (Kampung Dukwia)\n- Berkas yang dibawa: Fotokopi KK (2 lembar), Akta Kelahiran (2 lembar), dan Pas Foto 3x4 (2 lembar).\n\nCek status online di website resmi:\nhttps://sdninpresarso8.sch.id/pengumuman.html#ppdb\n\n_Hormat kami,_\n*Panitia PPDB SD Negeri Inpres Arso VIII*`;
+        } else if (item.status === 'Tidak Diterima') {
+            pesan = `*PENGUMUMAN SELEKSI PPDB*\n*SD NEGERI INPRES ARSO VIII*\n\nKepada Yth. Bapak/Ibu Wali dari:\n• *Nama Calon Siswa:* ${item.nama}\n• *No. Registrasi:* ${item.id}\n• *Status:* *BELUM DAPAT DITERIMA*\n\nKami menginformasikan bahwa pendaftaran ananda saat ini belum dapat kami terima dikarenakan kuota daya tampung kelas I telah terpenuhi.\n\nTerima kasih sebesar-besarnya atas kepercayaan Bapak/Ibu kepada SD Negeri Inpres Arso VIII. Kami mendoakan yang terbaik untuk kelanjutan pendidikan ananda di sekolah pilihan lainnya.\n\n_Hormat kami,_\n*Panitia PPDB SD Negeri Inpres Arso VIII*`;
+        } else {
+            pesan = `*PEMBERITAHUAN PENDAFTARAN PPDB*\n*SD NEGERI INPRES ARSO VIII*\n\nKepada Yth. Bapak/Ibu Wali dari:\n• *Nama Calon Siswa:* ${item.nama}\n• *No. Registrasi:* ${item.id}\n• *Status:* *MENUNGGU KELENGKAPAN BERKAS*\n\nData pendaftaran online ananda telah tercatat dalam sistem kami. Untuk menyelesaikan proses seleksi, silakan hadir ke sekolah membawa fotokopi Kartu Keluarga dan Akta Kelahiran pada jam kerja (08.00 - 12.00 WIT).\n\n_Hormat kami,_\n*Panitia PPDB SD Negeri Inpres Arso VIII*`;
+        }
+
+        const waUrl = `https://wa.me/${hp}?text=${encodeURIComponent(pesan)}`;
+        window.open(waUrl, '_blank');
+    };
+
+    window.printPPDBLetter = function(id) {
+        const items = getPPDBData();
+        const item = items.find(i => i.id === id);
+        if (!item) return;
+
+        const isAccepted = item.status === 'Diterima';
+        const printWindow = window.open('', '_blank', 'width=800,height=900');
+        printWindow.document.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Surat Keterangan PPDB - ${item.nama}</title>
+                <style>
+                    body { font-family: 'Times New Roman', serif; padding: 40px; color: #000; line-height: 1.5; }
+                    .kop { text-align: center; border-bottom: 3px double #000; padding-bottom: 12px; margin-bottom: 25px; }
+                    .kop h3 { margin: 0; font-size: 16pt; font-weight: bold; text-transform: uppercase; }
+                    .kop h2 { margin: 2px 0; font-size: 18pt; font-weight: bold; }
+                    .kop p { margin: 0; font-size: 10pt; }
+                    .title { text-align: center; margin-bottom: 25px; }
+                    .title h4 { margin: 0; font-size: 14pt; text-decoration: underline; text-transform: uppercase; }
+                    .title span { font-size: 11pt; }
+                    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+                    table td { padding: 6px 4px; vertical-align: top; font-size: 12pt; }
+                    .status-box { border: 2px solid #000; padding: 12px; text-align: center; font-size: 14pt; font-weight: bold; margin: 25px 0; background: ${isAccepted ? '#f0fdf4' : '#fef2f2'}; }
+                    .ttd-wrapper { display: flex; justify-content: space-between; margin-top: 50px; }
+                    .ttd-box { width: 220px; text-align: center; font-size: 11pt; }
+                    @media print { body { padding: 0; } }
+                </style>
+            </head>
+            <body>
+                <div class="kop">
+                    <h3>PEMERINTAH KABUPATEN KEEROM</h3>
+                    <h3>DINAS PENDIDIKAN DAN KEBUDAYAAN</h3>
+                    <h2>SD NEGERI INPRES ARSO VIII</h2>
+                    <p>NPSN: 60300868 • Alamat: Jln. Sulawesi, Kampung Dukwia, Distrik Arso Barat, Kab. Keerom, Papua 99368</p>
+                    <p>Laman Resmi: https://sdninpresarso8.sch.id • Email: sdn.inpresarso8@gmail.com</p>
+                </div>
+
+                <div class="title">
+                    <h4>SURAT KETERANGAN PENERIMAAN PESERTA DIDIK BARU</h4>
+                    <span>Nomor: 421.2 / PPDB / SDN-A8 / ${new Date().getFullYear()}</span>
+                </div>
+
+                <p>Kepala SD Negeri Inpres Arso VIII, Kabupaten Keerom menerangkan bahwa:</p>
+
+                <table>
+                    <tr><td style="width: 220px;">Nomor Registrasi PPDB</td><td style="width: 15px;">:</td><td><strong>${item.id}</strong></td></tr>
+                    <tr><td>Nama Calon Peserta Didik</td><td>:</td><td><strong>${item.nama}</strong></td></tr>
+                    <tr><td>Tempat, Tanggal Lahir</td><td>:</td><td>${item.ttl}</td></tr>
+                    <tr><td>Jenis Kelamin</td><td>:</td><td>${item.gender}</td></tr>
+                    <tr><td>Nama Orang Tua / Wali</td><td>:</td><td>${item.ortu}</td></tr>
+                    <tr><td>Nomor WhatsApp / HP</td><td>:</td><td>${item.hp}</td></tr>
+                    <tr><td>Alamat Tempat Tinggal</td><td>:</td><td>${item.alamat}</td></tr>
+                    <tr><td>Tanggal Registrasi</td><td>:</td><td>${item.tgl}</td></tr>
+                </table>
+
+                <p>Berdasarkan hasil verifikasi berkas dan kuota penerimaan peserta didik baru, calon siswa tersebut di atas dinyatakan:</p>
+
+                <div class="status-box">
+                    ${isAccepted ? 'D I T E R I M A' : (item.status === 'Tidak Diterima' ? 'T I D A K  D I T E R I M A' : 'MENUNGGU KELENGKAPAN BERKAS')}
+                </div>
+
+                <p style="text-align: justify;">
+                    ${isAccepted ? 'Surat keterangan ini diberikan sebagai bukti resmi penerimaan calon peserta didik. Bagi calon siswa yang dinyatakan diterima, diwajibkan melakukan daftar ulang dan melengkapi berkas fisik ke kantor sekolah sesuai jadwal yang telah ditentukan.' : 'Demikian surat keterangan ini dibuat untuk dipergunakan sebagaimana mestinya.'}
+                </p>
+
+                <div class="ttd-wrapper">
+                    <div class="ttd-box">
+                        <br>
+                        Ketua Panitia PPDB,<br><br><br><br>
+                        <strong>ADI PUSPITO, S.Pd</strong><br>
+                        NIP. 19890615 201403 1 002
+                    </div>
+                    <div class="ttd-box">
+                        Arso Barat, ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}<br>
+                        Kepala Sekolah,<br><br><br><br>
+                        <strong>SRI RAHAYU, S.Pd</strong><br>
+                        NIP. 19680412 199308 2 001
+                    </div>
+                </div>
+
+                <script>
+                    window.onload = function() { window.print(); };
+                </script>
+            </body>
+            </html>
+        `);
+        printWindow.document.close();
+    };
+
+    window.printPPDBRecap = function() {
+        const items = getPPDBData();
+        const printWindow = window.open('', '_blank', 'width=900,height=900');
+        let rows = '';
+        items.forEach((item, i) => {
+            rows += `
+                <tr>
+                    <td style="text-align: center; border: 1px solid #000; padding: 6px;">${i+1}</td>
+                    <td style="border: 1px solid #000; padding: 6px;">${item.id}</td>
+                    <td style="border: 1px solid #000; padding: 6px;"><strong>${item.nama}</strong></td>
+                    <td style="border: 1px solid #000; padding: 6px; text-align: center;">${item.gender}</td>
+                    <td style="border: 1px solid #000; padding: 6px;">${item.ttl}</td>
+                    <td style="border: 1px solid #000; padding: 6px;">${item.ortu} (${item.hp})</td>
+                    <td style="border: 1px solid #000; padding: 6px; text-align: center; font-weight: bold;">${item.status}</td>
+                </tr>
+            `;
+        });
+
+        if (items.length === 0) {
+            rows = '<tr><td colspan="7" style="text-align: center; padding: 15px; border: 1px solid #000;">Belum ada calon pendaftar.</td></tr>';
+        }
+
+        printWindow.document.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Rekapitulasi Pendaftar PPDB - SDN Inpres Arso VIII</title>
+                <style>
+                    body { font-family: Arial, sans-serif; padding: 30px; font-size: 11pt; color: #000; }
+                    .kop { text-align: center; border-bottom: 3px double #000; padding-bottom: 10px; margin-bottom: 20px; }
+                    .kop h3 { margin: 0; font-size: 14pt; font-weight: bold; }
+                    .kop h2 { margin: 2px 0; font-size: 16pt; font-weight: bold; }
+                    .kop p { margin: 0; font-size: 9pt; }
+                    h4 { text-align: center; margin: 15px 0 20px; font-size: 13pt; text-transform: uppercase; }
+                    table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+                    th { border: 1px solid #000; padding: 8px; background: #f1f5f9; text-align: center; font-size: 10pt; }
+                    td { font-size: 10pt; }
+                    .ttd-wrapper { display: flex; justify-content: space-between; margin-top: 40px; }
+                    .ttd-box { width: 220px; text-align: center; }
+                    @media print { body { padding: 0; } }
+                </style>
+            </head>
+            <body>
+                <div class="kop">
+                    <h3>PEMERINTAH KABUPATEN KEEROM</h3>
+                    <h3>DINAS PENDIDIKAN DAN KEBUDAYAAN</h3>
+                    <h2>SD NEGERI INPRES ARSO VIII</h2>
+                    <p>NPSN: 60300868 • Kampung Dukwia, Distrik Arso Barat, Kabupaten Keerom, Papua</p>
+                </div>
+                <h4>DAFTAR REKAPITULASI & PENGUMUMAN HASIL SELEKSI PPDB</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 30px;">No</th>
+                            <th style="width: 100px;">No. Registrasi</th>
+                            <th>Nama Lengkap Siswa</th>
+                            <th style="width: 40px;">L/P</th>
+                            <th>Tempat, Tgl Lahir</th>
+                            <th>Orang Tua / Kontak</th>
+                            <th style="width: 120px;">Hasil Seleksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${rows}
+                    </tbody>
+                </table>
+
+                <div class="ttd-wrapper">
+                    <div class="ttd-box">
+                        Mengetahui,<br>
+                        Ketua Panitia PPDB,<br><br><br><br>
+                        <strong>ADI PUSPITO, S.Pd</strong><br>
+                        NIP. 19890615 201403 1 002
+                    </div>
+                    <div class="ttd-box">
+                        Arso Barat, ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}<br>
+                        Kepala Sekolah,<br><br><br><br>
+                        <strong>SRI RAHAYU, S.Pd</strong><br>
+                        NIP. 19680412 199308 2 001
+                    </div>
+                </div>
+
+                <script>
+                    window.onload = function() { window.print(); };
+                </script>
+            </body>
+            </html>
+        `);
+        printWindow.document.close();
+    };
+
+    window.deletePPDB = function(id) {
+        if (confirm('Hapus data pendaftar ini?')) {
+            let items = getPPDBData();
+            items = items.filter(i => i.id !== id);
+            localStorage.setItem('sdn_ppdb_submissions', JSON.stringify(items));
+            syncToServer('ppdb_submissions', items);
+            renderPPDBTable();
+        }
+    };
+
+    renderPPDBTable();
+}
+
+/* -------------------------------------------------------------------
+   7B. MANAJEMEN SARANA & PRASARANA (CRUD LENGKAP & SINKRONISASI SAPRAS.HTML)
+   ------------------------------------------------------------------- */
+const defaultSarprasData = [
+    { id: 1, nama: "Kantor Sekolah", kondisi: "rusak-sedang", kepemilikan: "Pemerintah", keterangan: "Digunakan bersama oleh Kepala Sekolah dan Dewan Guru" },
+    { id: 2, nama: "Ruang Guru", kondisi: "tidak-ada", kepemilikan: "-", keterangan: "Perlu Usulan Pembangunan Baru (guru masih berkantor di ruang kantor)" },
+    { id: 3, nama: "Ruang Kelas I", kondisi: "rusak-sedang", kepemilikan: "Pemerintah", keterangan: "Ditempati 26 siswa kelas 1" },
+    { id: 4, nama: "Ruang Kelas II", kondisi: "rusak-sedang", kepemilikan: "Pemerintah", keterangan: "Ditempati 25 siswa kelas 2" },
+    { id: 5, nama: "Ruang Kelas III", kondisi: "rusak-sedang", kepemilikan: "Pemerintah", keterangan: "Ditempati 27 siswa kelas 3" },
+    { id: 6, nama: "Ruang Kelas IV", kondisi: "rusak-sedang", kepemilikan: "Pemerintah", keterangan: "Ditempati 23 siswa kelas 4" },
+    { id: 7, nama: "Ruang Kelas V", kondisi: "rusak-sedang", kepemilikan: "Pemerintah", keterangan: "Ditempati 27 siswa kelas 5" },
+    { id: 8, nama: "Ruang Kelas VI", kondisi: "rusak-sedang", kepemilikan: "Pemerintah", keterangan: "Ditempati 29 siswa kelas 6" },
+    { id: 9, nama: "Ruang TIK (Teknologi Informasi & Komunikasi)", kondisi: "rusak-sedang", kepemilikan: "Pemerintah", keterangan: "Pusat perangkat Starlink & Komputer" },
+    { id: 10, nama: "Ruang Agama Kristen", kondisi: "rusak-sedang", kepemilikan: "Pemerintah", keterangan: "Bimbingan rohani Protestan" },
+    { id: 11, nama: "Ruang Agama Katolik", kondisi: "rusak-sedang", kepemilikan: "Pemerintah", keterangan: "Bimbingan rohani Katolik" },
+    { id: 12, nama: "Ruang Perpustakaan", kondisi: "rusak-sedang", kepemilikan: "Pemerintah", keterangan: "Perlu pengadaan rak buku dan perbaikan atap" },
+    { id: 13, nama: "Rumah Penjaga Sekolah", kondisi: "rusak-berat", kepemilikan: "Pemerintah", keterangan: "Perlu Rehabilitasi Menyeluruh" },
+    { id: 14, nama: "Rumah Kepala Sekolah", kondisi: "rusak-sedang", kepemilikan: "Pemerintah", keterangan: "Rumah dinas di area sekolah" },
+    { id: 15, nama: "Meja Guru di Kantor", kondisi: "baik", kepemilikan: "Pemerintah", keterangan: "Layak pakai untuk administrasi" },
+    { id: 16, nama: "Meja Guru di Kelas", kondisi: "rusak-sedang", kepemilikan: "Pemerintah", keterangan: "Perlu servis engsel / kayu" },
+    { id: 17, nama: "Kursi Guru", kondisi: "rusak-sedang", kepemilikan: "Pemerintah", keterangan: "Perlu penambahan dan perbaikan" },
+    { id: 18, nama: "Meja Siswa", kondisi: "rusak-sedang", kepemilikan: "Pemerintah", keterangan: "Sebagian perlu direparasi" },
+    { id: 19, nama: "Bangku Siswa", kondisi: "rusak-sedang", kepemilikan: "Pemerintah", keterangan: "Perlu perawatan berkala" },
+    { id: 20, nama: "Lemari di Kelas", kondisi: "rusak-sedang", kepemilikan: "Pemerintah", keterangan: "Tempat penyimpanan buku pegangan" },
+    { id: 21, nama: "Proyektor Infocus", kondisi: "baik", kepemilikan: "Pemerintah", keterangan: "Fungsi normal untuk presentasi" },
+    { id: 22, nama: "Komputer", kondisi: "baik", kepemilikan: "Pemerintah", keterangan: "Operasional ANBK & Guru" },
+    { id: 23, nama: "Laptop Guru", kondisi: "rusak-sedang", kepemilikan: "Pemerintah", keterangan: "Sebagian baik, sebagian lambat/perlu servis" },
+    { id: 24, nama: "Layar Proyektor", kondisi: "rusak-sedang", kepemilikan: "Pemerintah", keterangan: "Ada unit baik dan unit perlu ganti kain" },
+    { id: 25, nama: "Printer", kondisi: "baik", kepemilikan: "Pemerintah", keterangan: "Cetak soal dan laporan sekolah" },
+    { id: 26, nama: "Kulkas", kondisi: "baik", kepemilikan: "Pemerintah", keterangan: "Fasilitas ruang kantor" },
+    { id: 27, nama: "Warles (Wireless Mic / Audio)", kondisi: "baik", kepemilikan: "Pemerintah", keterangan: "Dipakai kegiatan upacara & senam" },
+    { id: 28, nama: "Ampli Power", kondisi: "baik", kepemilikan: "Pemerintah", keterangan: "Penguat suara pengeras sekolah" },
+    { id: 29, nama: "Dispenser Air", kondisi: "baik", kepemilikan: "Pemerintah", keterangan: "Penyedia air minum dewan guru" },
+    { id: 30, nama: "Spiker Aktif", kondisi: "rusak-sedang", kepemilikan: "Pemerintah", keterangan: "Sebagian unit perlu perbaikan kabel/suara" },
+    { id: 31, nama: "Sofa Tamu Kantor", kondisi: "rusak-sedang", kepemilikan: "Pemerintah", keterangan: "Tempat duduk tamu & komite" }
+];
+
+function getSarprasData() {
+    if (window.SDN_DATABASE && Array.isArray(window.SDN_DATABASE.sarpras) && window.SDN_DATABASE.sarpras.length > 0) {
+        return window.SDN_DATABASE.sarpras;
+    }
+    const raw = localStorage.getItem('sdn_sarpras_data');
+    return raw ? JSON.parse(raw) : defaultSarprasData;
+}
+
+function saveSarprasData(data) {
+    try {
+        localStorage.setItem('sdn_sarpras_data', JSON.stringify(data));
+    } catch (e) {}
+    if (window.SDN_DATABASE) window.SDN_DATABASE.sarpras = data;
+    syncToServer('sarpras', data);
+    try { window.dispatchEvent(new Event('storage')); } catch (e) {}
+}
+
+function initSarprasManager() {
+    const form = document.getElementById('sarprasForm');
+    const editIdInput = document.getElementById('editSarprasId');
+    const namaInput = document.getElementById('sarprasNama');
+    const kondisiInput = document.getElementById('sarprasKondisi');
+    const kepemilikanInput = document.getElementById('sarprasKepemilikan');
+    const keteranganInput = document.getElementById('sarprasKeterangan');
+    const formHeading = document.getElementById('formSarprasHeading');
+    const btnSubmit = document.getElementById('btnSimpanSarpras');
+    const btnBatal = document.getElementById('btnBatalEditSarpras');
+    const btnReset = document.getElementById('btnResetSarprasDefault');
+    const tableBody = document.getElementById('sarprasTableBody');
+    const filterBtns = document.querySelectorAll('.btn-filter-admin-sapras');
+
+    if (!tableBody) return;
+
+    let currentFilter = 'all';
+
+    function resetSarprasForm() {
+        if (form) form.reset();
+        if (editIdInput) editIdInput.value = '';
+        if (kepemilikanInput) kepemilikanInput.value = 'Pemerintah';
+        if (formHeading) formHeading.textContent = '+ Tambah Sarana / Prasarana Baru';
+        if (btnSubmit) btnSubmit.innerHTML = '💾 Simpan Sarana Prasarana';
+        if (btnBatal) btnBatal.style.display = 'none';
+    }
+
+    function updateSummaryCards(items) {
+        let baik = 0, sedang = 0, berat = 0, tdkAda = 0;
+        items.forEach(item => {
+            if (item.kondisi === 'baik') baik++;
+            else if (item.kondisi === 'rusak-sedang') sedang++;
+            else if (item.kondisi === 'rusak-berat') berat++;
+            else if (item.kondisi === 'tidak-ada') tdkAda++;
+        });
+
+        const elTotal = document.getElementById('adminSarprasTotal');
+        const elBaik = document.getElementById('adminSarprasBaik');
+        const elSedang = document.getElementById('adminSarprasSedang');
+        const elBerat = document.getElementById('adminSarprasBerat');
+        const elTidakAda = document.getElementById('adminSarprasTidakAda');
+
+        if (elTotal) elTotal.textContent = items.length;
+        if (elBaik) elBaik.textContent = baik;
+        if (elSedang) elSedang.textContent = sedang;
+        if (elBerat) elBerat.textContent = berat;
+        if (elTidakAda) elTidakAda.textContent = tdkAda;
+    }
+
+    // State Paginasi & Pencarian Sarpras Admin
+    let sarprasPage = 1;
+    const adminSarprasSearch = document.getElementById('adminSarprasSearch');
+    const adminSarprasPageSize = document.getElementById('adminSarprasPageSize');
+
+    if (adminSarprasSearch) {
+        adminSarprasSearch.addEventListener('input', () => {
+            sarprasPage = 1;
+            renderTable();
+        });
+    }
+    if (adminSarprasPageSize) {
+        adminSarprasPageSize.addEventListener('change', () => {
+            sarprasPage = 1;
+            renderTable();
+        });
+    }
+
+    function renderTable() {
+        const allItems = getSarprasData();
+        updateSummaryCards(allItems);
+
+        // Filter tab kondisi & pencarian
+        const q = adminSarprasSearch ? adminSarprasSearch.value.trim().toLowerCase() : '';
+        let filtered = allItems.filter(item => {
+            if (currentFilter !== 'all' && item.kondisi !== currentFilter) {
+                return false;
+            }
+            if (q) {
+                const matchName = item.nama && item.nama.toLowerCase().includes(q);
+                const matchKep = item.kepemilikan && item.kepemilikan.toLowerCase().includes(q);
+                const matchKet = item.keterangan && item.keterangan.toLowerCase().includes(q);
+                const matchKon = item.kondisi && item.kondisi.toLowerCase().includes(q);
+                return matchName || matchKep || matchKet || matchKon;
+            }
+            return true;
+        });
+
+        const totalItems = filtered.length;
+        const pageSizeVal = adminSarprasPageSize ? adminSarprasPageSize.value : '5';
+        const pageSize = pageSizeVal === 'ALL' ? totalItems : (parseInt(pageSizeVal, 10) || 5);
+        const totalPages = pageSizeVal === 'ALL' ? 1 : Math.ceil(totalItems / pageSize) || 1;
+        if (sarprasPage > totalPages) sarprasPage = totalPages;
+        if (sarprasPage < 1) sarprasPage = 1;
+
+        const startIdx = pageSizeVal === 'ALL' ? 0 : (sarprasPage - 1) * pageSize;
+        const endIdx = pageSizeVal === 'ALL' ? totalItems : Math.min(startIdx + pageSize, totalItems);
+        const pagedItems = filtered.slice(startIdx, endIdx);
+
+        tableBody.innerHTML = '';
+
+        if (pagedItems.length === 0) {
+            tableBody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #94a3b8; padding: 25px;">${allItems.length === 0 ? 'Belum ada sarana prasarana tersimpan.' : 'Tidak ada item sarpras yang cocok dengan kategori / pencarian ini.'}</td></tr>`;
+        } else {
+            pagedItems.forEach((item, index) => {
+                const realNum = startIdx + index + 1;
+                const tr = document.createElement('tr');
+                let badgeHtml = '';
+                if (item.kondisi === 'baik') {
+                    badgeHtml = '<span class="cond-badge cond-baik">✅ Baik</span>';
+                } else if (item.kondisi === 'rusak-sedang') {
+                    badgeHtml = '<span class="cond-badge cond-rusak-sedang">⚠️ Rusak Sedang</span>';
+                } else if (item.kondisi === 'rusak-berat') {
+                    badgeHtml = '<span class="cond-badge cond-rusak-berat">⛔ Rusak Berat</span>';
+                } else {
+                    badgeHtml = '<span class="cond-badge cond-tidak-ada">❌ Tidak Ada</span>';
+                }
+
+                tr.innerHTML = `
+                    <td style="text-align: center; font-weight: 700;">${realNum}</td>
+                    <td><strong style="color: var(--primary-dark); font-size: 13.5px;">${escapeHTML(item.nama)}</strong></td>
+                    <td style="text-align: center;">${badgeHtml}</td>
+                    <td><span style="font-size: 12.5px; color: #475569;">${escapeHTML(item.kepemilikan || 'Pemerintah')}</span></td>
+                    <td><span style="font-size: 12.5px; color: #334155;">${escapeHTML(item.keterangan || '-')}</span></td>
+                    <td style="text-align: center; white-space: nowrap;">
+                        <button type="button" class="btn-edit-sarpras" data-id="${item.id}" style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 700; margin-right: 4px;">✏️ Edit</button>
+                        <button type="button" class="btn-delete-sarpras" data-id="${item.id}" style="background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 700;">🗑️ Hapus</button>
+                    </td>
+                `;
+                tableBody.appendChild(tr);
+            });
+
+            // Event listener Edit Sarpras
+            tableBody.querySelectorAll('.btn-edit-sarpras').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'), 10);
+                    const items = getSarprasData();
+                    const item = items.find(s => s.id === id);
+                    if (!item) return;
+
+                    if (editIdInput) editIdInput.value = item.id;
+                    if (namaInput) namaInput.value = item.nama;
+                    if (kondisiInput) kondisiInput.value = item.kondisi;
+                    if (kepemilikanInput) kepemilikanInput.value = item.kepemilikan || 'Pemerintah';
+                    if (keteranganInput) keteranganInput.value = item.keterangan || '';
+
+                    if (formHeading) formHeading.textContent = `✏️ Edit Sarpras: "${item.nama}"`;
+                    if (btnSubmit) btnSubmit.innerHTML = '💾 Simpan Perubahan Sarpras';
+                    if (btnBatal) btnBatal.style.display = 'inline-block';
+
+                    const cardForm = document.getElementById('cardSarprasForm') || form;
+                    cardForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                });
+            });
+
+            // Event listener Hapus Sarpras
+            tableBody.querySelectorAll('.btn-delete-sarpras').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'), 10);
+                    if (confirm('Apakah Anda yakin ingin menghapus data inventaris sarpras ini?')) {
+                        let items = getSarprasData();
+                        items = items.filter(s => s.id !== id);
+                        saveSarprasData(items);
+                        if (editIdInput && parseInt(editIdInput.value, 10) === id) {
+                            resetSarprasForm();
+                        }
+                        renderTable();
+                    }
+                });
+            });
+        }
+
+        // Render Kontrol Paginasi Sarpras
+        renderAdminPaginationControls('adminSarprasPagination', sarprasPage, totalPages, totalItems, pageSizeVal, (p) => {
+            sarprasPage = p;
+            renderTable();
+        });
+    }
+
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const nama = namaInput.value.trim();
+            const kondisi = kondisiInput.value;
+            const kepemilikan = kepemilikanInput.value.trim() || 'Pemerintah';
+            const keterangan = keteranganInput.value.trim();
+
+            if (!nama || !keterangan) {
+                alert('Nama sarpras dan keterangan kondisi wajib diisi.');
+                return;
+            }
+
+            const items = getSarprasData();
+            const isEdit = editIdInput && editIdInput.value;
+
+            if (isEdit) {
+                const editId = parseInt(editIdInput.value, 10);
+                const itemIndex = items.findIndex(s => s.id === editId);
+                if (itemIndex !== -1) {
+                    items[itemIndex].nama = nama;
+                    items[itemIndex].kondisi = kondisi;
+                    items[itemIndex].kepemilikan = kepemilikan;
+                    items[itemIndex].keterangan = keterangan;
+                    saveSarprasData(items);
+                    resetSarprasForm();
+                    renderTable();
+                    alert(`✅ Data sarpras "${nama}" berhasil diperbarui!
+Perubahan langsung otomatis tampil di halaman Sarpras Publik (sapras.html).`);
+                    return;
+                }
+            }
+
+            // Mode Tambah Baru
+            const newSarpras = {
+                id: Date.now(),
+                nama: nama,
+                kondisi: kondisi,
+                kepemilikan: kepemilikan,
+                keterangan: keterangan
+            };
+
+            items.push(newSarpras);
+            saveSarprasData(items);
+            resetSarprasForm();
+            renderTable();
+            alert(`✅ Sarana prasarana "${nama}" berhasil ditambahkan!
+Item ini langsung aktif di halaman Sarpras Publik.`);
+        });
+    }
+
+    if (btnBatal) {
+        btnBatal.addEventListener('click', function() {
+            resetSarprasForm();
+        });
+    }
+
+    if (btnReset) {
+        btnReset.addEventListener('click', function() {
+            if (confirm('Pulihkan inventaris sarpras ke 31 item bawaan resmi sekolah?')) {
+                saveSarprasData(defaultSarprasData);
+                resetSarprasForm();
+                renderTable();
+                alert('Inventaris sarpras berhasil dipulihkan.');
+            }
+        });
+    }
+
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            filterBtns.forEach(b => {
+                b.classList.remove('active');
+                b.style.background = '#f1f5f9';
+                b.style.color = '#475569';
+            });
+            this.classList.add('active');
+            this.style.background = 'var(--primary)';
+            this.style.color = 'white';
+            currentFilter = this.getAttribute('data-filter');
+            sarprasPage = 1;
+            renderTable();
+        });
+    });
+
+    renderTable();
+}
+
+/* -------------------------------------------------------------------
+   8. PENGATURAN KREDENSIAL AKUN ADMIN
+   ------------------------------------------------------------------- */
+function updateActiveCredentialsDisplay() {
+    const user = localStorage.getItem('sdn_admin_user') || 'admin';
+    const pass = localStorage.getItem('sdn_admin_pass') || 'sdnarso8juara';
+    const dispUser = document.getElementById('displayActiveUser');
+    const dispPass = document.getElementById('displayActivePass');
+    if (dispUser) dispUser.textContent = user;
+    if (dispPass) dispPass.value = pass;
+}
+
+function initAccountSettings() {
+    updateActiveCredentialsDisplay();
+
+    // Toggle lihat kata sandi aktif
+    const btnToggleActive = document.getElementById('btnToggleShowActivePass');
+    const dispPass = document.getElementById('displayActivePass');
+    const eyeIconActive = document.getElementById('eyeIconActive');
+    const eyeTextActive = document.getElementById('eyeTextActive');
+
+    if (btnToggleActive && dispPass && !btnToggleActive._bound) {
+        btnToggleActive._bound = true;
+        btnToggleActive.addEventListener('click', function () {
+            if (dispPass.type === 'password') {
+                dispPass.type = 'text';
+                if (eyeIconActive) eyeIconActive.textContent = '🙈';
+                if (eyeTextActive) eyeTextActive.textContent = 'Tutup';
+                btnToggleActive.classList.add('active');
+            } else {
+                dispPass.type = 'password';
+                if (eyeIconActive) eyeIconActive.textContent = '👁️';
+                if (eyeTextActive) eyeTextActive.textContent = 'Lihat Kode';
+                btnToggleActive.classList.remove('active');
+            }
+        });
+    }
+
+    // Tombol salin kredensial
+    const btnCopy = document.getElementById('btnCopyActiveCreds');
+    if (btnCopy && !btnCopy._bound) {
+        btnCopy._bound = true;
+        btnCopy.addEventListener('click', function () {
+            const user = localStorage.getItem('sdn_admin_user') || 'admin';
+            const pass = localStorage.getItem('sdn_admin_pass') || 'sdnarso8juara';
+            const textToCopy = `Kredensial Login SDN Inpres Arso VIII\nUsername: ${user}\nPassword: ${pass}`;
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                alert(`✅ Kredensial Pengelola Berhasil Disalin!\n\nUsername: ${user}\nPassword: ${pass}\n\nAnda dapat menempelkannya (paste) di mana saja.`);
+            }).catch(() => {
+                prompt("Salin manual kredensial di bawah ini:", `${user} / ${pass}`);
+            });
+        });
+    }
+
+    // Toggle lihat kata sandi baru saat mengetik (Tombol Mata & Centang Aktif)
+    const toggleNewPass = document.getElementById('toggleNewPass');
+    const newPassInput = document.getElementById('newPassword');
+    const showNewPassCheckbox = document.getElementById('showNewPassCheckbox');
+
+    function setNewPassVisibility(show) {
+        if (!newPassInput) return;
+        newPassInput.type = show ? 'text' : 'password';
+        if (toggleNewPass) {
+            toggleNewPass.textContent = show ? '🙈' : '👁️';
+            toggleNewPass.title = show ? 'Sembunyikan Kata Sandi' : 'Tampilkan Kata Sandi';
+            toggleNewPass.style.color = show ? '#0284c7' : '#64748b';
+        }
+        if (showNewPassCheckbox) {
+            showNewPassCheckbox.checked = show;
+        }
+    }
+
+    if (toggleNewPass && newPassInput && !toggleNewPass._bound) {
+        toggleNewPass._bound = true;
+        toggleNewPass.addEventListener('click', function () {
+            setNewPassVisibility(newPassInput.type === 'password');
+        });
+    }
+
+    if (showNewPassCheckbox && !showNewPassCheckbox._bound) {
+        showNewPassCheckbox._bound = true;
+        showNewPassCheckbox.addEventListener('change', function () {
+            setNewPassVisibility(this.checked);
+        });
+    }
+
+    const form = document.getElementById('accountSettingsForm');
+    if (!form || form._bound) return;
+    form._bound = true;
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const newUser = document.getElementById('newUsername').value.trim();
+        const newPass = document.getElementById('newPassword').value.trim();
+
+        if (newUser.length < 3) {
+            alert('Username minimal harus 3 karakter.');
+            return;
+        }
+        if (newPass.length < 6) {
+            alert('Password minimal harus 6 karakter.');
+            return;
+        }
+
+        localStorage.setItem('sdn_admin_user', newUser);
+        localStorage.setItem('sdn_admin_pass', newPass);
+        updateActiveCredentialsDisplay();
+        alert(`✅ Kredensial login admin berhasil diperbarui!\n\nUsername Baru: ${newUser}\nPassword Baru: ${newPass}\n\nKredensial disimpan aman.`);
+        form.reset();
+    });
+}
+
+/* -------------------------------------------------------------------
+   9. KELOLA GALERI KEGIATAN SEKOLAH (CRUD DENGAN LOCALSTORAGE)
+   ------------------------------------------------------------------- */
+const defaultGaleri = [
+    {
+        id: 1,
+        judul: "Gapura Resmi SDN Inpres Arso VIII & Dewan Guru",
+        kategori: "Fasilitas & Dewan Guru",
+        src: "images/gerbang-sekolah.jpg"
+    },
+    {
+        id: 2,
+        judul: "Pelaksanaan Simulasi ANBK & Pembelajaran Komputer Digital",
+        kategori: "Teknologi & ANBK",
+        src: "images/kegiatan-anbk-komputer.jpg"
+    },
+    {
+        id: 3,
+        judul: "Senam Pagi Bersama Seluruh Siswa & Dewan Guru",
+        kategori: "Kesehatan & Senam",
+        src: "images/kegiatan-senam-bersama.jpg"
+    },
+    {
+        id: 4,
+        judul: "Gudep 08-013 SDN Inpres Arso VIII Berbusana Adat Papua & Nusantara",
+        kategori: "Pramuka & Seni Budaya",
+        src: "images/kegiatan-pramuka-budaya.jpg"
+    },
+    {
+        id: 5,
+        judul: "Suasana Pembelajaran Aktif di Ruang Kelas Bersama Guru",
+        kategori: "Pembelajaran Kelas",
+        src: "images/kegiatan-belajar-kelas.jpg"
+    },
+    {
+        id: 6,
+        judul: "Rapat Kerja Dewan Guru Bersama Kepala Sekolah di Kantor",
+        kategori: "Manajemen Sekolah",
+        src: "images/kegiatan-rapat-dewan-guru.jpg"
+    },
+    {
+        id: 7,
+        judul: "Peringatan Hari Besar Keagamaan & Pembinaan Budi Pekerti",
+        kategori: "Pendidikan Karakter",
+        src: "images/kegiatan-keagamaan-rohani.jpg"
+    },
+    {
+        id: 8,
+        judul: "Gerakan Gemar Membaca Buku & Praktik Komputer di Perpustakaan",
+        kategori: "Literasi & Perpustakaan",
+        src: "images/kegiatan-literasi-komputer.jpg"
+    },
+    {
+        id: 9,
+        judul: "Musyawarah Dewan Guru Membahas Evaluasi Kurikulum & Siswa",
+        kategori: "Evaluasi Kurikulum",
+        src: "images/kegiatan-evaluasi-guru.jpg"
+    },
+    {
+        id: 10,
+        judul: "Latihan Kepramukaan dan Pembinaan Disiplin Siswa di Kelas",
+        kategori: "Kesiswaan & Pramuka",
+        src: "images/kegiatan-pramuka-kelas.jpg"
+    },
+    {
+        id: 11,
+        judul: "Kekompakan Tenaga Pendidik & Staf SDN Inpres Arso VIII",
+        kategori: "Dewan Guru & GTK",
+        src: "images/kegiatan-kebersamaan-guru.jpg"
+    },
+    {
+        id: 12,
+        judul: "Gotong Royong Kerja Bakti Merawat Kebersihan Lingkungan Sekolah",
+        kategori: "Lingkungan Sehat",
+        src: "images/kegiatan-kerja-bakti.jpg"
+    }
+];
+
+function getGaleriData() {
+    if (window.SDN_DATABASE && Array.isArray(window.SDN_DATABASE.galeri) && window.SDN_DATABASE.galeri.length > 0) {
+        return window.SDN_DATABASE.galeri;
+    }
+    const raw = localStorage.getItem('sdn_galeri_data');
+    if (raw && !raw.includes('unsplash')) {
+        try {
+            const parsed = JSON.parse(raw);
+            return Array.isArray(parsed) ? parsed : defaultGaleri;
+        } catch (e) {
+            return defaultGaleri;
+        }
+    }
+    return defaultGaleri;
+}
+
+function saveGaleriData(data) {
+    try {
+        localStorage.setItem('sdn_galeri_data', JSON.stringify(data));
+    } catch (e) {}
+    if (window.SDN_DATABASE) window.SDN_DATABASE.galeri = data;
+    syncToServer('galeri', data);
+    try { window.dispatchEvent(new Event('storage')); } catch (e) {}
+}
+
+function initGaleriManager() {
+    const form = document.getElementById('addGaleriForm');
+    const editIdInput = document.getElementById('editGaleriId');
+    const formHeading = document.getElementById('formGaleriHeading');
+    const btnSubmit = document.getElementById('btnSimpanGaleri');
+    const btnBatal = document.getElementById('btnBatalEditGaleri');
+
+    const judulInput = document.getElementById('galeriJudul');
+    const kategoriInput = document.getElementById('galeriKategori');
+    const fileInput = document.getElementById('galeriFileInput');
+    const previewContainer = document.getElementById('galeriPreviewContainer');
+    const previewImg = document.getElementById('galeriPreviewImg');
+    const gridEl = document.getElementById('adminGaleriGrid');
+    const countEl = document.getElementById('galeriCount');
+    const dashCount = document.getElementById('dashCountGaleri');
+    const dashPreviewGrid = document.getElementById('dashGaleriPreviewGrid');
+    const btnReset = document.getElementById('btnResetGaleriDefault');
+
+    let currentImageDataUrl = '';
+
+    // Fungsi kompresi gambar agar hemat LocalStorage (< 80KB)
+    function compressImageFile(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onerror = reject;
+            reader.onload = function (event) {
+                const img = new Image();
+                img.onerror = reject;
+                img.onload = function () {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+                    const maxDim = 750;
+
+                    if (width > maxDim || height > maxDim) {
+                        if (width > height) {
+                            height = Math.round((height * maxDim) / width);
+                            width = maxDim;
+                        } else {
+                            width = Math.round((width * maxDim) / height);
+                            height = maxDim;
+                        }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    let quality = 0.70;
+                    let resultUrl = canvas.toDataURL('image/jpeg', quality);
+                    
+                    if (resultUrl.length > 120000) {
+                        resultUrl = canvas.toDataURL('image/jpeg', 0.55);
+                    }
+                    resolve(resultUrl);
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    if (fileInput) {
+        fileInput.addEventListener('change', async function (e) {
+            const file = e.target.files[0];
+            if (!file) {
+                if (!editIdInput || !editIdInput.value) {
+                    if (previewContainer) previewContainer.style.display = 'none';
+                    currentImageDataUrl = '';
+                }
+                return;
+            }
+
+            if (previewContainer) {
+                previewContainer.style.display = 'block';
+                if (previewImg) previewImg.style.opacity = '0.4';
+            }
+
+            try {
+                currentImageDataUrl = await compressImageFile(file);
+                if (previewImg) {
+                    previewImg.src = currentImageDataUrl;
+                    previewImg.style.opacity = '1';
+                }
+            } catch (err) {
+                console.error('Gagal membaca gambar:', err);
+                alert('Gagal memproses file foto. Pastikan format gambar JPG/PNG/WEBP.');
+            }
+        });
+    }
+
+    function resetGaleriForm() {
+        if (form) form.reset();
+        if (editIdInput) editIdInput.value = '';
+        currentImageDataUrl = '';
+        if (previewContainer) previewContainer.style.display = 'none';
+        if (formHeading) formHeading.textContent = '+ Tambah Foto Kegiatan Baru';
+        if (btnSubmit) btnSubmit.innerHTML = '💾 Tambahkan ke Galeri';
+        if (btnBatal) btnBatal.style.display = 'none';
+        if (fileInput) fileInput.setAttribute('required', 'required');
+    }
+
+    if (btnBatal) {
+        btnBatal.addEventListener('click', resetGaleriForm);
+    }
+
+    // Render daftar foto di KEDUA tempat: Tab Galeri & Tab Dashboard Utama
+    // State Paginasi & Pencarian Galeri Admin
+    let galeriPage = 1;
+    const adminGaleriSearch = document.getElementById('adminGaleriSearch');
+    const adminGaleriFilterKategori = document.getElementById('adminGaleriFilterKategori');
+    const adminGaleriPageSize = document.getElementById('adminGaleriPageSize');
+
+    if (adminGaleriSearch) {
+        adminGaleriSearch.addEventListener('input', () => {
+            galeriPage = 1;
+            renderGaleriList();
+        });
+    }
+    if (adminGaleriFilterKategori) {
+        adminGaleriFilterKategori.addEventListener('change', () => {
+            galeriPage = 1;
+            renderGaleriList();
+        });
+    }
+    if (adminGaleriPageSize) {
+        adminGaleriPageSize.addEventListener('change', () => {
+            galeriPage = 1;
+            renderGaleriList();
+        });
+    }
+
+    function renderGaleriList() {
+        const allItems = getGaleriData();
+        
+        // 1. Update counter angka
+        if (countEl) countEl.textContent = allItems.length;
+        if (dashCount) dashCount.textContent = allItems.length;
+
+        // Filter pencarian & kategori
+        const q = adminGaleriSearch ? adminGaleriSearch.value.trim().toLowerCase() : '';
+        const katFilter = adminGaleriFilterKategori ? adminGaleriFilterKategori.value : 'ALL';
+
+        let filtered = allItems.filter(item => {
+            if (katFilter !== 'ALL' && item.kategori !== katFilter) {
+                return false;
+            }
+            if (q) {
+                const matchJudul = item.judul && item.judul.toLowerCase().includes(q);
+                const matchKat = item.kategori && item.kategori.toLowerCase().includes(q);
+                const matchTgl = item.tanggal && item.tanggal.toLowerCase().includes(q);
+                return matchJudul || matchKat || matchTgl;
+            }
+            return true;
+        });
+
+        const totalItems = filtered.length;
+        const pageSizeVal = adminGaleriPageSize ? adminGaleriPageSize.value : '6';
+        const pageSize = pageSizeVal === 'ALL' ? totalItems : (parseInt(pageSizeVal, 10) || 6);
+        const totalPages = pageSizeVal === 'ALL' ? 1 : Math.ceil(totalItems / pageSize) || 1;
+        if (galeriPage > totalPages) galeriPage = totalPages;
+        if (galeriPage < 1) galeriPage = 1;
+
+        const startIdx = pageSizeVal === 'ALL' ? 0 : (galeriPage - 1) * pageSize;
+        const endIdx = pageSizeVal === 'ALL' ? totalItems : Math.min(startIdx + pageSize, totalItems);
+        const pagedItems = filtered.slice(startIdx, endIdx);
+
+        // 2. Render grid lengkap di tab galeri
+        if (gridEl) {
+            gridEl.innerHTML = '';
+            if (pagedItems.length === 0) {
+                gridEl.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 30px; color: #94a3b8;">${allItems.length === 0 ? 'Belum ada foto kegiatan. Silakan tambahkan foto di formulir atas.' : 'Tidak ada foto galeri yang cocok dengan filter atau pencarian.'}</div>`;
+            } else {
+                pagedItems.forEach((item) => {
+                    const card = document.createElement('div');
+                    card.style.cssText = 'background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 1px 3px rgba(0,0,0,0.05);';
+                    card.innerHTML = `
+                        <div style="height: 150px; background: #f1f5f9; position: relative; overflow: hidden;">
+                            <img src="${item.src}" alt="${escapeHTML(item.judul)}" style="width: 100%; height: 100%; object-fit: cover;">
+                            <span style="position: absolute; top: 8px; left: 8px; background: rgba(15,23,42,0.8); color: #ffffff; font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 4px;">
+                                ${escapeHTML(item.kategori)}
+                            </span>
+                        </div>
+                        <div style="padding: 12px; display: flex; flex-direction: column; justify-content: space-between; flex-grow: 1;">
+                            <p style="font-size: 13px; font-weight: 600; color: #1e293b; margin: 0 0 10px; line-height: 1.4;">${escapeHTML(item.judul)}</p>
+                            <div style="display: flex; gap: 6px; margin-top: auto;">
+                                <button type="button" class="btn-edit-galeri-item" data-id="${item.id}" style="flex: 1; background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; padding: 6px; border-radius: 4px; font-size: 11.5px; font-weight: 700; cursor: pointer;">
+                                    ✏️ Edit
+                                </button>
+                                <button type="button" class="btn-delete-galeri-item" data-id="${item.id}" style="flex: 1; background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; padding: 6px; border-radius: 4px; font-size: 11.5px; font-weight: 700; cursor: pointer;">
+                                    🗑️ Hapus
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    gridEl.appendChild(card);
+                });
+
+                // Pasang event edit
+                gridEl.querySelectorAll('.btn-edit-galeri-item').forEach(btn => {
+                    btn.addEventListener('click', function () {
+                        const id = parseInt(this.getAttribute('data-id'), 10);
+                        const items = getGaleriData();
+                        const found = items.find(g => g.id === id);
+                        if (!found) return;
+
+                        if (editIdInput) editIdInput.value = found.id;
+                        if (judulInput) judulInput.value = found.judul;
+                        if (kategoriInput) kategoriInput.value = found.kategori;
+                        currentImageDataUrl = found.src;
+
+                        if (previewImg && previewContainer) {
+                            previewImg.src = found.src;
+                            previewContainer.style.display = 'block';
+                        }
+
+                        if (formHeading) formHeading.textContent = `✏️ Edit Foto: "${found.judul.slice(0, 30)}..."`;
+                        if (btnSubmit) btnSubmit.innerHTML = '💾 Simpan Perubahan Foto';
+                        if (btnBatal) btnBatal.style.display = 'inline-block';
+
+                        const cardForm = document.getElementById('cardGaleriForm') || form;
+                        cardForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    });
+                });
+
+                // Pasang event hapus
+                gridEl.querySelectorAll('.btn-delete-galeri-item').forEach(btn => {
+                    btn.addEventListener('click', function () {
+                        const id = parseInt(this.getAttribute('data-id'), 10);
+                        if (confirm('Yakin ingin menghapus foto ini dari galeri?')) {
+                            let items = getGaleriData();
+                            items = items.filter(g => g.id !== id);
+                            saveGaleriData(items);
+                            if (editIdInput && parseInt(editIdInput.value, 10) === id) {
+                                resetGaleriForm();
+                            }
+                            renderGaleriList();
+                        }
+                    });
+                });
+            }
+        }
+
+        // Render Kontrol Paginasi Galeri
+        renderAdminPaginationControls('adminGaleriPagination', galeriPage, totalPages, totalItems, pageSizeVal, (p) => {
+            galeriPage = p;
+            renderGaleriList();
+        });
+
+        // 3. Render widget ringkasan pratinjau di dashboard utama (dashGaleriPreviewGrid)
+        const dashPreviewGrid = document.getElementById('dashGaleriPreviewGrid');
+        if (dashPreviewGrid) {
+            dashPreviewGrid.innerHTML = '';
+            const previewItems = allItems.slice(0, 4);
+            if (previewItems.length === 0) {
+                dashPreviewGrid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 20px; color: #94a3b8;">Belum ada foto kegiatan.</div>`;
+            } else {
+                previewItems.forEach(item => {
+                    const box = document.createElement('div');
+                    box.style.cssText = 'border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0; background: #ffffff;';
+                    box.innerHTML = `
+                        <div style="height: 100px; background: #f1f5f9; overflow: hidden;">
+                            <img src="${item.src}" alt="${escapeHTML(item.judul)}" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <div style="padding: 8px;">
+                            <p style="font-size: 11.5px; font-weight: 700; color: #1e293b; margin: 0; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                ${escapeHTML(item.judul)}
+                            </p>
+                        </div>
+                    `;
+                    dashPreviewGrid.appendChild(box);
+                });
+            }
+        }
+    }
+
+    if (form) {
+        form.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const judul = judulInput.value.trim();
+            const kategori = kategoriInput.value;
+
+            if (!judul) {
+                alert('Silakan masukkan judul/keterangan foto.');
+                return;
+            }
+
+            const isEdit = editIdInput && editIdInput.value;
+            const items = getGaleriData();
+
+            if (isEdit) {
+                const editId = parseInt(editIdInput.value, 10);
+                const itemIndex = items.findIndex(g => g.id === editId);
+                if (itemIndex !== -1) {
+                    items[itemIndex].judul = judul;
+                    items[itemIndex].kategori = kategori;
+                    if (currentImageDataUrl) {
+                        items[itemIndex].src = currentImageDataUrl;
+                    }
+                    saveGaleriData(items);
+                    resetGaleriForm();
+                    renderGaleriList();
+                    alert(`✅ Perubahan foto "${judul}" berhasil disimpan!
+Foto langsung terperbarui di Galeri Website.`);
+                    return;
+                }
+            }
+
+            if (!currentImageDataUrl) {
+                alert('Silakan pilih berkas foto dari perangkat Anda terlebih dahulu.');
+                return;
+            }
+
+            const newFoto = {
+                id: Date.now(),
+                src: currentImageDataUrl,
+                judul: judul,
+                kategori: kategori
+            };
+
+            items.unshift(newFoto);
+            saveGaleriData(items);
+
+            resetGaleriForm();
+            renderGaleriList();
+            alert(`✅ Foto "${judul}" berhasil ditambahkan ke galeri!`);
+        });
+    }
+
+    // Reset galeri ke default
+    if (btnReset) {
+        btnReset.addEventListener('click', function () {
+            if (confirm('Pulihkan galeri ke foto bawaan awal sekolah? Foto baru yang Anda tambahkan akan terhapus.')) {
+                saveGaleriData(defaultGaleri);
+                resetGaleriForm();
+                renderGaleriList();
+                alert('Galeri berhasil dipulihkan ke foto bawaan sekolah.');
+            }
+        });
+    }
+
+    // Inisialisasi awal
+    renderGaleriList();
+}
+
+
+/* -------------------------------------------------------------------
+   10. PENCADANGAN & PEMULIHAN DATA LENGKAP (BACKUP & RESTORE)
+   ------------------------------------------------------------------- */
+function escapeHTML(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+function initBackupRestoreManager() {
+    const btnExport = document.getElementById('btnExportAllData');
+    const btnRestore = document.getElementById('btnRestoreAllData');
+    const restoreInput = document.getElementById('restoreFileInput');
+
+    if (btnExport) {
+        btnExport.addEventListener('click', function () {
+            const backupData = {
+                school: "SD NEGERI INPRES ARSO VIII",
+                npsn: "60300868",
+                exported_at: new Date().toISOString(),
+                data: {
+                    pengumuman: localStorage.getItem('sdn_pengumuman_data'),
+                    siswa: localStorage.getItem('sdn_siswa_counts') || localStorage.getItem('sdn_siswa_kelas'),
+                    guru: localStorage.getItem('sdn_guru_data'),
+                    sarpras: localStorage.getItem('sdn_sarpras_data'),
+                    kolaborasi: localStorage.getItem('sdn_kolaborasi_data'),
+                    kkg: localStorage.getItem('sdn_kkg_data'),
+                    sop_data: localStorage.getItem('sdn_sop_data'),
+                    ppdb: localStorage.getItem('sdn_ppdb_submissions'),
+                    ppdbConfig: localStorage.getItem('sdn_ppdb_config'),
+                    galeri: localStorage.getItem('sdn_galeri_data'),
+                    sambutan: localStorage.getItem('sdn_sambutan_data'),
+                    berita: localStorage.getItem('sdn_berita_data')
+                }
+            };
+
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
+            const dlAnchor = document.createElement('a');
+            const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+            dlAnchor.setAttribute("href", dataStr);
+            dlAnchor.setAttribute("download", `cadangan_data_sdn_arso8_${dateStr}.json`);
+            document.body.appendChild(dlAnchor);
+            dlAnchor.click();
+            dlAnchor.remove();
+        });
+    }
+
+    if (btnRestore && restoreInput) {
+        btnRestore.addEventListener('click', function () {
+            const file = restoreInput.files[0];
+            if (!file) {
+                alert('Silakan pilih berkas cadangan (.JSON) terlebih dahulu.');
+                return;
+            }
+
+            if (!confirm('Peringatan: Memulihkan data akan menggantikan data aktif saat ini dengan isi file cadangan. Lanjutkan?')) {
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                try {
+                    const parsed = JSON.parse(e.target.result);
+                    if (!parsed || !parsed.data) {
+                        throw new Error('Format berkas cadangan tidak valid.');
+                    }
+
+                    const d = parsed.data;
+                    if (d.pengumuman) localStorage.setItem('sdn_pengumuman_data', d.pengumuman);
+                    if (d.siswa) {
+                        localStorage.setItem('sdn_siswa_counts', d.siswa);
+                        localStorage.setItem('sdn_siswa_kelas', d.siswa);
+                    }
+                    if (d.guru) localStorage.setItem('sdn_guru_data', d.guru);
+                    if (d.sarpras) localStorage.setItem('sdn_sarpras_data', d.sarpras);
+                    if (d.kolaborasi) localStorage.setItem('sdn_kolaborasi_data', d.kolaborasi);
+                    if (d.kkg) localStorage.setItem('sdn_kkg_data', d.kkg);
+                    if (d.ppdb) localStorage.setItem('sdn_ppdb_submissions', d.ppdb);
+                    if (d.ppdbConfig) localStorage.setItem('sdn_ppdb_config', d.ppdbConfig);
+                    if (d.galeri) localStorage.setItem('sdn_galeri_data', d.galeri);
+                    if (d.sambutan) localStorage.setItem('sdn_sambutan_data', d.sambutan);
+                    if (d.berita) localStorage.setItem('sdn_berita_data', d.berita);
+
+                    // Sinkronkan ke cloud
+                    if (typeof publishAllToOnline === 'function') {
+                        publishAllToOnline();
+                    }
+
+                    alert('Seluruh data sekolah berhasil dipulihkan! Dashboard akan dimuat ulang.');
+                    window.location.reload();
+                } catch (err) {
+                    alert('Gagal memulihkan data: ' + err.message);
+                }
+            };
+            reader.readAsText(file);
+        });
+    }
+}
+
+
+/* -------------------------------------------------------------------
+   11. KELOLA MITRA & KOLABORASI SEKOLAH (6 PILAR)
+   Dukungan Foto Dokumentasi Kegiatan & Sinkronisasi Cloud
+   ------------------------------------------------------------------- */
+function compressActivityPhoto(file, maxDim = 800, maxQuality = 0.70) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = reject;
+        reader.onload = function(event) {
+            const img = new Image();
+            img.onerror = reject;
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
+
+                if (width > maxDim || height > maxDim) {
+                    if (width > height) {
+                        height = Math.round((height * maxDim) / width);
+                        width = maxDim;
+                    } else {
+                        width = Math.round((width * maxDim) / height);
+                        height = maxDim;
+                    }
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+
+                let resultUrl = canvas.toDataURL('image/jpeg', maxQuality);
+                if (resultUrl.length > 120000) {
+                    resultUrl = canvas.toDataURL('image/jpeg', 0.55);
+                }
+                resolve(resultUrl);
+            };
+            img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+const defaultKolaborasiList = (window.SDN_DATABASE && window.SDN_DATABASE.kolaborasi) ? window.SDN_DATABASE.kolaborasi : [
+    {
+        id: 1,
+        judul: "Kolaborasi Guru dengan Guru (Teman Sejawat)",
+        kategori: "PENDIDIK & TENAGA KEPENDIDIKAN",
+        mitra: "Dewan Guru SDN Inpres Arso VIII & Guru Tamu",
+        icon: "👩‍🏫",
+        foto: "images/kegiatan-rapat-dewan-guru.jpg",
+        keterangan_foto: "Dokumentasi musyawarah mingguan dewan guru SDN Inpres Arso VIII dalam penyelarasan Modul Ajar Kurikulum Merdeka.",
+        ringkasan: "Sinergi profesional antar-guru dalam penyusunan modul ajar, observasi kelas sejawat (peer teaching), serta berbagi praktik baik pembelajaran digital Starlink.",
+        uraian_kerja: [
+            "Mengadakan musyawarah mingguan dewan guru untuk menyelaraskan Capaian Pembelajaran (CP) dan Alur Tujuan Pembelajaran (ATP) Kurikulum Merdeka.",
+            "Melaksanakan supervisi klinis dan observasi kelas sejawat (peer observation) untuk saling memberikan masukan konstruktif terkait metode mengajar.",
+            "Kolaborasi guru kelas tinggi dan rendah dalam merancang asesmen diagnostik awal bagi siswa baru.",
+            "Pendampingan intensif dari guru senior (PNS) kepada guru pemula dan honorer dalam pengelolaan administrasi kelas dan pemanfaatan media digital.",
+            "Pemanfaatan bersama fasilitas laboratorium TIK, proyektor, dan jaringan internet satelit Starlink untuk penyusunan materi ajar interaktif."
+        ],
+        penanggung_jawab: "Warno, S.Pd.SD & Tim Kurikulum Sekolah",
+        periode: "Setiap Pekan & Pertemuan Berkala",
+        status: "Aktif Berjalan Rutin"
+    },
+    {
+        id: 2,
+        judul: "Kolaborasi Guru dengan Siswa (Pendampingan & Karakter)",
+        kategori: "KESISWAAN & PEMBINAAN",
+        mitra: "Seluruh Peserta Didik Kelas I - VI SDN Inpres Arso VIII",
+        icon: "🎒",
+        foto: "images/kegiatan-belajar-kelas.jpg",
+        keterangan_foto: "Dokumentasi pendampingan belajar ramah anak, literasi Calistung, dan penguatan budi pekerti di ruang kelas.",
+        ringkasan: "Hubungan pedagogis yang hangat, humanis, dan suportif demi menumbuhkan motivasi belajar, budi pekerti luhur, dan disiplin tanpa kekerasan.",
+        uraian_kerja: [
+            "Pendampingan personal (tutoring) setiap pagi bagi anak-anak yang memerlukan bimbingan khusus dalam membaca, menulis, dan berhitung (Calistung).",
+            "Pembimbingan minat dan bakat siswa melalui kegiatan ekstrakurikuler wajib Pramuka Gudep 08-013, latihan kesenian tari adat Papua, dan olahraga atletik.",
+            "Penyelenggaraan sesi konseling sahabat anak untuk mendengarkan keluh kesah, kendala belajar, serta mengatasi potensi perundungan (anti-bullying) di lingkungan sekolah.",
+            "Pembiasaan literasi 15 menit sebelum pelajaran dimulai di pojok baca kelas dan perpustakaan sekolah.",
+            "Pembiasaan salam, senyum, sapa, sopan, santun (5S), doa bersama lintas agama, serta pembinaan disiplin upacara bendera dan senam pagi ceria."
+        ],
+        penanggung_jawab: "Ferdinand, S.Pd & Seluruh Wali Kelas I - VI",
+        periode: "Harian & Mingguan",
+        status: "Aktif Berjalan Rutin"
+    },
+    {
+        id: 3,
+        judul: "Kolaborasi Sekolah dengan Komite Sekolah",
+        kategori: "KOMITE & RKAS",
+        mitra: "Pengurus Komite Sekolah SDN Inpres Arso VIII",
+        icon: "🏛️",
+        foto: "images/kegiatan-evaluasi-guru.jpg",
+        keterangan_foto: "Dokumentasi musyawarah pleno bersama pengurus Komite Sekolah terkait RKAS dan rencana penataan sarpras.",
+        ringkasan: "Sinergi akuntabel dalam perencanaan anggaran RKAS, pengawasan keterbukaan dana BOS, serta penataan sarana prasarana sekolah.",
+        uraian_kerja: [
+            "Musyawarah penyusunan dan pengesahan Rencana Kegiatan dan Anggaran Sekolah (RKAS) bersama Komite setiap awal tahun ajaran baru.",
+            "Rapat pleno pertanggungjawaban realisasi Bantuan Operasional Sekolah (BOS) secara transparan dan akuntabel setiap caturwulan.",
+            "Kolaborasi gotong royong perawatan lingkungan fisik sekolah, perbaikan pagar, ruang kelas, dan sanitasi jamban siswa bersama warga komite.",
+            "Dukungan komite dalam pengadaan seragam batik khas sekolah dan perlengkapan drum band/olahraga murid.",
+            "Mediasi dan penyambung aspirasi wali murid terhadap program sekolah demi peningkatan mutu pembelajaran berkelanjutan."
+        ],
+        penanggung_jawab: "Adi Puspito, S.Pd & Ketua Komite Sekolah",
+        periode: "Triwulan & Semester",
+        status: "Aktif Berjalan Rutin"
+    },
+    {
+        id: 4,
+        judul: "Kolaborasi Sekolah dengan Orang Tua & Masyarakat",
+        kategori: "PAGUYUBAN & MASYARAKAT",
+        mitra: "Paguyuban Orang Tua Murid & Tokoh Masyarakat Dukwia",
+        icon: "👨‍👩‍👧‍👦",
+        foto: "images/kegiatan-kebersamaan-guru.jpg",
+        keterangan_foto: "Dokumentasi silaturahmi berkala dan pembinaan jam belajar malam mandiri bersama Paguyuban Orang Tua Kampung Dukwia.",
+        ringkasan: "Kemitraan erat antara lingkungan rumah dan sekolah guna memastikan kesinambungan pola asuh, pembinaan ibadah, dan keamanan anak.",
+        uraian_kerja: [
+            "Pembentukan Paguyuban Orang Tua di setiap rombongan belajar (Kelas I - VI) untuk komunikasi aktif perkembangan anak didik.",
+            "Pertemuan orang tua murid berkala untuk pelaporan perkembangan raport hasil belajar dan konsultasi karakter anak.",
+            "Keterlibatan orang tua sebagai narasumber tamu (Kelas Inspirasi) berbagi pengalaman profesi: bertani, berwirausaha, maupun mengabdi.",
+            "Sosialisasi bersama pembatasan gawai (gadget) dan pengawasan jam belajar malam mandiri di rumah warga Kampung Dukwia.",
+            "Gotong royong bersama warga sekitar dalam menjaga kebersihan lingkungan perbatasan sekolah dan pengamanan area jalan raya saat jam pulang murid."
+        ],
+        penanggung_jawab: "Yuli Syetia Sari, S.Pd & Koordinator Paguyuban Kelas",
+        periode: "Bulanan & Tiap Pembagian Raport",
+        status: "Aktif Berjalan Rutin"
+    },
+    {
+        id: 5,
+        judul: "Kolaborasi Sekolah dengan Puskesmas Arso Barat",
+        kategori: "KESEHATAN & GIZI (UKS)",
+        mitra: "Puskesmas Arso Barat (Distrik Arso Barat, Kab. Keerom)",
+        icon: "🏥",
+        foto: "images/kegiatan-senam-bersama.jpg",
+        keterangan_foto: "Dokumentasi pemeriksaan kesehatan berkala, imunisasi BIAS, dan senam kebugaran jasmani bersama tim medis Puskesmas Arso Barat.",
+        ringkasan: "Integrasi program Unit Kesehatan Sekolah (UKS), pencegahan stunting, imunisasi nasional, serta pemeriksaan berkala kesehatan peserta didik.",
+        uraian_kerja: [
+            "Pelaksanaan Bulan Imunisasi Anak Sekolah (BIAS) berupa vaksinasi Campak-Rubella, DT, dan Td bagi murid kelas 1, 2, dan 5 secara berkala.",
+            "Pemeriksaan berkala kesehatan indera (mata, telinga), kesehatan gigi & mulut, serta pengukuran antropometri (tinggi & berat badan).",
+            "Penyuluhan Perilaku Hidup Bersih dan Sehat (PHBS), praktik cuci tangan 6 langkah pakai sabun, dan pembinaan kebersihan kuku serta rambut.",
+            "Pendistribusian tablet tambah darah (TTD) bagi siswi kelas tinggi serta edukasi gizi seimbang pencegahan anemia dan stunting di Keerom.",
+            "Inspeksi higiene dan sanitasi kantin sekolah serta penyuluhan jajanan sehat bebas bahan pengawet berbahaya bagi pedagang sekolah."
+        ],
+        penanggung_jawab: "Cicik Mursidah, S.Pd & Tim Medis UKS Puskesmas Arso Barat",
+        periode: "Semesteran & Kunjungan Rutin",
+        status: "Aktif Berjalan Rutin"
+    },
+    {
+        id: 6,
+        judul: "Kolaborasi Sekolah dengan Lembaga Kampung",
+        kategori: "PEMERINTAH KAMPUNG & ADAT",
+        mitra: "Pemerintah Kampung Dukwia, Babinsa, Bhabinkamtibmas & Tokoh Adat",
+        icon: "🏡",
+        foto: "images/kegiatan-pramuka-budaya.jpg",
+        keterangan_foto: "Dokumentasi kegiatan ekstrakurikuler Pramuka dan latihan tari adat Papua berkolaborasi dengan Pemerintah Kampung Dukwia.",
+        ringkasan: "Kerjasama kewilayahan dalam menjaga keamanan sekolah, keharmonisan sosial lintas suku bangsa, dan penguatan nilai kearifan lokal Keerom.",
+        uraian_kerja: [
+            "Sinergi keamanan lingkungan sekolah bersama Babinsa Koramil Arso dan Bhabinkamtibmas Polsek Arso Barat untuk patroli lingkungan perbatasan.",
+            "Dukungan Pemerintah Kampung Dukwia dalam penyediaan akses jalan desa yang layak dan penerangan jalan sekitar gerbang sekolah.",
+            "Kolaborasi Projek Penguatan Profil Pelajar Pancasila (P5) bertema 'Kearifan Lokal Keerom' melibatkan tetua adat dan pengrajin lokal kampung.",
+            "Partisipasi aktif siswa dan dewan guru dalam peringatan HUT RI tingkat kampung, karnaval budaya Nusantara, dan bakti sosial desa.",
+            "Penyelarasan program perlindungan hak anak di tingkat kampung untuk mencegah anak putus sekolah di wilayah Distrik Arso Barat."
+        ],
+        penanggung_jawab: "Adi Puspito, S.Pd, Kepala Kampung Dukwia, Babinsa & Bhabinkamtibmas",
+        periode: "Berkala Sepanjang Tahun",
+        status: "Aktif Berjalan Rutin"
+    }
+];
+
+function getKolaborasiData() {
+    if (window.SDN_DATABASE && Array.isArray(window.SDN_DATABASE.kolaborasi) && window.SDN_DATABASE.kolaborasi.length > 0) {
+        return window.SDN_DATABASE.kolaborasi;
+    }
+    try {
+        const raw = localStorage.getItem('sdn_kolaborasi_data');
+        if (raw) {
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+    } catch (e) {}
+    return defaultKolaborasiList;
+}
+
+function saveKolaborasiData(items) {
+    localStorage.setItem('sdn_kolaborasi_data', JSON.stringify(items));
+    if (window.SDN_DATABASE) window.SDN_DATABASE.kolaborasi = items;
+    syncToServer('kolaborasi', items);
+}
+
+function initKolaborasiManager() {
+    const form = document.getElementById('kolaborasiForm');
+    const container = document.getElementById('adminKolaborasiListContainer');
+    const countEl = document.getElementById('adminKolaborasiCount');
+    const editIdInput = document.getElementById('editKolaborasiId');
+    const judulInput = document.getElementById('kolaborasiJudul');
+    const kategoriInput = document.getElementById('kolaborasiKategori');
+    const mitraInput = document.getElementById('kolaborasiMitra');
+    const iconInput = document.getElementById('kolaborasiIcon');
+    const statusInput = document.getElementById('kolaborasiStatus');
+    const ringkasanInput = document.getElementById('kolaborasiRingkasan');
+    const uraianInput = document.getElementById('kolaborasiUraianKerja');
+    const picInput = document.getElementById('kolaborasiPic');
+    const periodeInput = document.getElementById('kolaborasiPeriode');
+    const fotoInput = document.getElementById('kolaborasiFotoInput');
+    const previewContainer = document.getElementById('kolaborasiPreviewContainer');
+    const previewImg = document.getElementById('kolaborasiPreviewImg');
+    const btnHapusFoto = document.getElementById('btnHapusFotoKolaborasi');
+    const ketFotoInput = document.getElementById('kolaborasiKeteranganFoto');
+    const btnBatal = document.getElementById('btnBatalEditKolaborasi');
+    const btnSubmit = document.getElementById('btnSimpanKolaborasi');
+    const formHeading = document.getElementById('formKolaborasiHeading');
+    const btnReset = document.getElementById('btnResetKolaborasiDefault');
+
+    let currentKolaborasiFoto = '';
+
+    if (!container) return;
+
+    // Handle foto input change
+    if (fotoInput) {
+        fotoInput.addEventListener('change', async function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            if (previewContainer) {
+                previewContainer.style.display = 'block';
+                if (previewImg) previewImg.style.opacity = '0.5';
+            }
+
+            try {
+                currentKolaborasiFoto = await compressActivityPhoto(file);
+                if (previewImg) {
+                    previewImg.src = currentKolaborasiFoto;
+                    previewImg.style.opacity = '1';
+                }
+            } catch (err) {
+                console.error('Gagal memproses foto:', err);
+                alert('Gagal memproses file foto. Pastikan format JPG, PNG, atau WEBP.');
+            }
+        });
+    }
+
+    if (btnHapusFoto) {
+        btnHapusFoto.addEventListener('click', function() {
+            currentKolaborasiFoto = '';
+            if (fotoInput) fotoInput.value = '';
+            if (previewContainer) previewContainer.style.display = 'none';
+            if (previewImg) previewImg.src = '';
+        });
+    }
+
+    function resetForm() {
+        if (form) form.reset();
+        if (editIdInput) editIdInput.value = '';
+        currentKolaborasiFoto = '';
+        if (previewContainer) previewContainer.style.display = 'none';
+        if (previewImg) previewImg.src = '';
+        if (formHeading) formHeading.textContent = '+ Tambah Kemitraan Baru';
+        if (btnSubmit) btnSubmit.textContent = '💾 Simpan Kemitraan';
+        if (btnBatal) btnBatal.style.display = 'none';
+        if (iconInput) iconInput.value = '🤝';
+    }
+
+    if (btnBatal) {
+        btnBatal.addEventListener('click', resetForm);
+    }
+
+    // State Paginasi & Pencarian Kolaborasi Admin
+    let kolaborasiPage = 1;
+    const adminKolaborasiSearch = document.getElementById('adminKolaborasiSearch');
+    const adminKolaborasiPageSize = document.getElementById('adminKolaborasiPageSize');
+
+    if (adminKolaborasiSearch) {
+        adminKolaborasiSearch.addEventListener('input', () => {
+            kolaborasiPage = 1;
+            renderList();
+        });
+    }
+    if (adminKolaborasiPageSize) {
+        adminKolaborasiPageSize.addEventListener('change', () => {
+            kolaborasiPage = 1;
+            renderList();
+        });
+    }
+
+    function renderList() {
+        const allItems = getKolaborasiData();
+        if (countEl) countEl.textContent = allItems.length;
+
+        // Filter pencarian
+        const q = adminKolaborasiSearch ? adminKolaborasiSearch.value.trim().toLowerCase() : '';
+        let filtered = allItems;
+        if (q) {
+            filtered = allItems.filter(item => {
+                const matchJudul = item.judul && item.judul.toLowerCase().includes(q);
+                const matchMitra = item.mitra && item.mitra.toLowerCase().includes(q);
+                const matchKat = item.kategori && item.kategori.toLowerCase().includes(q);
+                const matchRingkasan = item.ringkasan && item.ringkasan.toLowerCase().includes(q);
+                const matchPic = item.penanggung_jawab && item.penanggung_jawab.toLowerCase().includes(q);
+                const matchPeriode = item.periode && item.periode.toLowerCase().includes(q);
+                return matchJudul || matchMitra || matchKat || matchRingkasan || matchPic || matchPeriode;
+            });
+        }
+
+        const totalItems = filtered.length;
+        const pageSizeVal = adminKolaborasiPageSize ? adminKolaborasiPageSize.value : '6';
+        const pageSize = pageSizeVal === 'ALL' ? totalItems : (parseInt(pageSizeVal, 10) || 6);
+        const totalPages = pageSizeVal === 'ALL' ? 1 : Math.ceil(totalItems / pageSize) || 1;
+        if (kolaborasiPage > totalPages) kolaborasiPage = totalPages;
+        if (kolaborasiPage < 1) kolaborasiPage = 1;
+
+        const startIdx = pageSizeVal === 'ALL' ? 0 : (kolaborasiPage - 1) * pageSize;
+        const endIdx = pageSizeVal === 'ALL' ? totalItems : Math.min(startIdx + pageSize, totalItems);
+        const pagedItems = filtered.slice(startIdx, endIdx);
+
+        container.innerHTML = '';
+
+        if (pagedItems.length === 0) {
+            container.innerHTML = `<div style="text-align: center; padding: 30px; color: #94a3b8;">${allItems.length === 0 ? 'Belum ada pilar kemitraan. Silakan tambahkan pada formulir di atas.' : 'Tidak ada pilar kemitraan yang cocok dengan pencarian.'}</div>`;
+        } else {
+            const borderColors = ['#0284c7', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444', '#14b8a6'];
+
+            pagedItems.forEach((item, index) => {
+                const color = borderColors[index % borderColors.length];
+                const icon = item.icon || '🤝';
+                const judul = item.judul || ('Pilar Kemitraan ' + (startIdx + index + 1));
+                const kategori = item.kategori || 'KEMITRAAN SEKOLAH';
+                const mitra = item.mitra || '-';
+                const ringkasan = item.ringkasan || '';
+                const pic = item.penanggung_jawab || '-';
+                const periode = item.periode || '-';
+                const status = item.status || 'Aktif Berjalan Rutin';
+
+                let uraianList = [];
+                if (Array.isArray(item.uraian_kerja)) {
+                    uraianList = item.uraian_kerja;
+                } else if (typeof item.uraian_kerja === 'string') {
+                    uraianList = item.uraian_kerja.split('\n').map(s => s.trim().replace(/^[-*•\d.]+\s*/, '')).filter(s => s.length > 0);
+                }
+
+                const listHtml = uraianList.map(u => '<li>' + escapeHTML(u) + '</li>').join('');
+
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.style.cssText = `border-left: 5px solid ${color}; padding: 20px; margin-bottom: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.06);`;
+                card.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; flex-wrap: wrap;">
+                        <div style="display: flex; gap: 14px; align-items: flex-start; flex: 1; min-width: 260px;">
+                            <div style="width: 44px; height: 44px; border-radius: 10px; background: #f1f5f9; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0;">
+                                ${icon}
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 4px;">
+                                    <span style="font-size: 11px; font-weight: 800; color: ${color}; background: #f8fafc; border: 1px solid #e2e8f0; padding: 2px 8px; border-radius: 4px; text-transform: uppercase;">
+                                        ${escapeHTML(kategori)}
+                                    </span>
+                                    <span style="font-size: 11.5px; font-weight: 700; color: #166534; background: #dcfce7; padding: 2px 8px; border-radius: 4px;">
+                                        ${escapeHTML(status)}
+                                    </span>
+                                </div>
+                                <h3 style="font-size: 16px; font-weight: 800; color: var(--primary-dark); margin: 0 0 4px;">
+                                    ${escapeHTML(judul)}
+                                </h3>
+                                <div style="font-size: 13px; font-weight: 700; color: #334155; margin-bottom: 6px;">
+                                    🏢 Mitra: <span style="color: var(--primary);">${escapeHTML(mitra)}</span>
+                                </div>
+                                <p style="font-size: 13px; color: #475569; margin: 0 0 10px; line-height: 1.5;">
+                                    ${escapeHTML(ringkasan)}
+                                </p>
+
+                                ${listHtml ? `
+                                <div style="background: #f8fafc; border-radius: 6px; padding: 10px 14px; margin-bottom: 10px; border: 1px solid #e2e8f0;">
+                                    <strong style="font-size: 12px; color: #1e293b; display: block; margin-bottom: 4px;">Bentuk Kolaborasi Utama:</strong>
+                                    <ul style="font-size: 12px; color: #475569; margin: 0; padding-left: 18px; line-height: 1.5;">
+                                        ${listHtml}
+                                    </ul>
+                                </div>
+                                ` : ''}
+
+                                <div style="display: flex; gap: 16px; font-size: 11.5px; color: #64748b; flex-wrap: wrap;">
+                                    <span>👤 PIC: <strong>${escapeHTML(pic)}</strong></span>
+                                    <span>📅 Periode: <strong>${escapeHTML(periode)}</strong></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 6px;">
+                            <button type="button" class="btn-action-edit-kolaborasi" data-id="${item.id}" style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; padding: 7px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 700;">
+                                ✏️ Edit
+                            </button>
+                            <button type="button" class="btn-action-delete-kolaborasi" data-id="${item.id}" style="background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; padding: 7px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 700;">
+                                🗑️ Hapus
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            // Pasang event edit
+            container.querySelectorAll('.btn-action-edit-kolaborasi').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'), 10);
+                    const items = getKolaborasiData();
+                    const item = items.find(k => k.id === id);
+                    if (!item) return;
+
+                    if (editIdInput) editIdInput.value = item.id;
+                    if (judulInput) judulInput.value = item.judul || '';
+                    if (kategoriInput) kategoriInput.value = item.kategori || 'KEMITRAAN PENDIDIKAN';
+                    if (mitraInput) mitraInput.value = item.mitra || '';
+                    if (iconInput) iconInput.value = item.icon || '🤝';
+                    if (statusInput) statusInput.value = item.status || 'Aktif Berjalan Rutin';
+                    if (picInput) picInput.value = item.penanggung_jawab || '';
+                    if (periodeInput) periodeInput.value = item.periode || 'Tahun Ajaran 2026/2027';
+                    if (ringkasanInput) ringkasanInput.value = item.ringkasan || '';
+
+                    if (uraianInput) {
+                        if (Array.isArray(item.uraian_kerja)) {
+                            uraianInput.value = item.uraian_kerja.join('\n');
+                        } else {
+                            uraianInput.value = item.uraian_kerja || '';
+                        }
+                    }
+
+                    if (formHeading) formHeading.textContent = '✏️ Edit Pilar: "' + (item.judul || '') + '"';
+                    if (btnSubmit) btnSubmit.innerHTML = '💾 Simpan Perubahan Pilar';
+                    if (btnBatal) btnBatal.style.display = 'inline-block';
+
+                    const cardForm = document.getElementById('cardKolaborasiForm') || form;
+                    cardForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                });
+            });
+
+            // Pasang event hapus
+            container.querySelectorAll('.btn-action-delete-kolaborasi').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'), 10);
+                    const items = getKolaborasiData();
+                    const item = items.find(k => k.id === id);
+                    if (!item) return;
+
+                    if (confirm('Hapus pilar kemitraan "' + item.judul + '" dari daftar?')) {
+                        const newItems = items.filter(k => k.id !== id);
+                        saveKolaborasiData(newItems);
+                        renderList();
+                        alert('✅ Pilar kemitraan berhasil dihapus dan otomatis disinkronkan ke cloud.');
+                    }
+                });
+            });
+        }
+
+        // Render Kontrol Paginasi Kolaborasi
+        renderAdminPaginationControls('adminKolaborasiPagination', kolaborasiPage, totalPages, totalItems, pageSizeVal, (p) => {
+            kolaborasiPage = p;
+            renderList();
+        });
+    }
+
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const editId = editIdInput ? parseInt(editIdInput.value, 10) : null;
+            const items = getKolaborasiData();
+
+            const uraianLines = (uraianInput ? uraianInput.value : '')
+                .split('\n')
+                .map(s => s.trim().replace(/^[-*•\d.]+\s*/, ''))
+                .filter(s => s.length > 0);
+
+            const payload = {
+                judul: judulInput ? judulInput.value.trim() : '',
+                kategori: kategoriInput ? kategoriInput.value.trim() : 'KEMITRAAN SEKOLAH',
+                mitra: mitraInput ? mitraInput.value.trim() : '',
+                icon: iconInput ? (iconInput.value.trim() || '🤝') : '🤝',
+                status: statusInput ? statusInput.value : 'Aktif Berjalan Rutin',
+                ringkasan: ringkasanInput ? ringkasanInput.value.trim() : '',
+                uraian_kerja: uraianLines,
+                penanggung_jawab: picInput ? picInput.value.trim() : '',
+                periode: periodeInput ? periodeInput.value.trim() : 'Berkala',
+                foto: currentKolaborasiFoto,
+                keterangan_foto: ketFotoInput ? ketFotoInput.value.trim() : ''
+            };
+
+            if (editId && !isNaN(editId)) {
+                const idx = items.findIndex(k => k.id === editId);
+                if (idx !== -1) {
+                    items[idx] = { ...items[idx], ...payload };
+                    saveKolaborasiData(items);
+                    resetForm();
+                    renderList();
+                    alert('✅ Kemitraan & Foto Dokumentasi berhasil diperbarui dan tersimpan ke Google Cloud Database!');
+                    return;
+                }
+            }
+
+            const newId = items.length > 0 ? (Math.max(...items.map(k => k.id || 0)) + 1) : 1;
+            const newItem = { id: newId, ...payload };
+            items.push(newItem);
+            saveKolaborasiData(items);
+            resetForm();
+            renderList();
+            alert('✅ Kemitraan & Foto Dokumentasi baru berhasil ditambahkan dan langsung aktif di website!');
+        });
+    }
+
+    if (btnReset) {
+        btnReset.addEventListener('click', function() {
+            if (confirm('Pulihkan ke 6 Pilar Kemitraan bawaan resmi sekolah?')) {
+                saveKolaborasiData(defaultKolaborasiList);
+                resetForm();
+                renderList();
+                alert('6 Pilar Kemitraan berhasil dipulihkan.');
+            }
+        });
+    }
+
+    renderList();
+}
+
+
+/* -------------------------------------------------------------------
+   12. KELOLA PENGEMBANGAN GURU (K3S & KKG TINGKAT GUSEK 1)
+   Dukungan Foto Dokumentasi Pertemuan & Notulen
+   ------------------------------------------------------------------- */
+const defaultKKGData = {
+    "gusek_info": {
+        "nama_gugus": "Kelompok Kerja Kepala Sekolah (KKKS) & KKG Gusek 1 Arso Barat",
+        "pemerintah": "Pemerintah Kabupaten Keerom",
+        "kabupaten": "Kabupaten Keerom, Provinsi Papua",
+        "alamat_sekretariat": "Jalan Melati Barat Arso I, Kampung Sanggaria, Distrik Arso Barat 99473",
+        "ketua": "Robi Ulludin, S.Pd.SD.",
+        "nip_ketua": "196906201992031018",
+        "tanggal_penetapan": "Arso Barat, 23 Juli 2026",
+        "semester": "Semester Gasal Tahun Pelajaran 2026/2027",
+        "hari_rutin": "Hari Rabu Bergilir",
+        "dasar_hukum": "SK Kelompok Kerja Kepala Sekolah & Guru Dinas Pendidikan dan Pengajaran Kab. Keerom",
+        "deskripsi": "Wadah kemitraan profesional resmi pendidik dan kepala sekolah dasar di Gugus Sekolah 1 (Gusek 1) Arso Barat untuk penyusunan modul ajar mendalam, standarisasi kisi-kisi dan naskah soal ATS/AAS, serta simulasi pengajaran inovatif."
+    },
+    "k3s": {
+        "judul": "Kelompok Kerja Kepala Sekolah (KKKS / K3S) Gusek 1 Arso Barat",
+        "ketua": "Robi Ulludin, S.Pd.SD. (NIP 196906201992031018)",
+        "sekretariat": "Jalan Melati Barat Arso I, Kampung Sanggaria, Distrik Arso Barat 99473",
+        "jadwal": "Setiap Hari Rabu Bergilir (Semester Gasal TP 2026/2027)",
+        "uraian_kerja": [
+            "Harmonisasi kalender pendidikan semester gasal 2026/2027 se-Gusek 1 Arso Barat.",
+            "Pengawalan dan supervisi penyusunan Modul Ajar Pembelajaran Mendalam (Deep Learning) Fase A, B, dan C.",
+            "Koordinasi penyusunan Kisi-kisi dan Master Soal Asesmen Tengah Semester (ATS) dan Asesmen Akhir Semester (AAS).",
+            "Supervisi klinis dan evaluasi simulasi pembelajaran bermutu di ruang kelas bersama kepala sekolah anggota gugus.",
+            "Penguatan sinergi sarana digital, ANBK, dan pemanfaatan internet satelit Starlink di sekolah-sekolah anggota."
+        ]
+    },
+    "kkg_kelompok_a": {
+        "nama_kelompok": "Kelompok Kelas Awal (Kelas 1, 2, 3 dan Agama)",
+        "cakupan": "Guru Kelas 1, Guru Kelas 2, Guru Kelas 3, dan Guru Pendidikan Agama",
+        "jadwal": "Hari Rabu Bergilir di Sekolah Anggota Gugus",
+        "tuan_rumah_siklus": "Bergilir di Sekolah Anggota (SD Inpres 1 Arso I, SD Inpres Arso VI, SD Inpres Arso X, SDN Inpres Arso VIII)",
+        "uraian_kerja": [
+            "Penyusunan Modul Ajar Pembelajaran Mendalam Kelas 1, 2, 3, dan Pendidikan Agama.",
+            "Penyusunan Kisi-kisi dan Butir Soal Asesmen Tengah Semester (ATS) Kelas 1, 2, 3, dan Agama.",
+            "Simulasi Pembelajaran Mendalam Kelas 1, 2, 3, dan Agama dengan media konkret dan penguatan literasi-numerasi awal.",
+            "Penyusunan Kisi-kisi dan Soal Asesmen Akhir Semester (AAS) Gasal (diselenggarakan di SDN Inpres Arso VIII pada 11 November 2026)."
+        ]
+    },
+    "kkg_kelompok_b": {
+        "nama_kelompok": "Kelompok Kelas Tinggi (Kelas 4, 5, 6, PJOK, Kesenian, dan Bahasa Inggris)",
+        "cakupan": "Guru Kelas 4, Kelas 5, Kelas 6, Guru PJOK, Guru Seni Budaya/Kesenian, dan Guru Bahasa Inggris",
+        "jadwal": "Hari Rabu Bergilir di Sekolah Anggota Gugus",
+        "tuan_rumah_siklus": "Bergilir di Sekolah Anggota (SD Inpres 2 Arso I, SD Inpres SKP F 3 Arso, SD Inpres Arso XI)",
+        "uraian_kerja": [
+            "Penyusunan Modul Ajar Pembelajaran Mendalam Kelas 4, 5, 6, PJOK, Kesenian, dan Bahasa Inggris.",
+            "Penyusunan Kisi-kisi dan Butir Soal Asesmen Tengah Semester (ATS) Kelas 4, 5, 6, PJOK, Kesenian, dan Bahasa Inggris.",
+            "Simulasi Pembelajaran Mendalam Kelas 4, 5, 6, PJOK, Kesenian, dan Bahasa Inggris berbasis studi kasus dan proyek.",
+            "Penyusunan Kisi-kisi dan Soal Asesmen Akhir Semester (AAS) Kelas Tinggi secara terstandar se-Gusek 1."
+        ]
+    },
+    "jadwal_pertemuan": [
+        {
+            "id": 1,
+            "no": 1,
+            "hari": "Rabu",
+            "tanggal": "Rabu, 5 Agustus 2026",
+            "bulan": "Agustus 2026",
+            "tuan_rumah": "SD Inpres 1 Arso I",
+            "kelompok": "Kelas 1, 2, 3 & Agama (Kelas Awal)",
+            "agenda": "Penyusunan Modul Ajar Pembelajaran Mendalam Kelas 1, 2, 3, dan Agama",
+            "pemateri": "Ketua KKG, Ketua KKKS, Guru Kelas Awal",
+            "status": "Terlaksana",
+            "foto": "images/kegiatan-rapat-dewan-guru.jpg",
+            "notulen": "Musyawarah penyusunan Modul Ajar Pembelajaran Mendalam Fase A dan Fase B (Kelas 1, 2, 3 dan Agama) se-Gusek 1 Arso Barat."
+        },
+        {
+            "id": 2,
+            "no": 2,
+            "hari": "Rabu",
+            "tanggal": "Rabu, 19 Agustus 2026",
+            "bulan": "Agustus 2026",
+            "tuan_rumah": "SD Inpres 2 Arso I",
+            "kelompok": "Kelas 4, 5, 6, PJOK, Kesenian & B.Inggris (Kelas Tinggi)",
+            "agenda": "Penyusunan Modul Ajar Pembelajaran Mendalam Kelas 4, 5, 6, PJOK, Kesenian, dan Bahasa Inggris",
+            "pemateri": "Ketua KKG, Ketua KKKS, Guru Kelas Tinggi",
+            "status": "Terlaksana",
+            "foto": "images/kegiatan-evaluasi-guru.jpg",
+            "notulen": "Penyelarasan Modul Ajar Mendalam untuk Fase B (Kelas 4) dan Fase C (Kelas 5-6), PJOK, Kesenian, serta Bahasa Inggris terpadu."
+        },
+        {
+            "id": 3,
+            "no": 3,
+            "hari": "Rabu",
+            "tanggal": "Rabu, 2 September 2026",
+            "bulan": "September 2026",
+            "tuan_rumah": "SD Inpres Arso VI",
+            "kelompok": "Kelas 1, 2, 3 & Agama (Kelas Awal)",
+            "agenda": "Penyusunan Kisi Kisi dan Soal ATS Kelas 1, 2, 3, dan Agama",
+            "pemateri": "Ketua KKG, Ketua KKKS, Turut, S.Pd",
+            "status": "Terlaksana",
+            "foto": "images/kegiatan-keagamaan-rohani.jpg",
+            "notulen": "Penyusunan bank kisi-kisi dan naskah soal Asesmen Tengah Semester (ATS) Gasal untuk kelas rendah dan muatan keagamaan."
+        },
+        {
+            "id": 4,
+            "no": 4,
+            "hari": "Rabu",
+            "tanggal": "Rabu, 16 September 2026",
+            "bulan": "September 2026",
+            "tuan_rumah": "SD Inpres SKP F 3 Arso",
+            "kelompok": "Kelas 4, 5, 6, PJOK, Kesenian & B.Inggris (Kelas Tinggi)",
+            "agenda": "Penyusunan Kisi Kisi dan Soal ATS Kelas 4, 5, 6, PJOK, Kesenian, dan Bahasa Inggris",
+            "pemateri": "Ketua KKG, Ketua KKKS, Turut, S.Pd",
+            "status": "Terlaksana",
+            "foto": "images/kegiatan-anbk-komputer.jpg",
+            "notulen": "Pemantapan kisi-kisi dan instrumen Asesmen Tengah Semester (ATS) kelas tinggi, materi praktik PJOK, dan kesenian."
+        },
+        {
+            "id": 5,
+            "no": 5,
+            "hari": "Rabu",
+            "tanggal": "Rabu, 7 Oktober 2026",
+            "bulan": "Oktober 2026",
+            "tuan_rumah": "SD Inpres Arso X",
+            "kelompok": "Kelas 1, 2, 3 & Agama (Kelas Awal)",
+            "agenda": "Simulasi Pembelajaran Mendalam Kelas 1, 2, 3, dan Agama",
+            "pemateri": "Ketua KKG, Ketua KKKS, Guru Kelas 1, 2, dan 3",
+            "status": "Terlaksana",
+            "foto": "images/kegiatan-senam-bersama.jpg",
+            "notulen": "Praktik mikro-teaching simulasi pembelajaran mendalam dengan pendekatan kontekstual kearifan lokal Keerom."
+        },
+        {
+            "id": 6,
+            "no": 6,
+            "hari": "Rabu",
+            "tanggal": "Rabu, 28 Oktober 2026",
+            "bulan": "Oktober 2026",
+            "tuan_rumah": "SD Inpres Arso XI",
+            "kelompok": "Kelas 4, 5, 6, PJOK, Kesenian & B.Inggris (Kelas Tinggi)",
+            "agenda": "Simulasi Pembelajaran Mendalam Kelas 4, 5, 6, PJOK, Kesenian, dan Bahasa Inggris",
+            "pemateri": "Ketua KKG, Ketua KKKS, Guru Kelas 4, 5, dan 6",
+            "status": "Terlaksana",
+            "foto": "images/kegiatan-pramuka-budaya.jpg",
+            "notulen": "Peer-teaching simulasi pembelajaran pemecahan masalah (problem solving) dan demonstrasi gerak olahraga PJOK."
+        },
+        {
+            "id": 7,
+            "no": 7,
+            "hari": "Rabu",
+            "tanggal": "Rabu, 11 November 2026",
+            "bulan": "November 2026",
+            "tuan_rumah": "SDN Inpres Arso VIII",
+            "kelompok": "Kelas 1, 2, 3 & Agama (Kelas Awal)",
+            "agenda": "Penyusunan Kisi Kisi dan Soal AAS Kelas 1, 2, 3, dan Agama",
+            "pemateri": "Ketua KKG, Ketua KKKS, Turut, S.Pd",
+            "status": "Terlaksana",
+            "foto": "images/kegiatan-literasi-komputer.jpg",
+            "notulen": "SDN Inpres Arso VIII sebagai tuan rumah Gusek 1. Workshop penyusunan kisi-kisi dan naskah Asesmen Akhir Semester (AAS) Gasal 2026/2027 berlangsung sukses di ruang guru & TIK."
+        },
+        {
+            "id": 8,
+            "no": 8,
+            "hari": "Rabu",
+            "tanggal": "Rabu, 25 November 2026",
+            "bulan": "November 2026",
+            "tuan_rumah": "SD Inpres 2 Arso I",
+            "kelompok": "Kelas 4, 5, 6, PJOK, Kesenian & B.Inggris (Kelas Tinggi)",
+            "agenda": "Penyusunan Kisi Kisi dan Soal AAS Kelas 4, 5, 6, PJOK, Kesenian, dan Bahasa Inggris",
+            "pemateri": "Ketua KKG, Ketua KKKS, Turut, S.Pd",
+            "status": "Dijadwalkan",
+            "foto": "",
+            "notulen": "Persiapan finalisasi soal Asesmen Akhir Semester (AAS) Gasal kelas tinggi dan standarisasi rubrik penilaian unjuk kerja."
+        }
+    ]
+};
+
+function getKKGData() {
+    if (window.SDN_DATABASE && window.SDN_DATABASE.kkg && typeof window.SDN_DATABASE.kkg === 'object') {
+        return window.SDN_DATABASE.kkg;
+    }
+    try {
+        const raw = localStorage.getItem('sdn_kkg_data');
+        if (raw) {
+            const parsed = JSON.parse(raw);
+            if (parsed && typeof parsed === 'object') return parsed;
+        }
+    } catch (e) {}
+    return defaultKKGData;
+}
+
+function saveKKGData(data) {
+    localStorage.setItem('sdn_kkg_data', JSON.stringify(data));
+    if (window.SDN_DATABASE) window.SDN_DATABASE.kkg = data;
+    syncToServer('kkg', data);
+}
+
+function initKKGManager() {
+    const form = document.getElementById('kkgJadwalForm');
+    const tableBody = document.getElementById('adminKKGTableBody');
+    const countEl = document.getElementById('adminKKGCount');
+    const editIdInput = document.getElementById('editKKGId');
+    const tanggalInput = document.getElementById('kkgTanggal');
+    const bulanInput = document.getElementById('kkgBulan');
+    const tuanRumahInput = document.getElementById('kkgTuanRumah');
+    const kelompokInput = document.getElementById('kkgKelompok');
+    const agendaInput = document.getElementById('kkgAgenda');
+    const statusInput = document.getElementById('kkgStatus');
+    const fotoInput = document.getElementById('kkgFotoInput');
+    const previewContainer = document.getElementById('kkgPreviewContainer');
+    const previewImg = document.getElementById('kkgPreviewImg');
+    const btnHapusFoto = document.getElementById('btnHapusFotoKKG');
+    const notulenInput = document.getElementById('kkgNotulen');
+    const btnBatal = document.getElementById('btnBatalEditKKG');
+    const btnSubmit = document.getElementById('btnSimpanKKG');
+    const formHeading = document.getElementById('formKKGHeading');
+    const btnReset = document.getElementById('btnResetKKGDefault');
+
+    let currentKKGFoto = '';
+
+    if (!tableBody) return;
+
+    if (fotoInput) {
+        fotoInput.addEventListener('change', async function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            if (previewContainer) {
+                previewContainer.style.display = 'block';
+                if (previewImg) previewImg.style.opacity = '0.5';
+            }
+
+            try {
+                currentKKGFoto = await compressActivityPhoto(file);
+                if (previewImg) {
+                    previewImg.src = currentKKGFoto;
+                    previewImg.style.opacity = '1';
+                }
+            } catch (err) {
+                console.error('Gagal memproses foto pertemuan:', err);
+                alert('Gagal memproses file foto. Pastikan format JPG, PNG, atau WEBP.');
+            }
+        });
+    }
+
+    if (btnHapusFoto) {
+        btnHapusFoto.addEventListener('click', function() {
+            currentKKGFoto = '';
+            if (fotoInput) fotoInput.value = '';
+            if (previewContainer) previewContainer.style.display = 'none';
+            if (previewImg) previewImg.src = '';
+        });
+    }
+
+    function resetForm() {
+        if (form) form.reset();
+        if (editIdInput) editIdInput.value = '';
+        currentKKGFoto = '';
+        if (previewContainer) previewContainer.style.display = 'none';
+        if (previewImg) previewImg.src = '';
+        if (formHeading) formHeading.textContent = '+ Tambah Jadwal Pertemuan Bergilir K3S / KKG';
+        if (btnSubmit) btnSubmit.textContent = '💾 Simpan Jadwal Pertemuan';
+        if (btnBatal) btnBatal.style.display = 'none';
+    }
+
+    if (btnBatal) {
+        btnBatal.addEventListener('click', resetForm);
+    }
+
+    // State Paginasi & Pencarian KKG Admin
+    let kkgPage = 1;
+    const adminKKGSearch = document.getElementById('adminKKGSearch');
+    const adminKKGFilterKelompok = document.getElementById('adminKKGFilterKelompok');
+    const adminKKGPageSize = document.getElementById('adminKKGPageSize');
+
+    if (adminKKGSearch) {
+        adminKKGSearch.addEventListener('input', () => {
+            kkgPage = 1;
+            renderTable();
+        });
+    }
+    if (adminKKGFilterKelompok) {
+        adminKKGFilterKelompok.addEventListener('change', () => {
+            kkgPage = 1;
+            renderTable();
+        });
+    }
+    if (adminKKGPageSize) {
+        adminKKGPageSize.addEventListener('change', () => {
+            kkgPage = 1;
+            renderTable();
+        });
+    }
+
+    function renderTable() {
+        const data = getKKGData();
+        const jadwalList = Array.isArray(data.jadwal_pertemuan) ? data.jadwal_pertemuan : [];
+        if (countEl) countEl.textContent = jadwalList.length;
+
+        // Filter pencarian & kelompok
+        const q = adminKKGSearch ? adminKKGSearch.value.trim().toLowerCase() : '';
+        const kelFilter = adminKKGFilterKelompok ? adminKKGFilterKelompok.value : 'ALL';
+
+        let filtered = jadwalList.filter(j => {
+            if (kelFilter === 'Awal') {
+                const k = (j.kelompok || '').toLowerCase();
+                if (!k.includes('kelompok a') && !k.includes('agama')) return false;
+            } else if (kelFilter === 'Tinggi') {
+                const k = (j.kelompok || '').toLowerCase();
+                if (!k.includes('kelompok b') && !k.includes('pjok') && !k.includes('inggris')) return false;
+            }
+
+            if (q) {
+                const matchBulan = j.bulan && j.bulan.toLowerCase().includes(q);
+                const matchTgl = j.tanggal && j.tanggal.toLowerCase().includes(q);
+                const matchTuan = j.tuan_rumah && j.tuan_rumah.toLowerCase().includes(q);
+                const matchKel = j.kelompok && j.kelompok.toLowerCase().includes(q);
+                const matchAgenda = j.agenda && j.agenda.toLowerCase().includes(q);
+                const matchPemateri = j.pemateri && j.pemateri.toLowerCase().includes(q);
+                const matchNotulen = j.notulen && j.notulen.toLowerCase().includes(q);
+                return matchBulan || matchTgl || matchTuan || matchKel || matchAgenda || matchPemateri || matchNotulen;
+            }
+            return true;
+        });
+
+        const totalItems = filtered.length;
+        const pageSizeVal = adminKKGPageSize ? adminKKGPageSize.value : '5';
+        const pageSize = pageSizeVal === 'ALL' ? totalItems : (parseInt(pageSizeVal, 10) || 5);
+        const totalPages = pageSizeVal === 'ALL' ? 1 : Math.ceil(totalItems / pageSize) || 1;
+        if (kkgPage > totalPages) kkgPage = totalPages;
+        if (kkgPage < 1) kkgPage = 1;
+
+        const startIdx = pageSizeVal === 'ALL' ? 0 : (kkgPage - 1) * pageSize;
+        const endIdx = pageSizeVal === 'ALL' ? totalItems : Math.min(startIdx + pageSize, totalItems);
+        const pagedItems = filtered.slice(startIdx, endIdx);
+
+        tableBody.innerHTML = '';
+
+        if (pagedItems.length === 0) {
+            tableBody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 25px; color: #94a3b8;">${jadwalList.length === 0 ? 'Belum ada jadwal pertemuan terdaftar.' : 'Tidak ada agenda kegiatan KKG yang cocok dengan pencarian / filter.'}</td></tr>`;
+        } else {
+            pagedItems.forEach((j, index) => {
+                const realNum = startIdx + index + 1;
+                const tr = document.createElement('tr');
+                tr.style.borderBottom = '1px solid #e2e8f0';
+                if (index % 2 === 1) tr.style.backgroundColor = '#f8fafc';
+
+                let statusBadge = '<span style="background: #dcfce7; color: #166534; font-size: 11.5px; font-weight: 700; padding: 3px 8px; border-radius: 6px;">Terlaksana</span>';
+                if (j.status && (j.status.toLowerCase().includes('akan') || j.status.toLowerCase().includes('dijadwalkan') || j.status.toLowerCase().includes('mendatang'))) {
+                    statusBadge = '<span style="background: #dbeafe; color: #1e40af; font-size: 11.5px; font-weight: 700; padding: 3px 8px; border-radius: 6px;">Dijadwalkan</span>';
+                } else if (j.status && j.status.toLowerCase().includes('tunda')) {
+                    statusBadge = '<span style="background: #fee2e2; color: #991b1b; font-size: 11.5px; font-weight: 700; padding: 3px 8px; border-radius: 6px;">Ditunda</span>';
+                }
+
+                let kelBadgeStyle = 'background: #e0f2fe; color: #0369a1;';
+                if (j.kelompok && (j.kelompok.includes('Kelompok A') || j.kelompok.includes('Agama'))) {
+                    kelBadgeStyle = 'background: #d1fae5; color: #065f46;';
+                } else if (j.kelompok && (j.kelompok.includes('Kelompok B') || j.kelompok.includes('PJOK') || j.kelompok.includes('Inggris'))) {
+                    kelBadgeStyle = 'background: #e0f2fe; color: #0369a1;';
+                } else if (j.kelompok && j.kelompok.includes('Semua')) {
+                    kelBadgeStyle = 'background: #fef3c7; color: #92400e;';
+                }
+
+                const hasFoto = Boolean(j.foto);
+
+                tr.innerHTML = `
+                    <td style="text-align: center; font-weight: 700; padding: 12px 10px; color: #64748b;">${realNum}</td>
+                    <td style="padding: 12px 10px;">
+                        <strong style="color: #0f172a; font-size: 13.5px; display: block;">${escapeHTML(j.tanggal || j.bulan)}</strong>
+                        <small style="color: #64748b; font-size: 11.5px;">📅 ${escapeHTML(j.bulan)}</small>
+                    </td>
+                    <td style="padding: 12px 10px;">
+                        <strong style="color: var(--primary); font-size: 13.5px; display: block;">${escapeHTML(j.tuan_rumah)}</strong>
+                        ${j.tuan_rumah && j.tuan_rumah.includes('Arso VIII') ? '<span style="background: #fef08a; color: #854d0e; font-size: 10.5px; font-weight: 800; padding: 1px 6px; border-radius: 4px; display: inline-block; margin-top: 2px;">⭐ Tuan Rumah Sekolah Kita</span>' : ''}
+                    </td>
+                    <td style="padding: 12px 10px;">
+                        <span style="${kelBadgeStyle} font-size: 11.5px; font-weight: 700; padding: 3px 8px; border-radius: 6px; display: inline-block;">
+                            ${escapeHTML(j.kelompok)}
+                        </span>
+                    </td>
+                    <td style="padding: 12px 10px;">
+                        <div style="font-weight: 600; color: #1e293b; font-size: 13px; line-height: 1.4; margin-bottom: 4px;">
+                            ${escapeHTML(j.agenda)}
+                        </div>
+                        ${j.pemateri ? `<div style="font-size: 11.5px; color: #0284c7; font-weight: 700;">🎤 Pemateri: ${escapeHTML(j.pemateri)}</div>` : ''}
+                        ${hasFoto ? `
+                            <div style="margin-top: 6px; display: flex; align-items: center; gap: 8px;">
+                                <img src="${j.foto}" alt="Foto Pertemuan" style="width: 50px; height: 36px; object-fit: cover; border-radius: 4px; border: 1px solid #cbd5e1; cursor: pointer;" onclick="window.open('${j.foto}', '_blank')" title="Klik untuk perbesar foto">
+                                <span style="font-size: 11px; color: #10b981; font-weight: 700;">📸 Ada Foto Kegiatan</span>
+                            </div>
+                        ` : ''}
+                    </td>
+                    <td style="text-align: center; padding: 12px 10px;">
+                        ${statusBadge}
+                    </td>
+                    <td style="text-align: center; padding: 12px 10px; white-space: nowrap;">
+                        <button type="button" class="btn-action-edit-kkg" data-id="${j.id}" style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 700; margin-right: 4px;">
+                            ✏️ Edit
+                        </button>
+                        <button type="button" class="btn-action-delete-kkg" data-id="${j.id}" style="background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 700;">
+                            🗑️ Hapus
+                        </button>
+                    </td>
+                `;
+                tableBody.appendChild(tr);
+            });
+
+            // Pasang event edit
+            tableBody.querySelectorAll('.btn-action-edit-kkg').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'), 10);
+                    const data = getKKGData();
+                    const j = (data.jadwal_pertemuan || []).find(item => item.id === id);
+                    if (!j) return;
+
+                    if (editIdInput) editIdInput.value = j.id;
+                    if (tanggalInput) tanggalInput.value = j.tanggal || '';
+                    if (bulanInput) bulanInput.value = j.bulan || '';
+                    if (statusInput) statusInput.value = j.status || 'Terlaksana';
+                    if (tuanRumahInput) tuanRumahInput.value = j.tuan_rumah || '';
+                    if (kelompokInput) kelompokInput.value = j.kelompok || 'Kelompok A (Kelas 1, 2, 3 & Guru Agama)';
+                    if (agendaInput) agendaInput.value = j.agenda || '';
+                    if (notulenInput) notulenInput.value = j.notulen || '';
+
+                    if (j.foto) {
+                        currentFotoKKGDataUrl = j.foto;
+                        if (previewImg && previewContainer) {
+                            previewImg.src = j.foto;
+                            previewContainer.style.display = 'block';
+                        }
+                    } else {
+                        currentFotoKKGDataUrl = '';
+                        if (previewContainer) previewContainer.style.display = 'none';
+                    }
+
+                    if (formHeading) formHeading.textContent = '✏️ Edit Jadwal Pertemuan (' + (j.tanggal || j.bulan) + ')';
+                    if (btnSubmit) btnSubmit.innerHTML = '💾 Simpan Perubahan Jadwal';
+                    if (btnBatal) btnBatal.style.display = 'inline-block';
+
+                    const cardForm = document.getElementById('cardKKGJadwalForm') || form;
+                    cardForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                });
+            });
+
+            // Pasang event hapus
+            tableBody.querySelectorAll('.btn-action-delete-kkg').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'), 10);
+                    const data = getKKGData();
+                    const j = (data.jadwal_pertemuan || []).find(item => item.id === id);
+                    if (!j) return;
+
+                    if (confirm('Hapus jadwal pertemuan tanggal ' + (j.tanggal || j.bulan) + ' di ' + j.tuan_rumah + '?')) {
+                        data.jadwal_pertemuan = (data.jadwal_pertemuan || []).filter(item => item.id !== id);
+                        saveKKGData(data);
+                        renderTable();
+                        alert('✅ Jadwal pertemuan berhasil dihapus.');
+                    }
+                });
+            });
+        }
+
+        // Render Kontrol Paginasi KKG
+        renderAdminPaginationControls('adminKKGPagination', kkgPage, totalPages, totalItems, pageSizeVal, (p) => {
+            kkgPage = p;
+            renderTable();
+        });
+    }
+
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const editId = editIdInput ? parseInt(editIdInput.value, 10) : null;
+            const data = getKKGData();
+            if (!Array.isArray(data.jadwal_pertemuan)) data.jadwal_pertemuan = [];
+
+            const payload = {
+                tanggal: tanggalInput ? tanggalInput.value.trim() : '',
+                bulan: bulanInput ? bulanInput.value.trim() : '',
+                tuan_rumah: tuanRumahInput ? tuanRumahInput.value.trim() : '',
+                kelompok: kelompokInput ? kelompokInput.value : '',
+                agenda: agendaInput ? agendaInput.value.trim() : '',
+                status: statusInput ? statusInput.value : 'Terlaksana',
+                foto: currentKKGFoto,
+                notulen: notulenInput ? notulenInput.value.trim() : ''
+            };
+
+            if (editId && !isNaN(editId)) {
+                const idx = data.jadwal_pertemuan.findIndex(j => j.id === editId);
+                if (idx !== -1) {
+                    data.jadwal_pertemuan[idx] = { ...data.jadwal_pertemuan[idx], ...payload };
+                    saveKKGData(data);
+                    resetForm();
+                    renderTable();
+                    alert('✅ Jadwal pertemuan & foto dokumentasi berhasil diperbarui dan disinkronkan ke Google Cloud!');
+                    return;
+                }
+            }
+
+            const newId = data.jadwal_pertemuan.length > 0 ? (Math.max(...data.jadwal_pertemuan.map(j => j.id || 0)) + 1) : 1;
+            const newJadwal = { id: newId, ...payload };
+            data.jadwal_pertemuan.unshift(newJadwal);
+            saveKKGData(data);
+            resetForm();
+            renderTable();
+            alert('✅ Jadwal pertemuan & foto dokumentasi baru berhasil ditambahkan!');
+        });
+    }
+
+    if (btnReset) {
+        btnReset.addEventListener('click', function() {
+            if (confirm('Pulihkan ke jadwal pertemuan K3S & KKG bawaan?')) {
+                saveKKGData(defaultKKGData);
+                resetForm();
+                renderTable();
+                alert('Jadwal pertemuan K3S & KKG berhasil dipulihkan.');
+            }
+        });
+    }
+
+    renderTable();
+}
+
+
+/* -------------------------------------------------------------------
+   MANAJEMEN AGENDA MENDATANG SEKOLAH (CRUD & CLOUD SYNC)
+   ------------------------------------------------------------------- */
+const defaultAgendaData = [
+    {
+        "id": 1,
+        "tanggal": "10",
+        "bulan": "Nov",
+        "tahun": "2026",
+        "judul": "Upacara Peringatan Hari Pahlawan",
+        "keterangan": "Seluruh siswa memakai seragam merah putih lengkap."
+    },
+    {
+        "id": 2,
+        "tanggal": "25",
+        "bulan": "Nov",
+        "tahun": "2026",
+        "judul": "Peringatan Hari Guru Nasional",
+        "keterangan": "Apresiasi bagi dewan guru dan pentas seni sederhana siswa."
+    },
+    {
+        "id": 3,
+        "tanggal": "08",
+        "bulan": "Des",
+        "tahun": "2026",
+        "judul": "Pelaksanaan Asesmen Akhir Semester",
+        "keterangan": "Evaluasi pembelajaran semester ganjil seluruh kelas I - VI."
+    },
+    {
+        "id": 4,
+        "tanggal": "19",
+        "bulan": "Des",
+        "tahun": "2026",
+        "judul": "Pembagian Rapor Semester Ganjil",
+        "keterangan": "Pengambilan laporan hasil belajar siswa oleh orang tua/wali murid."
+    }
+];
+
+function getAgendaData() {
+    try {
+        const raw = localStorage.getItem('sdn_agenda_data');
+        if (raw) {
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+    } catch (e) {}
+
+    if (window.SDN_DATABASE && Array.isArray(window.SDN_DATABASE.agenda) && window.SDN_DATABASE.agenda.length > 0) {
+        return window.SDN_DATABASE.agenda;
+    }
+
+    return defaultAgendaData;
+}
+
+function saveAgendaData(items) {
+    localStorage.setItem('sdn_agenda_data', JSON.stringify(items));
+    if (window.SDN_DATABASE) {
+        window.SDN_DATABASE.agenda = items;
+    }
+
+    // Sinkronkan ke Google Firebase Cloud Database
+    if (typeof saveDataToCloud === 'function') {
+        saveDataToCloud('agenda', items);
+    }
+
+    // Update Dashboard Counts
+    const dashCount = document.getElementById('dashCountAgenda');
+    if (dashCount) dashCount.textContent = items.length;
+    const adminCount = document.getElementById('adminAgendaCount');
+    if (adminCount) adminCount.textContent = items.length;
+}
+
+window.cancelEditAgenda = function () {
+    const form = document.getElementById('addAgendaForm');
+    if (form) form.reset();
+    const editId = document.getElementById('editAgendaId');
+    if (editId) editId.value = '';
+    const heading = document.getElementById('formAgendaHeading');
+    if (heading) heading.textContent = '+ Tambah Agenda Baru';
+    const btnSubmit = document.getElementById('btnSubmitAgenda');
+    if (btnSubmit) btnSubmit.innerHTML = '💾 Simpan Agenda';
+    const btnCancel = document.getElementById('btnCancelEditAgenda');
+    if (btnCancel) btnCancel.style.display = 'none';
+};
+
+function initAgendaManager() {
+    const tableBody = document.getElementById('agendaTableBody');
+    const form = document.getElementById('addAgendaForm');
+    const editIdInput = document.getElementById('editAgendaId');
+    const judulInput = document.getElementById('inputAgendaJudul');
+    const tglInput = document.getElementById('inputAgendaTanggal');
+    const blnInput = document.getElementById('inputAgendaBulan');
+    const thnInput = document.getElementById('inputAgendaTahun');
+    const ketInput = document.getElementById('inputAgendaKeterangan');
+    const formHeading = document.getElementById('formAgendaHeading');
+    const btnSubmit = document.getElementById('btnSubmitAgenda');
+    const btnCancel = document.getElementById('btnCancelEditAgenda');
+
+    if (!tableBody) return;
+
+    // State Paginasi & Pencarian Agenda Admin
+    let agendaPage = 1;
+    const adminAgendaSearch = document.getElementById('adminAgendaSearch');
+    const adminAgendaPageSize = document.getElementById('adminAgendaPageSize');
+
+    if (adminAgendaSearch) {
+        adminAgendaSearch.addEventListener('input', () => {
+            agendaPage = 1;
+            renderTable();
+        });
+    }
+    if (adminAgendaPageSize) {
+        adminAgendaPageSize.addEventListener('change', () => {
+            agendaPage = 1;
+            renderTable();
+        });
+    }
+
+    function renderTable() {
+        const allItems = getAgendaData();
+
+        const dashCount = document.getElementById('dashCountAgenda');
+        if (dashCount) dashCount.textContent = allItems.length;
+        const adminCount = document.getElementById('adminAgendaCount');
+        if (adminCount) adminCount.textContent = allItems.length;
+
+        // Filter pencarian
+        const q = adminAgendaSearch ? adminAgendaSearch.value.trim().toLowerCase() : '';
+        let filteredItems = allItems;
+        if (q) {
+            filteredItems = allItems.filter(item => 
+                (item.judul && item.judul.toLowerCase().includes(q)) ||
+                (item.tanggal && item.tanggal.toLowerCase().includes(q)) ||
+                (item.bulan && item.bulan.toLowerCase().includes(q)) ||
+                (item.tahun && item.tahun.toLowerCase().includes(q)) ||
+                (item.keterangan && item.keterangan.toLowerCase().includes(q))
+            );
+        }
+
+        const totalItems = filteredItems.length;
+        const pageSizeVal = adminAgendaPageSize ? adminAgendaPageSize.value : '5';
+        const pageSize = pageSizeVal === 'ALL' ? totalItems : (parseInt(pageSizeVal, 10) || 5);
+        const totalPages = pageSizeVal === 'ALL' ? 1 : Math.ceil(totalItems / pageSize) || 1;
+        if (agendaPage > totalPages) agendaPage = totalPages;
+        if (agendaPage < 1) agendaPage = 1;
+
+        const startIdx = pageSizeVal === 'ALL' ? 0 : (agendaPage - 1) * pageSize;
+        const endIdx = pageSizeVal === 'ALL' ? totalItems : Math.min(startIdx + pageSize, totalItems);
+        const pagedItems = filteredItems.slice(startIdx, endIdx);
+
+        tableBody.innerHTML = '';
+
+        if (pagedItems.length === 0) {
+            tableBody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: #94a3b8; padding: 25px;">${allItems.length === 0 ? 'Belum ada agenda kegiatan tersimpan. Silakan tambahkan agenda baru di atas.' : 'Tidak ada agenda yang cocok dengan pencarian.'}</td></tr>`;
+        } else {
+            pagedItems.forEach((item) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="text-align: center;">
+                        <div style="background: var(--primary-subtle); color: var(--primary); padding: 5px 8px; border-radius: 6px; font-weight: 800; display: inline-block;">
+                            <span style="font-size: 16px;">${escapeHTML(item.tanggal || '01')}</span>
+                            <small style="display: block; font-size: 11px; text-transform: uppercase;">${escapeHTML(item.bulan || 'Bln')}</small>
+                        </div>
+                    </td>
+                    <td>
+                        <strong style="color: var(--primary-dark); font-size: 14px;">${escapeHTML(item.judul)}</strong>
+                        <div style="font-size: 11px; color: #94a3b8; margin-top: 2px;">Tahun ${escapeHTML(item.tahun || '2026')}</div>
+                    </td>
+                    <td style="font-size: 13px; color: #475569;">${escapeHTML(item.keterangan || '-')}</td>
+                    <td style="text-align: center; white-space: nowrap;">
+                        <button type="button" class="btn-action-edit-agenda" data-id="${item.id}" style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 700; margin-right: 4px;">✏️ Edit</button>
+                        <button type="button" class="btn-action-delete-agenda" data-id="${item.id}" style="background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 700;">🗑️ Hapus</button>
+                    </td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        }
+
+        // Event Edit
+        tableBody.querySelectorAll('.btn-action-edit-agenda').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const id = parseInt(this.getAttribute('data-id'), 10);
+                const item = getAgendaData().find(a => a.id === id);
+                if (!item) return;
+
+                editIdInput.value = item.id;
+                judulInput.value = item.judul || '';
+                tglInput.value = item.tanggal || '';
+                blnInput.value = item.bulan || 'Nov';
+                thnInput.value = item.tahun || '2026';
+                ketInput.value = item.keterangan || '';
+
+                formHeading.textContent = '✏️ Edit Agenda Kegiatan';
+                btnSubmit.innerHTML = '💾 Perbarui Agenda';
+                if (btnCancel) btnCancel.style.display = 'inline-block';
+
+                const cardForm = document.getElementById('cardAgendaForm');
+                if (cardForm) cardForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+
+        // Event Delete
+        tableBody.querySelectorAll('.btn-action-delete-agenda').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const id = parseInt(this.getAttribute('data-id'), 10);
+                const item = getAgendaData().find(a => a.id === id);
+                if (!item) return;
+
+                if (confirm(`Yakin ingin menghapus agenda "${item.judul}"? Agenda ini akan hilang dari Beranda website.`)) {
+                    let items = getAgendaData().filter(a => a.id !== id);
+                    saveAgendaData(items);
+                    renderTable();
+                    alert('✅ Agenda berhasil dihapus!');
+                }
+            });
+        });
+
+        // Render Kontrol Paginasi Agenda
+        renderAdminPaginationControls('adminAgendaPagination', agendaPage, totalPages, totalItems, pageSizeVal, (p) => {
+            agendaPage = p;
+            renderTable();
+        });
+    }
+
+    if (form) {
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const judul = judulInput.value.trim();
+            const tanggal = tglInput.value.trim();
+            const bulan = blnInput.value;
+            const tahun = thnInput.value.trim() || '2026';
+            const keterangan = ketInput.value.trim();
+
+            if (!judul || !tanggal || !bulan || !keterangan) {
+                alert('Semua kolom bertanda * wajib diisi!');
+                return;
+            }
+
+            let items = getAgendaData();
+            const editId = parseInt(editIdInput.value, 10);
+
+            if (editId) {
+                // Update
+                items = items.map(a => {
+                    if (a.id === editId) {
+                        return { ...a, judul, tanggal, bulan, tahun, keterangan };
+                    }
+                    return a;
+                });
+                alert('✅ Agenda berhasil diperbarui!');
+            } else {
+                // Tambah baru
+                const newId = items.length > 0 ? Math.max(...items.map(a => a.id || 0)) + 1 : 1;
+                items.unshift({
+                    id: newId,
+                    judul,
+                    tanggal,
+                    bulan,
+                    tahun,
+                    keterangan
+                });
+                alert('✅ Agenda baru berhasil ditambahkan dan terbit di Beranda!');
+            }
+
+            saveAgendaData(items);
+            cancelEditAgenda();
+            renderTable();
+        });
+    }
+
+    renderTable();
+}
+
+
+/* -------------------------------------------------------------------
+   14. KELOLA STANDAR OPERASIONAL PROSEDUR (SOP) & KEDISIPLINAN SEKOLAH
+   Tata Tertib Guru & Siswa, Piket Harian Guru, Seragam 5 Siklus Mingguan,
+   serta Pembina Pramuka Siaga & Penggalang (Terhubung ke Dewan Guru)
+   ------------------------------------------------------------------- */
+const defaultSOPData = {
+    "tata_tertib_guru": [
+        "Jam 07.00 WIT – Seluruh dewan guru sudah hadir di sekolah sebelum aktivitas pembelajaran dimulai.",
+        "Budaya 5S – Menerapkan pembiasaan Senyum, Salam, Sapa, Sopan, dan Santun kepada seluruh warga sekolah dan tamu.",
+        "Persiapan Upacara – Pukul 07.00 WIT persiapan barisan upacara dan tepat pukul 07.15 WIT upacara bendera dimulai secara khidmat.",
+        "Pembina Upacara Bergilir – Guru secara terjadwal dan bergilir bertindak sebagai Pembina Upacara sesuai jadwal yang ditetapkan.",
+        "Keteladanan Karakter – Guru senantiasa meneladani peserta didik untuk selalu menjaga ketertiban, sopan santun, dan kebersihan lingkungan sekolah.",
+        "Disiplin Waktu – Disiplin waktu datang dan pulang sesuai ketentuan kedinasan yang berlaku.",
+        "Kewajiban Seragam – Wajib memakai seragam dinas harian sesuai ketentuan jadwal mingguan (siklus 5 minggu) yang telah ditetapkan.",
+        "Ekstrakurikuler Wajib – Wajib mendampingi dan mengikuti kegiatan ekstrakurikuler Gerakan Pramuka.",
+        "Pemberitahuan Izin – Guru yang berhalangan hadir atau sakit wajib memberikan surat pemberitahuan / izin resmi kepada Kepala Sekolah.",
+        "Presensi Akhir – Menandatangani daftar hadir resmi pada akhir kegiatan pembelajaran setiap hari kerja.",
+        "Tanggung Jawab Guru Piket – Guru piket wajib mengisi buku piket harian, menyambut siswa di gerbang, dan bertanggung jawab penuh menjaga ketertiban selama jam pembelajaran berlangsung."
+    ],
+    "tata_tertib_siswa": [
+        "Kehadiran Tepat Waktu – Peserta didik datang pukul 07.00 WIT sebelum pembelajaran berlangsung.",
+        "Membudayakan 5S – Menerapkan salam, senyum, sapa, sopan, dan santun kepada guru, tenaga kependidikan, serta sesama teman.",
+        "Kewajiban Upacara Bendera – Wajib mengikuti upacara bendera setiap hari Senin dengan mengenakan seragam lengkap (topi dan dasi).",
+        "Budaya Lingkungan Bersih – Membudayakan lingkungan bersih, aktif memungut sampah, dan membuangnya pada tempat sampah yang tersedia.",
+        "Tugas Piket Kelas – Peserta didik yang bertugas piket wajib hadir lebih awal untuk menyapu, membersihkan ruang kelas, lingkungan kelas, dan fasilitas MCK.",
+        "Waktu Pembelajaran – Peserta didik masuk kelas mulai jam 07.30 WIT dan berakhir hingga jam 14.00 WIT sesuai jadwal rombel.",
+        "Adab Berdoa – Membudayakan berdoa bersama dengan khusyuk sebelum memulai dan sesudah mengakhiri pembelajaran.",
+        "Berbaris Tertib – Sebelum memasuki ruang kelas, peserta didik berbaris rapi di depan kelas dipimpin ketua kelas dan bersalaman dengan guru.",
+        "Keamanan Lingkungan – Dilarang keluar pagar atau meninggalkan lingkungan sekolah tanpa izin guru piket atau wali kelas selama jam sekolah.",
+        "Menjaga Fasilitas Sekolah – Menjaga ketertiban, kebersihan, serta merawat sarana dan prasarana sekolah dengan rasa tanggung jawab."
+    ],
+    "piket_guru": {
+        "Senin": ["Elias Tabuni, S.Pd", "Flavianus Rainaldus, S.Ag"],
+        "Selasa": ["Esther Tina Maria Panjaitan, S.Pd", "Cicik Mursidah, S.Pd"],
+        "Rabu": ["Warno, S.Pd.SD", "Yuli Syetia Sari, S.Pd"],
+        "Kamis": ["Rini Handayani, S.Pd", "Ferdinand, S.Pd"],
+        "Jumat": ["Zainal Habiib Al Arif, S.Pd", "Umi Wildana Zulfa"]
+    },
+    "seragam_guru": [
+        { "siklus": "Minggu Ke-1", "senin_selasa": "Seragam Keki (Khaki)", "rabu": "Putih - Hitam", "kamis": "Batik Papua Warna Hijau", "jumat": "Kaos Merah Maroon" },
+        { "siklus": "Minggu Ke-2", "senin_selasa": "Seragam Keki (Khaki)", "rabu": "Putih - Hitam", "kamis": "Batik Papua Merah", "jumat": "Kaos Hitam" },
+        { "siklus": "Minggu Ke-3", "senin_selasa": "Seragam Keki (Khaki)", "rabu": "Putih - Hitam", "kamis": "Batik Papua Cenderawasih", "jumat": "Kaos Biru Lengan Panjang" },
+        { "siklus": "Minggu Ke-4", "senin_selasa": "Seragam Keki (Khaki)", "rabu": "Putih - Hitam", "kamis": "Batik Jawa Lengan Panjang", "jumat": "Kaos Merah Lengan Panjang" },
+        { "siklus": "Minggu Ke-5", "senin_selasa": "Seragam Keki (Khaki)", "rabu": "Putih - Hitam", "kamis": "Batik Papua Bebas", "jumat": "Kaos Kuning Lengan Panjang" }
+    ],
+    "pramuka_pembina": {
+        "jadwal": "Dilaksanakan 2 (dua) kali setiap bulan pada hari Jumat pukul 15.00 – 17.00 WIT di lingkungan sekolah.",
+        "siaga": [
+            "Yuli Syetia Sari, S.Pd",
+            "Ferdinand, S.Pd",
+            "Rita Paulina Wabiser, S.Pd",
+            "Elias Tabuni, S.Pd",
+            "Esther Tina Maria Panjaitan, S.Pd",
+            "Flavianus Rainaldus, S.Ag"
+        ],
+        "penggalang": [
+            "Warno, S.Pd.SD",
+            "Cicik Mursidah, S.Pd",
+            "Rini Handayani, S.Pd",
+            "Zainal Habiib Al Arif, S.Pd",
+            "Umi Wildana Zulfa"
+        ]
+    }
+};
+
+function getSOPData() {
+    if (window.SDN_DATABASE && window.SDN_DATABASE.sop_data && typeof window.SDN_DATABASE.sop_data === 'object') {
+        return window.SDN_DATABASE.sop_data;
+    }
+    try {
+        const raw = localStorage.getItem('sdn_sop_data');
+        if (raw) return JSON.parse(raw);
+    } catch (e) {}
+    return defaultSOPData;
+}
+
+function saveSOPData(data) {
+    localStorage.setItem('sdn_sop_data', JSON.stringify(data));
+    if (window.SDN_DATABASE) window.SDN_DATABASE.sop_data = data;
+    syncToServer('sop_data', data);
+}
+
+function populateSOPTeacherDropdowns() {
+    const teachers = (typeof getGuruData === 'function') ? getGuruData() : [];
+    const teacherNames = teachers.map(g => (typeof g === 'object' && g.nama) ? g.nama : g).filter(Boolean);
+
+    const piketSelectIds = [
+        'sopPiket_senin_1', 'sopPiket_senin_2',
+        'sopPiket_selasa_1', 'sopPiket_selasa_2',
+        'sopPiket_rabu_1', 'sopPiket_rabu_2',
+        'sopPiket_kamis_1', 'sopPiket_kamis_2',
+        'sopPiket_jumat_1', 'sopPiket_jumat_2'
+    ];
+
+    piketSelectIds.forEach(id => {
+        const sel = document.getElementById(id);
+        if (!sel) return;
+        const currentVal = sel.value;
+        sel.innerHTML = '<option value="">-- Pilih Guru Piket --</option>';
+        teacherNames.forEach(name => {
+            const opt = document.createElement('option');
+            opt.value = name;
+            opt.textContent = name;
+            sel.appendChild(opt);
+        });
+        if (currentVal) sel.value = currentVal;
+    });
+
+    const siagaAddSel = document.getElementById('sopPramukaSiagaAddGuru');
+    if (siagaAddSel) {
+        siagaAddSel.innerHTML = '<option value="">➕ Tambah Guru dari Database Dewan Guru...</option>';
+        teacherNames.forEach(name => {
+            const opt = document.createElement('option');
+            opt.value = name;
+            opt.textContent = name;
+            siagaAddSel.appendChild(opt);
+        });
+    }
+
+    const penggalangAddSel = document.getElementById('sopPramukaPenggalangAddGuru');
+    if (penggalangAddSel) {
+        penggalangAddSel.innerHTML = '<option value="">➕ Tambah Guru dari Database Dewan Guru...</option>';
+        teacherNames.forEach(name => {
+            const opt = document.createElement('option');
+            opt.value = name;
+            opt.textContent = name;
+            penggalangAddSel.appendChild(opt);
+        });
+    }
+
+    // ===================================================================
+    // PENGELOLAAN BAGAN STRUKTUR ORGANISASI GURU (UPLOAD GAMBAR & RESET)
+    // ===================================================================
+    const inputCustomBaganFile = document.getElementById('inputCustomBaganFile');
+    const btnUploadCustomBagan = document.getElementById('btnUploadCustomBagan');
+    const btnResetBaganToSvg = document.getElementById('btnResetBaganToSvg');
+    const btnHapusCustomBagan = document.getElementById('btnHapusCustomBagan');
+    const adminBaganPreviewContainer = document.getElementById('adminBaganPreviewContainer');
+    const adminBaganPreviewImg = document.getElementById('adminBaganPreviewImg');
+    const baganStatusBadge = document.getElementById('baganStatusBadge');
+
+    function refreshAdminBaganState() {
+        let customBagan = '';
+        if (window.SDN_DATABASE && window.SDN_DATABASE.bagan_struktur) {
+            customBagan = window.SDN_DATABASE.bagan_struktur;
+        } else {
+            try {
+                customBagan = localStorage.getItem('sdn_bagan_struktur') || '';
+            } catch (e) {}
+        }
+
+        if (customBagan && customBagan.length > 50) {
+            if (adminBaganPreviewContainer) adminBaganPreviewContainer.style.display = 'block';
+            if (adminBaganPreviewImg) adminBaganPreviewImg.src = customBagan;
+            if (baganStatusBadge) {
+                baganStatusBadge.textContent = '🖼️ Mode: Menggunakan Gambar Bagan Kustom';
+                baganStatusBadge.style.background = '#fef3c7';
+                baganStatusBadge.style.color = '#92400e';
+                baganStatusBadge.style.border = '1px solid #fde68a';
+            }
+        } else {
+            if (adminBaganPreviewContainer) adminBaganPreviewContainer.style.display = 'none';
+            if (adminBaganPreviewImg) adminBaganPreviewImg.src = '';
+            if (baganStatusBadge) {
+                baganStatusBadge.textContent = '✨ Mode: Terkoneksi Otomatis dengan Data Guru';
+                baganStatusBadge.style.background = '#e0f2fe';
+                baganStatusBadge.style.color = '#0369a1';
+                baganStatusBadge.style.border = '1px solid #bae6fd';
+            }
+        }
+    }
+
+    if (btnUploadCustomBagan && inputCustomBaganFile) {
+        btnUploadCustomBagan.addEventListener('click', function() {
+            const file = inputCustomBaganFile.files[0];
+            if (!file) {
+                alert('Silakan pilih berkas gambar/foto bagan baru terlebih dahulu.');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    let w = img.width;
+                    let h = img.height;
+                    const maxW = 1600;
+                    if (w > maxW) {
+                        h = Math.round((h * maxW) / w);
+                        w = maxW;
+                    }
+                    canvas.width = w;
+                    canvas.height = h;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, w, h);
+                    const compressedUrl = canvas.toDataURL('image/jpeg', 0.88);
+
+                    try {
+                        localStorage.setItem('sdn_bagan_struktur', compressedUrl);
+                    } catch (e) {
+                        console.warn('Gagal simpan ke localStorage:', e);
+                    }
+                    if (window.SDN_DATABASE) {
+                        window.SDN_DATABASE.bagan_struktur = compressedUrl;
+                    }
+                    syncToServer('bagan_struktur', compressedUrl);
+
+                    refreshAdminBaganState();
+                    inputCustomBaganFile.value = '';
+                    showSyncToast('🎉 Gambar bagan struktur organisasi baru berhasil dipasang!');
+                    alert('✅ Gambar bagan struktur organisasi baru berhasil dipasang!\nBagan ini sekarang langsung tampil di halaman Dewan Guru publik.');
+                };
+                img.src = evt.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function resetBaganToAutomatic() {
+        if (!confirm('Kembalikan bagan struktur ke Bagan Interaktif Otomatis?\nNama-nama guru di bagan akan kembali terkoneksi langsung dengan database guru.')) {
+            return;
+        }
+        try {
+            localStorage.removeItem('sdn_bagan_struktur');
+        } catch (e) {}
+        if (window.SDN_DATABASE) {
+            delete window.SDN_DATABASE.bagan_struktur;
+        }
+        syncToServer('bagan_struktur', '');
+        refreshAdminBaganState();
+        showSyncToast('✨ Bagan dikembalikan ke mode interaktif otomatis.');
+        alert('✅ Bagan struktur organisasi berhasil dikembalikan ke Bagan Interaktif Otomatis!\nSusunan guru di bagan langsung sinkron dengan daftar guru di bawah.');
+    }
+
+    if (btnResetBaganToSvg) btnResetBaganToSvg.addEventListener('click', resetBaganToAutomatic);
+    if (btnHapusCustomBagan) btnHapusCustomBagan.addEventListener('click', resetBaganToAutomatic);
+
+    refreshAdminBaganState();
+}
+
+function syncGuruWithSOP(oldNama, newNama) {
+    if (!oldNama || !newNama || oldNama === newNama) return;
+    const sopData = getSOPData();
+    let changed = false;
+
+    if (sopData.piket_guru && typeof sopData.piket_guru === 'object') {
+        Object.keys(sopData.piket_guru).forEach(hari => {
+            if (Array.isArray(sopData.piket_guru[hari])) {
+                sopData.piket_guru[hari] = sopData.piket_guru[hari].map(t => {
+                    if (t === oldNama || t.includes(oldNama)) {
+                        changed = true;
+                        return newNama;
+                    }
+                    return t;
+                });
+            }
+        });
+    }
+
+    if (sopData.pramuka_pembina) {
+        if (Array.isArray(sopData.pramuka_pembina.siaga)) {
+            sopData.pramuka_pembina.siaga = sopData.pramuka_pembina.siaga.map(t => {
+                if (t === oldNama || t.includes(oldNama)) {
+                    changed = true;
+                    return newNama;
+                }
+                return t;
+            });
+        }
+        if (Array.isArray(sopData.pramuka_pembina.penggalang)) {
+            sopData.pramuka_pembina.penggalang = sopData.pramuka_pembina.penggalang.map(t => {
+                if (t === oldNama || t.includes(oldNama)) {
+                    changed = true;
+                    return newNama;
+                }
+                return t;
+            });
+        }
+    }
+
+    if (changed) {
+        saveSOPData(sopData);
+        if (typeof initSOPManager === 'function') initSOPManager();
+    }
+}
+
+function initSOPManager() {
+    populateSOPTeacherDropdowns();
+
+    const sopData = getSOPData();
+
+    // 1. TATA TERTIB
+    const elTatibGuru = document.getElementById('sopTatibGuruInput');
+    const elTatibSiswa = document.getElementById('sopTatibSiswaInput');
+    const btnSimpanTatib = document.getElementById('btnSimpanSOPTatib');
+    const btnResetTatib = document.getElementById('btnResetSOPTatib');
+
+    if (elTatibGuru) elTatibGuru.value = (sopData.tata_tertib_guru || []).join('\n');
+    if (elTatibSiswa) elTatibSiswa.value = (sopData.tata_tertib_siswa || []).join('\n');
+
+    if (btnSimpanTatib) {
+        btnSimpanTatib.onclick = function() {
+            const data = getSOPData();
+            if (elTatibGuru) data.tata_tertib_guru = elTatibGuru.value.split('\n').map(l => l.trim()).filter(Boolean);
+            if (elTatibSiswa) data.tata_tertib_siswa = elTatibSiswa.value.split('\n').map(l => l.trim()).filter(Boolean);
+            saveSOPData(data);
+            showSyncToast('🎉 Poin Tata Tertib Guru & Siswa berhasil disimpan!');
+            alert('✅ Tata Tertib Guru & Siswa berhasil disimpan!');
+        };
+    }
+
+    if (btnResetTatib) {
+        btnResetTatib.onclick = function() {
+            if (confirm('Pulihkan poin-poin tata tertib guru & siswa ke setelan standar?')) {
+                const data = getSOPData();
+                data.tata_tertib_guru = JSON.parse(JSON.stringify(defaultSOPData.tata_tertib_guru));
+                data.tata_tertib_siswa = JSON.parse(JSON.stringify(defaultSOPData.tata_tertib_siswa));
+                saveSOPData(data);
+                if (elTatibGuru) elTatibGuru.value = data.tata_tertib_guru.join('\n');
+                if (elTatibSiswa) elTatibSiswa.value = data.tata_tertib_siswa.join('\n');
+                showSyncToast('Tata Tertib dipulihkan ke default.');
+                alert('Tata Tertib dipulihkan ke default.');
+            }
+        };
+    }
+
+    // 2. PIKET GURU
+    const hariKeys = ['senin', 'selasa', 'rabu', 'kamis', 'jumat'];
+    const hariDisplay = { senin: 'Senin', selasa: 'Selasa', rabu: 'Rabu', kamis: 'Kamis', jumat: 'Jumat' };
+    const btnSimpanPiket = document.getElementById('btnSimpanSOPPiket');
+    const btnResetPiket = document.getElementById('btnResetSOPPiket');
+
+    function populatePiketDropdownsFromData() {
+        const data = getSOPData();
+        const piket = data.piket_guru || {};
+
+        hariKeys.forEach(h => {
+            const hariCap = hariDisplay[h];
+            const pair = Array.isArray(piket[hariCap]) ? piket[hariCap] : [];
+            const sel1 = document.getElementById(`sopPiket_${h}_1`);
+            const sel2 = document.getElementById(`sopPiket_${h}_2`);
+
+            if (sel1 && pair[0]) {
+                let found = Array.from(sel1.options).some(o => o.value === pair[0]);
+                if (!found && pair[0]) {
+                    const opt = document.createElement('option');
+                    opt.value = pair[0];
+                    opt.textContent = pair[0];
+                    sel1.appendChild(opt);
+                }
+                sel1.value = pair[0];
+            }
+
+            if (sel2 && pair[1]) {
+                let found = Array.from(sel2.options).some(o => o.value === pair[1]);
+                if (!found && pair[1]) {
+                    const opt = document.createElement('option');
+                    opt.value = pair[1];
+                    opt.textContent = pair[1];
+                    sel2.appendChild(opt);
+                }
+                sel2.value = pair[1];
+            }
+        });
+    }
+
+    populatePiketDropdownsFromData();
+
+    if (btnSimpanPiket) {
+        btnSimpanPiket.onclick = function() {
+            const data = getSOPData();
+            if (!data.piket_guru) data.piket_guru = {};
+
+            hariKeys.forEach(h => {
+                const hariCap = hariDisplay[h];
+                const sel1 = document.getElementById(`sopPiket_${h}_1`);
+                const sel2 = document.getElementById(`sopPiket_${h}_2`);
+                const t1 = sel1 ? sel1.value.trim() : '';
+                const t2 = sel2 ? sel2.value.trim() : '';
+                data.piket_guru[hariCap] = [t1, t2].filter(Boolean);
+            });
+
+            saveSOPData(data);
+            showSyncToast('🎉 Jadwal Piket Harian Guru berhasil disimpan!');
+            alert('✅ Jadwal Piket Harian Guru berhasil disimpan!');
+        };
+    }
+
+    if (btnResetPiket) {
+        btnResetPiket.onclick = function() {
+            if (confirm('Pulihkan jadwal piket harian guru ke setelan standar?')) {
+                const data = getSOPData();
+                data.piket_guru = JSON.parse(JSON.stringify(defaultSOPData.piket_guru));
+                saveSOPData(data);
+                populatePiketDropdownsFromData();
+                showSyncToast('Jadwal piket guru dipulihkan.');
+                alert('Jadwal piket harian guru dipulihkan.');
+            }
+        };
+    }
+
+    // 3. SERAGAM GURU (5 SIKLUS MINGGUAN)
+    const btnSimpanSeragam = document.getElementById('btnSimpanSOPSeragam');
+    const btnResetSeragam = document.getElementById('btnResetSOPSeragam');
+
+    function populateSeragamInputsFromData() {
+        const data = getSOPData();
+        const seragamList = Array.isArray(data.seragam_guru) ? data.seragam_guru : [];
+
+        for (let m = 1; m <= 5; m++) {
+            const item = seragamList[m - 1] || {};
+            const elSenin = document.getElementById(`sopSeragam_m${m}_senin`);
+            const elRabu = document.getElementById(`sopSeragam_m${m}_rabu`);
+            const elKamis = document.getElementById(`sopSeragam_m${m}_kamis`);
+            const elJumat = document.getElementById(`sopSeragam_m${m}_jumat`);
+
+            if (elSenin) elSenin.value = item.senin_selasa || '';
+            if (elRabu) elRabu.value = item.rabu || '';
+            if (elKamis) elKamis.value = item.kamis || '';
+            if (elJumat) elJumat.value = item.jumat || '';
+        }
+    }
+
+    populateSeragamInputsFromData();
+
+    if (btnSimpanSeragam) {
+        btnSimpanSeragam.onclick = function() {
+            const data = getSOPData();
+            const newSeragamList = [];
+
+            for (let m = 1; m <= 5; m++) {
+                const elSenin = document.getElementById(`sopSeragam_m${m}_senin`);
+                const elRabu = document.getElementById(`sopSeragam_m${m}_rabu`);
+                const elKamis = document.getElementById(`sopSeragam_m${m}_kamis`);
+                const elJumat = document.getElementById(`sopSeragam_m${m}_jumat`);
+
+                newSeragamList.push({
+                    siklus: `Minggu Ke-${m}`,
+                    senin_selasa: elSenin ? elSenin.value.trim() : '',
+                    rabu: elRabu ? elRabu.value.trim() : '',
+                    kamis: elKamis ? elKamis.value.trim() : '',
+                    jumat: elJumat ? elJumat.value.trim() : ''
+                });
+            }
+
+            data.seragam_guru = newSeragamList;
+            saveSOPData(data);
+            showSyncToast('🎉 Jadwal Seragam Guru (5 Siklus Mingguan) berhasil disimpan!');
+            alert('✅ Jadwal Pemakaian Seragam Guru berhasil disimpan!');
+        };
+    }
+
+    if (btnResetSeragam) {
+        btnResetSeragam.onclick = function() {
+            if (confirm('Pulihkan jadwal seragam guru 5 minggu ke setelan standar?')) {
+                const data = getSOPData();
+                data.seragam_guru = JSON.parse(JSON.stringify(defaultSOPData.seragam_guru));
+                saveSOPData(data);
+                populateSeragamInputsFromData();
+                showSyncToast('Jadwal seragam dipulihkan.');
+                alert('Jadwal pemakaian seragam dipulihkan.');
+            }
+        };
+    }
+
+    // 4. PEMBINA PRAMUKA (SIAGA & PENGGALANG)
+    const elPramukaJadwal = document.getElementById('sopPramukaJadwalInput');
+    const elSiagaInput = document.getElementById('sopPramukaSiagaInput');
+    const elPenggalangInput = document.getElementById('sopPramukaPenggalangInput');
+    const siagaAddSel = document.getElementById('sopPramukaSiagaAddGuru');
+    const penggalangAddSel = document.getElementById('sopPramukaPenggalangAddGuru');
+    const btnSimpanPramuka = document.getElementById('btnSimpanSOPPramuka');
+    const btnResetPramuka = document.getElementById('btnResetSOPPramuka');
+
+    function populatePramukaFieldsFromData() {
+        const data = getSOPData();
+        const p = data.pramuka_pembina || {};
+
+        if (elPramukaJadwal) elPramukaJadwal.value = p.jadwal || '';
+        if (elSiagaInput) elSiagaInput.value = (p.siaga || []).join('\n');
+        if (elPenggalangInput) elPenggalangInput.value = (p.penggalang || []).join('\n');
+    }
+
+    populatePramukaFieldsFromData();
+
+    if (siagaAddSel && elSiagaInput) {
+        siagaAddSel.onchange = function() {
+            const val = this.value;
+            if (!val) return;
+            const currentLines = elSiagaInput.value.split('\n').map(l => l.trim()).filter(Boolean);
+            if (!currentLines.includes(val)) {
+                currentLines.push(val);
+                elSiagaInput.value = currentLines.join('\n');
+            }
+            this.value = '';
+        };
+    }
+
+    if (penggalangAddSel && elPenggalangInput) {
+        penggalangAddSel.onchange = function() {
+            const val = this.value;
+            if (!val) return;
+            const currentLines = elPenggalangInput.value.split('\n').map(l => l.trim()).filter(Boolean);
+            if (!currentLines.includes(val)) {
+                currentLines.push(val);
+                elPenggalangInput.value = currentLines.join('\n');
+            }
+            this.value = '';
+        };
+    }
+
+    if (btnSimpanPramuka) {
+        btnSimpanPramuka.onclick = function() {
+            const data = getSOPData();
+            if (!data.pramuka_pembina) data.pramuka_pembina = {};
+
+            if (elPramukaJadwal) data.pramuka_pembina.jadwal = elPramukaJadwal.value.trim();
+            if (elSiagaInput) data.pramuka_pembina.siaga = elSiagaInput.value.split('\n').map(l => l.trim()).filter(Boolean);
+            if (elPenggalangInput) data.pramuka_pembina.penggalang = elPenggalangInput.value.split('\n').map(l => l.trim()).filter(Boolean);
+
+            saveSOPData(data);
+            showSyncToast('🎉 Tim Pembina Pramuka Siaga & Penggalang berhasil disimpan!');
+            alert('✅ Tim Pembina Gerakan Pramuka berhasil disimpan!');
+        };
+    }
+
+    if (btnResetPramuka) {
+        btnResetPramuka.onclick = function() {
+            if (confirm('Pulihkan data tim pembina pramuka ke setelan standar?')) {
+                const data = getSOPData();
+                data.pramuka_pembina = JSON.parse(JSON.stringify(defaultSOPData.pramuka_pembina));
+                saveSOPData(data);
+                populatePramukaFieldsFromData();
+                showSyncToast('Tim pembina pramuka dipulihkan.');
+                alert('Tim pembina pramuka dipulihkan.');
+            }
+        };
+    }
+}
+
+// REFRESH SEMUA TAMPILAN ADMIN SAAT DATA CLOUD TELAH DIMUAT
+window.refreshAdminManagers = function() {
+    try { if (typeof renderBerita === 'function') renderBerita(); } catch (e) {}
+    try { if (typeof renderPengumuman === 'function') renderPengumuman(); } catch (e) {}
+    try { if (typeof renderGaleri === 'function') renderGaleri(); } catch (e) {}
+    try { if (typeof renderGuruTable === 'function') renderGuruTable(); } catch (e) {}
+    try { if (typeof renderSarpras === 'function') renderSarpras(); } catch (e) {}
+    try { if (typeof renderKolaborasiTable === 'function') renderKolaborasiTable(); } catch (e) {}
+    try { if (typeof renderKKGTable === 'function') renderKKGTable(); } catch (e) {}
+    try { if (typeof populateSOPForm === 'function') populateSOPForm(); } catch (e) {}
+    try { if (typeof populateKKGProfileForm === 'function') populateKKGProfileForm(); } catch (e) {}
+    try { if (typeof populateSiswaForm === 'function') populateSiswaForm(); } catch (e) {}
+    try { if (typeof populateSambutanForm === 'function') populateSambutanForm(); } catch (e) {}
+};
+
+/* -------------------------------------------------------------------
+   14. SISTEM LOG AKTIVITAS PENGELOLA (AUDIT TRAIL - DINONAKTIFKAN SESUAI ARAHAN)
+   ------------------------------------------------------------------- */
+function logAdminActivity(aksi, keterangan) {}
+window.logAdminActivity = logAdminActivity;
+function renderActivityLogs() {}
+window.renderActivityLogs = renderActivityLogs;
+
+/* -------------------------------------------------------------------
+   15. PENGELOLA PROFIL SEKOLAH (Visi, Misi, Tujuan, Sejarah, Identitas)
+   ------------------------------------------------------------------- */
+window.getProfilData = function() {
+    if (window.SDN_DATABASE && window.SDN_DATABASE.profil && typeof window.SDN_DATABASE.profil === 'object') {
+        return window.SDN_DATABASE.profil;
+    }
+    try {
+        const raw = localStorage.getItem('sdn_profil_data');
+        if (raw) return JSON.parse(raw);
+    } catch (e) {}
+    return {
+        visi: "MEWUJUDKAN PESERTA DIDIK YANG BERPRESTASI DALAM BIDANG KEIMANAN (BERTAQWA), BERKARAKTER, MAMPU BERKOLABORASI, SEHAT JASMANI, UNGGUL DALAM ILMU PENGETAHUAN DAN TEKNOLOGI (IPTEK), SERTA MENCINTAI LINGKUNGAN.",
+        misi: [
+            "Mengembangkan potensi peserta didik agar bertaqwa kepada Tuhan Yang Maha Esa.",
+            "Menyelenggarakan pendidikan yang demokratis, menjunjung tinggi hak asasi, nilai keagamaan, dan nilai kultural bangsa.",
+            "Menyelenggarakan pendidikan yang beraspirasi dari seluruh warga sekolah dan masyarakat sekitar.",
+            "Melaksanakan evaluasi pendidikan dalam penjaminan mutu yang bertanggung jawab dan transparan.",
+            "Menjalin hubungan erat dengan komite sekolah, tokoh masyarakat, dan berperan aktif dalam pelaksanaan pendidikan."
+        ],
+        tujuan: [
+            "Siswa beriman dan berakhlak mulia kepada Tuhan Yang Maha Esa.",
+            "Siswa senantiasa sehat jasmani dan rohani.",
+            "Siswa memiliki dasar-dasar pengetahuan dan ketrampilan untuk melanjutkan pendidikan ke jenjang yang lebih tinggi (SMP).",
+            "Siswa mengenal dan mencintai bangsa, masyarakat, dan ragam budaya Nusantara, khususnya budaya lokal Papua.",
+            "Siswa kreatif, terampil, bekerja keras, serta mampu mengembangkan diri secara terus-menerus."
+        ],
+        sejarah: "SD Negeri Inpres Arso VIII didirikan sebagai bagian dari program pemerataan akses pendidikan nasional di kawasan pemukiman transmigrasi dan masyarakat lokal Arso, Kabupaten Keerom. Beralamat di Jalan Sulawesi, Kampung Dukwia, Distrik Arso Barat, sekolah ini menjadi sentra pendidikan bagi warga sekitar yang majemuk.\n\nDengan luas area mencapai 10.000 m² milik pemerintah, sekolah ini memiliki potensi lingkungan yang sangat luas, sejuk, dan asri. Meskipun kondisi sarana prasarana fisik bangunan seperti ruang kelas, ruang TIK, dan ruang kantor saat ini berstatus rusak sedang dan masih memerlukan perhatian serta renovasi berkala dari pemerintah daerah, semangat 12 tenaga pendidik dan 157 siswa tetap menyala tinggi.\n\nKehadiran jaringan satelit berkecepatan tinggi Starlink menjadi lompatan bersejarah bagi SDN Inpres Arso VIII, membuktikan bahwa keterbatasan geografis bukan halangan bagi anak-anak di tanah Keerom Papua untuk bersaing menguasai ilmu pengetahuan dan teknologi modern.",
+        identitas: {
+            npsn: "60301140",
+            nss: "101250302008",
+            akreditasi: "A (Unggul - BAN-SM 2023)",
+            status_kepemilikan: "Pemerintah Daerah",
+            sk_pendirian: "01/SK/PDK/1984",
+            sk_izin_operasional: "0005/OPS.SD/DPM-PTSP/VII/2026",
+            luas_tanah: "10.000 m²",
+            daya_listrik: "2.200 Watt",
+            alamat: "Jalan Sulawesi, Kampung Dukwia, Distrik Arso Barat, Kabupaten Keerom, Papua 99473"
+        }
+    };
+};
+function getProfilData() { return window.getProfilData(); }
+
+window.populateProfilForm = function() {
+    const data = window.getProfilData();
+    const visiEl = document.getElementById('profilVisiInput');
+    const misiEl = document.getElementById('profilMisiInput');
+    const tujuanEl = document.getElementById('profilTujuanInput');
+    const sejarahEl = document.getElementById('profilSejarahInput');
+
+    if (visiEl) visiEl.value = data.visi || '';
+    if (misiEl) misiEl.value = Array.isArray(data.misi) ? data.misi.join('\n') : (data.misi || '');
+    if (tujuanEl) tujuanEl.value = Array.isArray(data.tujuan) ? data.tujuan.join('\n') : (data.tujuan || '');
+    if (sejarahEl) sejarahEl.value = data.sejarah || '';
+
+    const id = data.identitas || {};
+    const npsnEl = document.getElementById('identitasNPSN');
+    const nssEl = document.getElementById('identitasNSS');
+    const akredEl = document.getElementById('identitasAkreditasi');
+    const kepemilikanEl = document.getElementById('identitasKepemilikan');
+    const skPendirianEl = document.getElementById('identitasSKPendirian');
+    const skOperasionalEl = document.getElementById('identitasSKOperasional');
+    const luasEl = document.getElementById('identitasLuasTanah');
+    const dayaEl = document.getElementById('identitasDayaListrik');
+    const alamatEl = document.getElementById('identitasAlamat');
+
+    if (npsnEl) npsnEl.value = id.npsn || '60301140';
+    if (nssEl) nssEl.value = id.nss || '101250302008';
+    if (akredEl) akredEl.value = id.akreditasi || 'A (Unggul - BAN-SM 2023)';
+    if (kepemilikanEl) kepemilikanEl.value = id.status_kepemilikan || 'Pemerintah Daerah';
+    if (skPendirianEl) skPendirianEl.value = id.sk_pendirian || '01/SK/PDK/1984';
+    if (skOperasionalEl) skOperasionalEl.value = id.sk_izin_operasional || '0005/OPS.SD/DPM-PTSP/VII/2026';
+    if (luasEl) luasEl.value = id.luas_tanah || '10.000 m²';
+    if (dayaEl) dayaEl.value = id.daya_listrik || '2.200 Watt';
+    if (alamatEl) alamatEl.value = id.alamat || 'Jalan Sulawesi, Kampung Dukwia, Distrik Arso Barat, Kabupaten Keerom, Papua 99473';
+};
+function populateProfilForm() { return window.populateProfilForm(); }
+
+window.saveProfilData = function() {
+    const data = {
+        visi: document.getElementById('profilVisiInput')?.value.trim() || '',
+        misi: (document.getElementById('profilMisiInput')?.value || '').split('\n').map(m => m.trim()).filter(m => m.length > 0),
+        tujuan: (document.getElementById('profilTujuanInput')?.value || '').split('\n').map(m => m.trim()).filter(m => m.length > 0),
+        sejarah: document.getElementById('profilSejarahInput')?.value.trim() || '',
+        identitas: {
+            npsn: document.getElementById('identitasNPSN')?.value.trim() || '60301140',
+            nss: document.getElementById('identitasNSS')?.value.trim() || '101250302008',
+            akreditasi: document.getElementById('identitasAkreditasi')?.value.trim() || 'A (Unggul - BAN-SM 2023)',
+            status_kepemilikan: document.getElementById('identitasKepemilikan')?.value.trim() || 'Pemerintah Daerah',
+            sk_pendirian: document.getElementById('identitasSKPendirian')?.value.trim() || '01/SK/PDK/1984',
+            sk_izin_operasional: document.getElementById('identitasSKOperasional')?.value.trim() || '0005/OPS.SD/DPM-PTSP/VII/2026',
+            luas_tanah: document.getElementById('identitasLuasTanah')?.value.trim() || '10.000 m²',
+            daya_listrik: document.getElementById('identitasDayaListrik')?.value.trim() || '2.200 Watt',
+            alamat: document.getElementById('identitasAlamat')?.value.trim() || 'Jalan Sulawesi, Kampung Dukwia, Distrik Arso Barat, Kabupaten Keerom, Papua 99473'
+        }
+    };
+
+    if (window.SDN_DATABASE) window.SDN_DATABASE.profil = data;
+    safeAdminSet('sdn_profil_data', data);
+    syncToServer('profil', data);
+    try {
+        logAdminActivity('Pembaruan Profil Sekolah', 'Memperbarui Visi, Misi, Tujuan, Sejarah, dan Data Pokok Legalitas');
+    } catch(e) {}
+    showSyncToast('🎉 Profil Sekolah berhasil diperbarui dan aktif di internet!');
+    alert('✅ Profil Sekolah berhasil disimpan dan langsung aktif di website publik!');
+};
+function saveProfilData() { return window.saveProfilData(); }
+
+/* -------------------------------------------------------------------
+   16. PENGELOLA KONTAK RESMI & KOTAK MASUK PESAN TAMU
+   ------------------------------------------------------------------- */
+function getKontakData() {
+    if (window.SDN_DATABASE && window.SDN_DATABASE.kontak && typeof window.SDN_DATABASE.kontak === 'object') {
+        return window.SDN_DATABASE.kontak;
+    }
+    try {
+        const raw = localStorage.getItem('sdn_kontak_data');
+        if (raw) return JSON.parse(raw);
+    } catch (e) {}
+    return {
+        alamat: "Jalan Sulawesi, RW 03 / RT 05, Kampung Dukwia, Distrik Arso Barat, Kab. Keerom, Papua 99473",
+        telepon: "0812-4821-9125",
+        whatsapp: "6281248219125",
+        email: "sdninpresarso8@gmail.com",
+        jam_kerja: "Senin – Jumat: 07.15 – 12.30 WIT",
+        maps_embed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3985.748123456789!2d140.703999!3d-2.822991!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMsKwNDknMjIuOCJTIDE0MMKwNDInMTQuNCJF!5e0!3m2!1sid!2sid!4v1",
+        koordinat: "Lat -2.822991º, Long 140.703999º"
+    };
+}
+
+function populateKontakForm() {
+    const data = getKontakData();
+    const telpEl = document.getElementById('kontakInputTelepon');
+    const waEl = document.getElementById('kontakInputWhatsApp');
+    const emailEl = document.getElementById('kontakInputEmail');
+    const jamEl = document.getElementById('kontakInputJamKerja');
+    const alamatEl = document.getElementById('kontakInputAlamat');
+    const coordEl = document.getElementById('kontakInputKoordinat');
+    const mapsEl = document.getElementById('kontakInputMaps');
+
+    if (telpEl) telpEl.value = data.telepon || '0812-4821-9125';
+    if (waEl) waEl.value = data.whatsapp || '6281248219125';
+    if (emailEl) emailEl.value = data.email || 'sdninpresarso8@gmail.com';
+    if (jamEl) jamEl.value = data.jam_kerja || 'Senin – Jumat: 07.15 – 12.30 WIT';
+    if (alamatEl) alamatEl.value = data.alamat || 'Jalan Sulawesi, RW 03 / RT 05, Kampung Dukwia, Distrik Arso Barat, Kab. Keerom, Papua 99473';
+    if (coordEl) coordEl.value = data.koordinat || 'Lat -2.822991º, Long 140.703999º';
+    if (mapsEl) mapsEl.value = data.maps_embed || '';
+
+    renderPesanKontakTable();
+}
+
+function saveKontakData() {
+    const data = {
+        telepon: document.getElementById('kontakInputTelepon')?.value.trim() || '0812-4821-9125',
+        whatsapp: document.getElementById('kontakInputWhatsApp')?.value.trim() || '6281248219125',
+        email: document.getElementById('kontakInputEmail')?.value.trim() || 'sdninpresarso8@gmail.com',
+        jam_kerja: document.getElementById('kontakInputJamKerja')?.value.trim() || 'Senin – Jumat: 07.15 – 12.30 WIT',
+        alamat: document.getElementById('kontakInputAlamat')?.value.trim() || '',
+        koordinat: document.getElementById('kontakInputKoordinat')?.value.trim() || '',
+        maps_embed: document.getElementById('kontakInputMaps')?.value.trim() || ''
+    };
+
+    if (window.SDN_DATABASE) window.SDN_DATABASE.kontak = data;
+    safeAdminSet('sdn_kontak_data', data);
+    syncToServer('kontak', data);
+    logAdminActivity('Pembaruan Kontak Sekolah', 'Memperbarui saluran komunikasi resmi dan nomor WhatsApp');
+    showSyncToast('🎉 Informasi Kontak Resmi berhasil diperbarui di internet!');
+    alert('✅ Informasi Kontak Sekolah berhasil disimpan!');
+}
+
+function getPesanKontakData() {
+    if (window.SDN_DATABASE && Array.isArray(window.SDN_DATABASE.pesan_kontak)) {
+        return window.SDN_DATABASE.pesan_kontak;
+    }
+    try {
+        const raw = localStorage.getItem('sdn_pesan_kontak');
+        if (raw) return JSON.parse(raw);
+    } catch (e) {}
+    return [
+        {
+            id: "MSG-001",
+            nama: "Markus Wenda",
+            telepon: "0813-4455-6677",
+            subjek: "Informasi Siswa Pindahan",
+            pesan: "Selamat siang Kepala Sekolah, kami berencana memindahkan anak kami ke kelas 4 di SDN Inpres Arso VIII. Mohon info kelengkapan berkasnya.",
+            tanggal: "14 Nov 2026 10:15 WIT",
+            status: "Ditanggapi"
+        }
+    ];
+}
+
+function renderPesanKontakTable() {
+    const tbody = document.getElementById('pesanKontakTableBody');
+    if (!tbody) return;
+
+    const list = getPesanKontakData();
+    if (!list || list.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #94a3b8; padding: 20px;">Belum ada pesan masuk dari form kontak publik.</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = '';
+    list.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.style.borderBottom = '1px solid #f1f5f9';
+        const isAnswered = item.status === 'Ditanggapi' || item.status === 'Selesai';
+        const statusBadge = isAnswered 
+            ? '<span style="background: #dcfce7; color: #166534; font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 999px;">✅ Ditanggapi</span>'
+            : '<span style="background: #fee2e2; color: #991b1b; font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 999px;">⏳ Menunggu</span>';
+
+        const waClean = (item.telepon || '').replace(/[^0-9]/g, '');
+        const waLink = waClean ? `https://wa.me/${waClean.startsWith('0') ? '62' + waClean.slice(1) : waClean}` : '#';
+
+        tr.innerHTML = `
+            <td style="padding: 10px 12px; font-size: 12px; color: #64748b; white-space: nowrap;">📅 ${escapeHTML(item.tanggal || '-')}</td>
+            <td style="padding: 10px 12px; font-weight: 700; color: var(--primary-dark);">${escapeHTML(item.nama || '-')}</td>
+            <td style="padding: 10px 12px; font-weight: 600; color: #0284c7;">${escapeHTML(item.telepon || '-')}</td>
+            <td style="padding: 10px 12px; font-weight: 700;">${escapeHTML(item.subjek || '-')}</td>
+            <td style="padding: 10px 12px; color: #475569; font-size: 13px; line-height: 1.5; max-width: 320px;">${escapeHTML(item.pesan || '-')}</td>
+            <td style="padding: 10px 12px; white-space: nowrap;">${statusBadge}</td>
+            <td style="padding: 10px 12px; text-align: center; white-space: nowrap;">
+                <a href="${waLink}" target="_blank" class="btn" style="background: #25d366; color: white; padding: 5px 9px; font-size: 11.5px; border-radius: 6px; text-decoration: none; margin-right: 4px;" title="Balas via WhatsApp">💬 WA</a>
+                <button type="button" onclick="togglePesanStatus('${item.id}');" class="btn" style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; padding: 5px 8px; font-size: 11px; border-radius: 6px; cursor: pointer; margin-right: 4px;" title="Tandai Status Selesai / Menunggu">✔️</button>
+                <button type="button" onclick="deletePesanKontak('${item.id}');" class="btn" style="background: #fee2e2; border: 1px solid #fca5a5; color: #991b1b; padding: 5px 8px; font-size: 11px; border-radius: 6px; cursor: pointer;" title="Hapus Pesan">🗑️</button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+function togglePesanStatus(id) {
+    const list = getPesanKontakData();
+    const item = list.find(m => m.id === id);
+    if (!item) return;
+
+    item.status = (item.status === 'Ditanggapi' || item.status === 'Selesai') ? 'Belum Ditanggapi' : 'Ditanggapi';
+    if (window.SDN_DATABASE) window.SDN_DATABASE.pesan_kontak = list;
+    safeAdminSet('sdn_pesan_kontak', list);
+    syncToServer('pesan_kontak', list);
+    renderPesanKontakTable();
+    showSyncToast('Status pesan diperbarui.');
+}
+
+function deletePesanKontak(id) {
+    if (!confirm('Hapus pesan kontak ini?')) return;
+    let list = getPesanKontakData();
+    list = list.filter(m => m.id !== id);
+    if (window.SDN_DATABASE) window.SDN_DATABASE.pesan_kontak = list;
+    safeAdminSet('sdn_pesan_kontak', list);
+    syncToServer('pesan_kontak', list);
+    renderPesanKontakTable();
+    logAdminActivity('Penghapusan Pesan Kontak', 'Menghapus pesan ID ' + id);
+    showSyncToast('Pesan berhasil dihapus.');
+}
+
+/* -------------------------------------------------------------------
+   17. PENGELOLA BERANDA (Running Text / Marquee & Tagline)
+   ------------------------------------------------------------------- */
+function populateBerandaForm() {
+    let berandaData = null;
+    if (window.SDN_DATABASE && window.SDN_DATABASE.beranda && typeof window.SDN_DATABASE.beranda === 'object') {
+        berandaData = window.SDN_DATABASE.beranda;
+    }
+    const input = document.getElementById('berandaMarqueeInput');
+    if (input && berandaData && berandaData.marquee) {
+        input.value = berandaData.marquee;
+    }
+}
+
+function saveBerandaMarquee() {
+    const input = document.getElementById('berandaMarqueeInput');
+    if (!input) return;
+    const val = input.value.trim();
+
+    let berandaData = (window.SDN_DATABASE && window.SDN_DATABASE.beranda) ? window.SDN_DATABASE.beranda : {};
+    berandaData.marquee = val;
+
+    if (window.SDN_DATABASE) window.SDN_DATABASE.beranda = berandaData;
+    safeAdminSet('sdn_beranda_data', berandaData);
+    syncToServer('beranda', berandaData);
+    logAdminActivity('Pembaruan Teks Berjalan Beranda', 'Memperbarui teks pengumuman berjalan beranda');
+    showSyncToast('🎉 Teks pengumuman berjalan berhasil disimpan dan aktif di Beranda!');
+    alert('✅ Teks pengumuman berjalan Beranda berhasil diperbarui!');
+}
+
+
+// INJEKSI PADA REFRESH ADMIN MANAGERS
+const _prevRefresh = window.refreshAdminManagers;
+window.refreshAdminManagers = function() {
+    if (typeof _prevRefresh === 'function') {
+        try { _prevRefresh(); } catch (e) {}
+    }
+    try { if (typeof populateProfilForm === 'function') populateProfilForm(); } catch (e) {}
+    try { if (typeof populateKontakForm === 'function') populateKontakForm(); } catch (e) {}
+    };
+
+// INITIALIZATION DI AKHIR DOM READY
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+        if (typeof populateProfilForm === 'function') populateProfilForm();
+        if (typeof populateKontakForm === 'function') populateKontakForm();
+            }, 300);
+});
